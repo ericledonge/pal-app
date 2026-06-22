@@ -7,5 +7,12 @@
   "sortImports": {
     "order": "asc"
   },
-  "ignorePatterns": ["design/**", "docs/**", "**/*.md", "package-lock.json", ".rnstorybook/**"]
+  "ignorePatterns": [
+    "design/**",
+    "docs/**",
+    "**/*.md",
+    "package-lock.json",
+    ".rnstorybook/**",
+    "**/__tests__/fixtures/**"
+  ]
 }
