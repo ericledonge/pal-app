@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { trackEvent } from "@/lib/analytics";
+
 // Minuteur de match basé sur l'horloge (timestamp) plutôt qu'un simple décompte : exact malgré
 // le passage en arrière-plan ou un throttling de l'intervalle. Réinitialise si la durée change.
 export const useMatchTimer = (durationMin: number) => {
@@ -30,7 +32,10 @@ export const useMatchTimer = (durationMin: number) => {
     // eslint-disable-next-line react/exhaustive-deps
   }, [running]);
 
-  const start = useCallback(() => setRunning(true), []);
+  const start = useCallback(() => {
+    trackEvent("timer_started");
+    setRunning(true);
+  }, []);
   const pause = useCallback(() => setRunning(false), []);
   const reset = useCallback(() => {
     setRunning(false);

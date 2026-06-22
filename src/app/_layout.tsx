@@ -27,14 +27,16 @@ import { AppState, useColorScheme, View } from "react-native";
 
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
+import { initAnalytics } from "@/lib/analytics";
 import { t } from "@/lib/i18n";
 import { initObservability, logger } from "@/lib/logger";
 import { queryClient } from "@/lib/query-client";
 
 import "@/global.css";
 
-// Suivi d'erreurs (Sentry en prod si DSN configuré). À initialiser avant le rendu.
+// Suivi d'erreurs (Sentry en prod si DSN configuré) + analytics produit (Amplitude). À init avant le rendu.
 initObservability();
+initAnalytics();
 
 // Maintient le splash jusqu'au chargement des polices (évite tout flash de police système).
 void SplashScreen.preventAutoHideAsync();

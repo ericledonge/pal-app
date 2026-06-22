@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { trackEvent } from "@/lib/analytics";
+
 import {
   clearMatrixSession,
   readMatrixSession,
@@ -77,6 +79,7 @@ export const useMatrixSession = () => {
   }, []);
 
   const startSession = useCallback(() => {
+    trackEvent("matrix_generated", { joueurs: effectif.length, terrains: config.nbTerrains });
     setRounds([generateRound(effectif, config.nbTerrains, [])]);
     setCurrentIndex(0);
     setPhase("live");

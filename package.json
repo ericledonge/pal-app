@@ -19,6 +19,7 @@
     "validate": "oxfmt && oxlint --fix && oxfmt && oxlint"
   },
   "dependencies": {
+    "@amplitude/analytics-react-native": "^1.5.57",
     "@expo-google-fonts/inter": "^0.4.2",
     "@expo-google-fonts/lexend": "^0.4.1",
     "@expo/ui": "~56.0.18",
