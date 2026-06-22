@@ -10,31 +10,34 @@ import { Text } from "@/components/ui/text";
 import { t } from "@/lib/i18n";
 
 import { normalizeName } from "../domain/matrix.service";
+import { MatrixLiveView } from "./matrix-live-view";
 import { useMatrixSession } from "./use-matrix-session";
 import { usePresentPlayers } from "./use-present-players";
 
-export const MatrixConfigView = () => {
+export const MatrixView = () => {
   const { players: presents } = usePresentPlayers();
-  const { effectif, config, addGuest, addPresents, removePlayer, setTerrains, setDuration } =
-    useMatrixSession();
+  const session = useMatrixSession();
+  const { effectif, config, phase } = session;
   const [guest, setGuest] = useState("");
   const [selection, setSelection] = useState<Set<string>>(new Set());
   const preloaded = useRef(false);
 
-  // Pré-charge l'effectif depuis les présents F1, une seule fois (au démarrage de la session).
   useEffect(() => {
     if (!preloaded.current && presents.length > 0) {
-      addPresents(presents);
+      session.addPresents(presents);
       preloaded.current = true;
     }
     // eslint-disable-next-line react/exhaustive-deps
   }, [presents]);
 
-  // Présents pas encore dans l'effectif (les déjà-ajoutés sont masqués de la sélection).
   const available = useMemo(() => {
     const inEffectif = new Set(effectif.map((player) => normalizeName(player.nom)));
     return presents.filter((player) => !inEffectif.has(normalizeName(player.nom)));
   }, [presents, effectif]);
+
+  if (phase === "live") {
+    return <MatrixLiveView key={session.currentIndex} session={session} />;
+  }
 
   const toggle = (id: string) => {
     setSelection((current) => {
@@ -49,19 +52,19 @@ export const MatrixConfigView = () => {
   };
 
   const addSelection = () => {
-    addPresents(available.filter((player) => selection.has(player.id)));
+    session.addPresents(available.filter((player) => selection.has(player.id)));
     setSelection(new Set());
   };
 
   const confirmRemove = (id: string) => {
     Alert.alert(t("matrix.removeTitle"), t("matrix.removeConfirm"), [
       { text: t("common.cancel"), style: "cancel" },
-      { text: t("matrix.remove"), style: "destructive", onPress: () => removePlayer(id) },
+      { text: t("matrix.remove"), style: "destructive", onPress: () => session.removePlayer(id) },
     ]);
   };
 
   const handleAddGuest = () => {
-    addGuest(guest);
+    session.addGuest(guest);
     setGuest("");
   };
 
@@ -76,13 +79,13 @@ export const MatrixConfigView = () => {
               <Button
                 variant="secondary"
                 label="−"
-                onPress={() => setTerrains(Math.max(1, config.nbTerrains - 1))}
+                onPress={() => session.setTerrains(Math.max(1, config.nbTerrains - 1))}
               />
               <Text variant="stat">{config.nbTerrains}</Text>
               <Button
                 variant="secondary"
                 label="+"
-                onPress={() => setTerrains(config.nbTerrains + 1)}
+                onPress={() => session.setTerrains(config.nbTerrains + 1)}
               />
             </View>
           </View>
@@ -91,7 +94,7 @@ export const MatrixConfigView = () => {
             <Input
               keyboardType="number-pad"
               value={String(config.dureeMatchMin)}
-              onChangeText={(value) => setDuration(Number.parseInt(value, 10) || 0)}
+              onChangeText={(value) => session.setDuration(Number.parseInt(value, 10) || 0)}
               className="w-20 text-center"
             />
           </View>
@@ -157,6 +160,14 @@ export const MatrixConfigView = () => {
             />
           </Card>
         ) : null}
+
+        {session.canStart ? (
+          <Button label={t("matrix.generate")} onPress={session.startSession} />
+        ) : (
+          <Text variant="caption" className="text-center">
+            {t("matrix.insufficient")}
+          </Text>
+        )}
       </ScrollView>
     </View>
   );
