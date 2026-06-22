@@ -22,6 +22,7 @@ import {
 } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
+import { useColorScheme as useNativeWindColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { AppState, useColorScheme, View } from "react-native";
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context";
@@ -29,6 +30,7 @@ import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-c
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useLevelPreference } from "@/features/level/use-cases/use-level-preference";
+import { usePreferences } from "@/features/preferences/use-cases/use-preferences";
 import { initAnalytics } from "@/lib/analytics";
 import { t } from "@/lib/i18n";
 import { initObservability, logger } from "@/lib/logger";
@@ -60,25 +62,47 @@ export const ErrorBoundary = ({ error, retry }: ErrorBoundaryProps) => {
   );
 };
 
-// Masque le splash une fois les polices ET la préférence de niveau chargées (les deux
-// ressources qui conditionnent le premier écran), évitant tout flash. Rendu à l'intérieur du
-// QueryClientProvider pour lire la préférence ; fonctionne quelle que soit la route d'entrée
-// (y compris un deep link direct vers les onglets).
-const SplashGate = ({ fontsReady }: { fontsReady: boolean }) => {
-  const { isLoading } = useLevelPreference();
-  const ready = fontsReady && !isLoading;
+// Coquille de l'app (rendue dans le QueryClientProvider) : applique le thème selon la
+// préférence (système / clair / sombre) et masque le splash une fois polices + préférence de
+// niveau prêtes (évite tout flash, quelle que soit la route d'entrée). Le thème vit ici car il
+// dépend des préférences persistées (React Query).
+const AppShell = ({ fontsReady }: { fontsReady: boolean }) => {
+  const systemScheme = useColorScheme();
+  const { preferences } = usePreferences();
+  const { setColorScheme } = useNativeWindColorScheme();
+  const { isLoading: levelLoading } = useLevelPreference();
 
+  const { themeMode } = preferences;
+  // Pilote NativeWind (couleurs via global.css) selon la préférence ; "system" suit l'appareil.
+  useEffect(() => {
+    setColorScheme(themeMode);
+  }, [themeMode, setColorScheme]);
+
+  // Même résultat pour le thème de navigation (React Navigation).
+  const resolvedScheme = themeMode === "system" ? (systemScheme ?? "light") : themeMode;
+
+  const ready = fontsReady && !levelLoading;
   useEffect(() => {
     if (ready) {
       void SplashScreen.hideAsync();
     }
   }, [ready]);
 
-  return null;
+  return (
+    <ThemeProvider value={resolvedScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+        <Stack.Screen name="select-level" options={{ presentation: "modal", headerShown: false }} />
+        <Stack.Screen name="feedback" options={{ presentation: "modal", headerShown: false }} />
+      </Stack>
+      <StatusBar style={resolvedScheme === "dark" ? "light" : "dark"} />
+    </ThemeProvider>
+  );
 };
 
 function RootLayout() {
-  const colorScheme = useColorScheme();
   const [fontsLoaded, fontError] = useFonts({
     Lexend_400Regular,
     Lexend_500Medium,
@@ -103,20 +127,7 @@ function RootLayout() {
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-          <SplashGate fontsReady={fontsReady} />
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="select-level"
-              options={{ presentation: "modal", headerShown: false }}
-            />
-            <Stack.Screen name="feedback" options={{ presentation: "modal", headerShown: false }} />
-          </Stack>
-          <StatusBar style="auto" />
-        </ThemeProvider>
+        <AppShell fontsReady={fontsReady} />
       </QueryClientProvider>
     </SafeAreaProvider>
   );

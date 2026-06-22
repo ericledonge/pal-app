@@ -1,11 +1,18 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+/** Thème de l'app : suit le système, ou forcé en clair / sombre. */
+export type ThemeMode = "system" | "light" | "dark";
+
+const THEME_MODES: ReadonlySet<ThemeMode> = new Set(["system", "light", "dark"]);
+
+const isThemeMode = (value: unknown): value is ThemeMode =>
+  typeof value === "string" && THEME_MODES.has(value as ThemeMode);
+
 export interface Preferences {
-  /** Démarrer l'agenda sur « Tous les niveaux » plutôt que « Mon niveau ». */
-  defaultAllLevels: boolean;
+  themeMode: ThemeMode;
 }
 
-export const DEFAULT_PREFERENCES: Preferences = { defaultAllLevels: false };
+export const DEFAULT_PREFERENCES: Preferences = { themeMode: "system" };
 
 const STORAGE_KEY = "pal.preferences";
 
@@ -18,10 +25,7 @@ export const readPreferences = async (): Promise<Preferences> => {
   try {
     const parsed = JSON.parse(raw) as Partial<Preferences>;
     return {
-      defaultAllLevels:
-        typeof parsed.defaultAllLevels === "boolean"
-          ? parsed.defaultAllLevels
-          : DEFAULT_PREFERENCES.defaultAllLevels,
+      themeMode: isThemeMode(parsed.themeMode) ? parsed.themeMode : DEFAULT_PREFERENCES.themeMode,
     };
   } catch {
     return DEFAULT_PREFERENCES;

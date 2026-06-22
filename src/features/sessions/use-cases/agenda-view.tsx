@@ -5,7 +5,6 @@ import { Chip } from "@/components/ui/chip";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { ScreenEmpty, ScreenError, ScreenLoading } from "@/components/ui/screen-state";
 import { Text } from "@/components/ui/text";
-import { usePreferences } from "@/features/preferences/use-cases/use-preferences";
 import { t } from "@/lib/i18n";
 
 import type { AgendaMode, AgendaSlotViewModel } from "../domain/session.service";
@@ -15,9 +14,8 @@ import { SlotDetail } from "./slot-detail";
 import { useAgenda } from "./use-agenda";
 
 export const AgendaView = () => {
-  const { preferences } = usePreferences();
   const [day, setDay] = useState<Day>("today");
-  const [mode, setMode] = useState<AgendaMode>(preferences.defaultAllLevels ? "all" : "myLevel");
+  const [mode, setMode] = useState<AgendaMode>("myLevel");
   const [selected, setSelected] = useState<AgendaSlotViewModel | null>(null);
   const { sections, isLoading, isError, isRefreshing, errorKind, isEmpty, refresh } = useAgenda(
     day,
