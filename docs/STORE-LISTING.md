@@ -51,7 +51,7 @@ Orientation **portrait** uniquement (l'app est portrait-only).
 ## Politique de confidentialité
 
 - Texte : [`docs/PRIVACY.md`](PRIVACY.md).
-- **URL publique requise** par les deux stores. Hébergement sans backend : activer **GitHub Pages** sur le dépôt (`docs/`) → `https://ericledonge.github.io/pal-app/PRIVACY` (à confirmer une fois Pages activé), ou tout hébergement statique équivalent.
+- **URL publique** (GitHub Pages, source `main` / dossier `/docs`) : **`https://ericledonge.github.io/pal-app/privacy.html`** (page HTML autonome `docs/privacy.html` ; `docs/index.html` redirige la racine vers elle ; `.nojekyll` sert les fichiers tels quels).
 
 ## Formulaire de confidentialité (App Privacy / Data Safety)
 
