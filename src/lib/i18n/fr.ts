@@ -34,6 +34,12 @@ export const fr = {
   },
   profile: {
     title: "Profil",
-    subtitle: "Profil, niveau et réglages — à venir.",
+    myLevel: "Mon niveau",
+    changeLevel: "Changer de niveau",
+    noLevel: "Non défini",
+    preferences: "Préférences",
+    help: "Aide et commentaires",
+    feedback: "Donner mon avis",
+    version: "Version",
   },
 } as const;
