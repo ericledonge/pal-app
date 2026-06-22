@@ -23,6 +23,42 @@ Gérés par **EAS** (recommandé) :
 
 Pré-requis (une fois, compte Expo) : `eas login` → `eas init` (crée le `projectId`).
 
+## Builds de développement (appareils physiques)
+
+L'app embarque des modules natifs (Sentry, Reanimated, NetInfo, async-storage…) → elle **ne tourne pas dans Expo Go**. Pour développer/tester sur appareil, il faut un **dev build** (dev client). Dépendance requise : `expo-dev-client` (installée).
+
+### iOS (appareil physique)
+
+L'UDID de l'appareil doit être **enregistré** (provisioning ad hoc — nécessite l'Apple Developer Program) :
+
+```bash
+eas device:create                                 # « Register a device » → ouvrir l'URL/QR sur l'iPhone,
+                                                   #   installer le profil → capture l'UDID
+eas build --profile development --platform ios     # login Apple + credentials gérés par EAS
+```
+
+Build terminé → ouvrir le **lien de build sur l'iPhone** → « Install ». Nouvel appareil plus tard → `eas device:create` puis rebuild (profil ad hoc valide ~1 an).
+
+### Android (appareil physique)
+
+Aucun enregistrement d'appareil requis :
+
+```bash
+eas build --profile development --platform android # accepter « Generate new keystore »
+```
+
+→ produit un **APK** ; ouvrir le lien de build sur l'Android → installer (activer « sources inconnues » si demandé).
+
+> `--platform all` construit les deux d'un coup.
+
+### Boucle de dev
+
+```bash
+npx expo start --dev-client        # (ajouter --tunnel si l'appareil n'est pas sur le même Wi-Fi)
+```
+
+Ouvrir l'**app dev** installée (pas Expo Go) → connexion à Metro → fast refresh. **Rebuild uniquement si une dépendance native change** (ajout de module natif, bump SDK) ; pour du JS/TS pur → simple reload.
+
 ## Soumission aux stores (EAS Submit)
 
 > **Étape de fin, gated par compte** : nécessite les comptes Expo, Apple Developer et Google Play Console + des builds production. Non exécutable sans ces accès — à réaliser par le mainteneur.

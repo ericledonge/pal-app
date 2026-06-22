@@ -3,7 +3,9 @@
     "name": "Pickleball Action Lévis",
     "slug": "pal-app",
     "version": "1.0.0",
-    "runtimeVersion": { "policy": "appVersion" },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "palevis",
@@ -46,6 +48,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a7e248cd-790d-46df-9b58-565a9f0841a6"
+      }
+    },
+    "owner": "eledonge"
   }
 }
