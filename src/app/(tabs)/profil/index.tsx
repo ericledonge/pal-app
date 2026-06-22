@@ -1,6 +1,8 @@
 import Constants from "expo-constants";
+import { useRouter } from "expo-router";
 import { ScrollView, View } from "react-native";
 
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Text } from "@/components/ui/text";
@@ -8,6 +10,7 @@ import { useLevelPreference } from "@/features/level/use-cases/use-level-prefere
 import { t } from "@/lib/i18n";
 
 export default function ProfilScreen() {
+  const router = useRouter();
   const { level } = useLevelPreference();
   const version = Constants.expoConfig?.version ?? "—";
 
@@ -15,11 +18,18 @@ export default function ProfilScreen() {
     <View className="flex-1 bg-background">
       <ScreenHeader title={t("profile.title")} />
       <ScrollView contentContainerClassName="gap-md px-lg py-md">
-        <Card className="gap-2xs">
-          <Text variant="label" className="text-on-surface-muted">
-            {t("profile.myLevel")}
-          </Text>
-          <Text variant="cardTitle">{level ?? t("profile.noLevel")}</Text>
+        <Card className="gap-sm">
+          <View className="gap-2xs">
+            <Text variant="label" className="text-on-surface-muted">
+              {t("profile.myLevel")}
+            </Text>
+            <Text variant="cardTitle">{level ?? t("profile.noLevel")}</Text>
+          </View>
+          <Button
+            variant="secondary"
+            label={t("profile.changeLevel")}
+            onPress={() => router.push("/select-level")}
+          />
         </Card>
 
         <Card className="gap-2xs">

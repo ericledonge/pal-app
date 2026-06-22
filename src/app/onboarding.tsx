@@ -4,11 +4,11 @@ import { ScrollView, View } from "react-native";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Chip } from "@/components/ui/chip";
 import { Text } from "@/components/ui/text";
+import { LevelGrid } from "@/features/level/use-cases/level-grid";
 import { useLevelPreference } from "@/features/level/use-cases/use-level-preference";
 import { t } from "@/lib/i18n";
-import { LEVELS, type LevelCode } from "@/shared/domain/level";
+import type { LevelCode } from "@/shared/domain/level";
 
 export default function OnboardingScreen() {
   const router = useRouter();
@@ -43,17 +43,7 @@ export default function OnboardingScreen() {
 
       <View className="gap-sm">
         <Text variant="label">{t("onboarding.selectInstruction")}</Text>
-        <View className="flex-row flex-wrap gap-sm">
-          {LEVELS.map((code) => (
-            <Chip
-              key={code}
-              label={code}
-              selected={selected === code}
-              onPress={() => setSelected(code)}
-              className="w-[30%] items-center"
-            />
-          ))}
-        </View>
+        <LevelGrid selected={selected} onSelect={setSelected} />
       </View>
 
       <Button
