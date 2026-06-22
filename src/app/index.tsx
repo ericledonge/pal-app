@@ -1,6 +1,20 @@
 import { Redirect } from "expo-router";
+import { ActivityIndicator, View } from "react-native";
 
+import { useLevelPreference } from "@/features/level/use-cases/use-level-preference";
+
+// Gate d'entrée : tant qu'aucun niveau n'est choisi → onboarding ; sinon → app.
+// Pendant la lecture du stockage, écran neutre (aucun flash de l'app principale).
 export default function IndexRoute() {
-  // Route d'entrée / futur gate d'onboarding (issue #15). Pour l'instant, redirige vers les sessions.
-  return <Redirect href="/sessions" />;
+  const { level, isLoading } = useLevelPreference();
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-background">
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  return <Redirect href={level ? "/sessions" : "/onboarding"} />;
 }
