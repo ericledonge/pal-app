@@ -27,9 +27,13 @@ module.exports = {
         xl: "24px",
         "2xl": "28px",
       },
+      // Familles mappées sur les polices chargées via expo-font (@expo-google-fonts).
       fontFamily: {
-        lexend: ["Lexend", "sans-serif"],
-        inter: ["Inter", "sans-serif"],
+        lexend: ["Lexend_600SemiBold"],
+        "lexend-bold": ["Lexend_700Bold"],
+        inter: ["Inter_400Regular"],
+        "inter-medium": ["Inter_500Medium"],
+        "inter-semibold": ["Inter_600SemiBold"],
       },
     },
   },
