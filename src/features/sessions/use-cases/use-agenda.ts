@@ -14,7 +14,11 @@ export const useAgenda = (day: Day, mode: AgendaMode) => {
   const patinoire = useGrid(day, "patinoire");
 
   const isLoading = parc.isLoading || patinoire.isLoading;
-  const isError = parc.isError || patinoire.isError;
+  // Erreur affichée seulement sans donnée à montrer : une erreur de refetch (données déjà
+  // présentes) ne vide pas la liste (dégradation gracieuse).
+  const isError =
+    (parc.isError || patinoire.isError) && parc.data === undefined && patinoire.data === undefined;
+  const isRefreshing = parc.isRefetching || patinoire.isRefetching;
   const error = parc.error ?? patinoire.error ?? null;
   const errorKind = error ? (error instanceof GridParseError ? "parsing" : "network") : null;
 
@@ -36,6 +40,7 @@ export const useAgenda = (day: Day, mode: AgendaMode) => {
     sections,
     isLoading,
     isError,
+    isRefreshing,
     errorKind,
     isEmpty: !isLoading && !isError && sections.length === 0,
     refresh,

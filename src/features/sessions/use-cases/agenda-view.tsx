@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ScrollView, View } from "react-native";
+import { RefreshControl, ScrollView, View } from "react-native";
 
 import { Chip } from "@/components/ui/chip";
 import { ScreenHeader } from "@/components/ui/screen-header";
@@ -19,7 +19,10 @@ export const AgendaView = () => {
   const [day, setDay] = useState<Day>("today");
   const [mode, setMode] = useState<AgendaMode>(preferences.defaultAllLevels ? "all" : "myLevel");
   const [selected, setSelected] = useState<AgendaSlotViewModel | null>(null);
-  const { sections, isLoading, isError, errorKind, isEmpty, refresh } = useAgenda(day, mode);
+  const { sections, isLoading, isError, isRefreshing, errorKind, isEmpty, refresh } = useAgenda(
+    day,
+    mode,
+  );
 
   let body;
   if (isLoading) {
@@ -39,7 +42,10 @@ export const AgendaView = () => {
     );
   } else {
     body = (
-      <ScrollView contentContainerClassName="gap-md px-lg pb-2xl">
+      <ScrollView
+        contentContainerClassName="gap-md px-lg pb-2xl"
+        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={refresh} />}
+      >
         {sections.map((section) => (
           <View key={section.plateau} className="gap-sm">
             <Text variant="label" className="text-on-surface-muted">
