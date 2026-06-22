@@ -49,9 +49,13 @@ export default function ProfilScreen() {
           <Text variant="caption">{t("preferences.themeNote")}</Text>
         </Card>
 
-        <Card className="gap-2xs">
+        <Card className="gap-sm">
           <Text variant="label">{t("profile.help")}</Text>
-          <Text variant="caption">{t("common.soon")}</Text>
+          <Button
+            variant="secondary"
+            label={t("profile.feedback")}
+            onPress={() => router.push("/feedback")}
+          />
         </Card>
 
         <View className="items-center pt-md">

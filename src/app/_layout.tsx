@@ -73,6 +73,7 @@ export default function RootLayout() {
             name="select-level"
             options={{ presentation: "modal", headerShown: false }}
           />
+          <Stack.Screen name="feedback" options={{ presentation: "modal", headerShown: false }} />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
