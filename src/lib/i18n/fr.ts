@@ -17,7 +17,12 @@ export const fr = {
   },
   onboarding: {
     title: "Bienvenue",
-    subtitle: "Onboarding (sélection du niveau) à venir.",
+    intro: "Choisis ton niveau pour personnaliser ton agenda des sessions.",
+    ctTitle: "À propos des codes",
+    ctExplainer:
+      "C = Consolidation, T = Transition. Le code identifie simplement ton groupe ; cette distinction n'a pas d'incidence dans l'app.",
+    selectInstruction: "Sélectionne ton niveau",
+    start: "Commencer",
   },
   sessions: {
     title: "Sessions",

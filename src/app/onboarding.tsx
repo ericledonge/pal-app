@@ -1,15 +1,67 @@
-import { Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import { ScrollView, View } from "react-native";
 
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Chip } from "@/components/ui/chip";
+import { Text } from "@/components/ui/text";
+import { useLevelPreference } from "@/features/level/use-cases/use-level-preference";
 import { t } from "@/lib/i18n";
+import { LEVELS, type LevelCode } from "@/shared/domain/level";
 
 export default function OnboardingScreen() {
-  // Placeholder sans logique — la sélection du niveau arrive à l'issue #16.
+  const router = useRouter();
+  const { setLevel } = useLevelPreference();
+  const [selected, setSelected] = useState<LevelCode | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  const handleStart = async () => {
+    if (!selected) {
+      return;
+    }
+    setSaving(true);
+    await setLevel(selected);
+    router.replace("/sessions");
+  };
+
   return (
-    <View className="flex-1 items-center justify-center gap-sm bg-background px-xl">
-      <Text className="font-lexend text-[28px] text-on-surface">{t("onboarding.title")}</Text>
-      <Text className="font-inter text-[16px] text-on-surface-muted">
-        {t("onboarding.subtitle")}
-      </Text>
-    </View>
+    <ScrollView className="flex-1 bg-background" contentContainerClassName="gap-lg px-lg py-2xl">
+      <View className="gap-2xs">
+        <Text variant="title">{t("onboarding.title")}</Text>
+        <Text variant="body" className="text-on-surface-muted">
+          {t("onboarding.intro")}
+        </Text>
+      </View>
+
+      <Card className="gap-2xs">
+        <Text variant="label" className="text-on-surface">
+          {t("onboarding.ctTitle")}
+        </Text>
+        <Text variant="caption">{t("onboarding.ctExplainer")}</Text>
+      </Card>
+
+      <View className="gap-sm">
+        <Text variant="label">{t("onboarding.selectInstruction")}</Text>
+        <View className="flex-row flex-wrap gap-sm">
+          {LEVELS.map((code) => (
+            <Chip
+              key={code}
+              label={code}
+              selected={selected === code}
+              onPress={() => setSelected(code)}
+              className="w-[30%] items-center"
+            />
+          ))}
+        </View>
+      </View>
+
+      <Button
+        label={t("onboarding.start")}
+        disabled={!selected}
+        loading={saving}
+        onPress={() => void handleStart()}
+      />
+    </ScrollView>
   );
 }

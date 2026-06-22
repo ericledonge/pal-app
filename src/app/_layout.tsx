@@ -68,10 +68,7 @@ export default function RootLayout() {
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="index" />
           <Stack.Screen name="(tabs)" />
-          <Stack.Screen
-            name="onboarding"
-            options={{ presentation: "modal", headerShown: true, title: "Bienvenue" }}
-          />
+          <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
