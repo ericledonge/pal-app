@@ -19,7 +19,8 @@
     "react/exhaustive-deps": "warn",
     "react/react-in-jsx-scope": "off",
     "react/no-unstable-nested-components": ["warn", { "allowAsProps": true }],
-    "react/style-prop-object": "off"
+    "react/style-prop-object": "off",
+    "react/no-array-index-key": "off"
   },
   "env": {
     "builtin": true
