@@ -18,9 +18,13 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { AppState, useColorScheme } from "react-native";
 
+import { initObservability } from "@/lib/logger";
 import { queryClient } from "@/lib/query-client";
 
 import "@/global.css";
+
+// Suivi d'erreurs (Sentry en prod si DSN configuré). À initialiser avant le rendu.
+initObservability();
 
 // Maintient le splash jusqu'au chargement des polices (évite tout flash de police système).
 void SplashScreen.preventAutoHideAsync();
