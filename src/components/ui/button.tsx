@@ -37,7 +37,7 @@ export const Button = ({
       accessibilityRole="button"
       disabled={isDisabled}
       className={cn(
-        "flex-row items-center justify-center rounded-xl px-md py-sm",
+        "min-h-[44px] flex-row items-center justify-center rounded-xl px-md py-sm",
         CONTAINER[variant],
         isDisabled && "opacity-50",
         className,
