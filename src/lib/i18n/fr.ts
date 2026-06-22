@@ -10,6 +10,9 @@ export const fr = {
     cancel: "Annuler",
     save: "Enregistrer",
     close: "Fermer",
+    errorTitle: "Oups",
+    errorBody: "Une erreur est survenue. Tu peux réessayer.",
+    restart: "Relancer",
   },
   tabs: {
     sessions: "Sessions",

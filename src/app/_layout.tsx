@@ -10,15 +10,25 @@ import {
   Lexend_600SemiBold,
   Lexend_700Bold,
 } from "@expo-google-fonts/lexend";
+import * as Sentry from "@sentry/react-native";
 import { focusManager, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
+import {
+  DarkTheme,
+  DefaultTheme,
+  type ErrorBoundaryProps,
+  Stack,
+  ThemeProvider,
+} from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { AppState, useColorScheme } from "react-native";
+import { AppState, useColorScheme, View } from "react-native";
 
-import { initObservability } from "@/lib/logger";
+import { Button } from "@/components/ui/button";
+import { Text } from "@/components/ui/text";
+import { t } from "@/lib/i18n";
+import { initObservability, logger } from "@/lib/logger";
 import { queryClient } from "@/lib/query-client";
 
 import "@/global.css";
@@ -29,7 +39,24 @@ initObservability();
 // Maintient le splash jusqu'au chargement des polices (évite tout flash de police système).
 void SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+// Error boundary global : capture toute erreur de rendu, la journalise (Sentry en prod), et
+// affiche un écran de secours avec « Relancer ».
+export const ErrorBoundary = ({ error, retry }: ErrorBoundaryProps) => {
+  useEffect(() => {
+    logger.error(error, { boundary: "root" });
+  }, [error]);
+  return (
+    <View className="flex-1 items-center justify-center gap-md bg-background px-lg">
+      <Text variant="title">{t("common.errorTitle")}</Text>
+      <Text variant="body" className="text-center text-on-surface-muted">
+        {t("common.errorBody")}
+      </Text>
+      <Button label={t("common.restart")} onPress={() => void retry()} />
+    </View>
+  );
+};
+
+function RootLayout() {
   const colorScheme = useColorScheme();
   const [fontsLoaded, fontError] = useFonts({
     Lexend_400Regular,
@@ -80,3 +107,6 @@ export default function RootLayout() {
     </QueryClientProvider>
   );
 }
+
+// Sentry.wrap : capture les erreurs JS non gérées et les remonte (en prod, si DSN configuré).
+export default Sentry.wrap(RootLayout);
