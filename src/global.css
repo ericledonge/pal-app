@@ -6,14 +6,16 @@
 /* Thème CLAIR — référence des maquettes (primaire). */
 @layer base {
   :root {
-    --color-background: 248 249 251;
+    --color-background: 244 245 247; /* #f4f5f7 — neutre Stitch */
     --color-surface: 255 255 255;
     --color-surface-muted: 237 238 240;
-    --color-on-surface: 25 28 30;
+    --color-on-surface: 26 28 30; /* #1a1c1e — tertiaire Stitch */
     --color-on-surface-muted: 96 100 108;
     --color-outline: 225 228 232;
     --color-primary: 255 87 0; /* #ff5700 — accent de marque, identique en clair/sombre */
     --color-on-primary: 255 255 255;
+    --color-secondary: 255 184 0; /* #ffb800 — accent secondaire (or) Stitch, identique clair/sombre */
+    --color-on-secondary: 26 28 30; /* #1a1c1e — texte sombre sur l'or */
     --color-error: 186 26 26;
   }
 
@@ -28,6 +30,8 @@
       --color-outline: 45 52 73; /* #2d3449 */
       --color-primary: 255 87 0; /* #ff5700 — identique */
       --color-on-primary: 255 255 255;
+      --color-secondary: 255 184 0; /* #ffb800 — or, identique */
+      --color-on-secondary: 26 28 30; /* #1a1c1e — texte sombre sur l'or */
       --color-error: 255 180 171; /* #ffb4ab */
     }
   }
