@@ -1,4 +1,4 @@
-import { isLevelCode } from "@/shared/domain/level";
+import { isLevelCode, type LevelCode } from "@/shared/domain/level";
 
 import type { Plateau, Slot, SlotKind } from "./session.types";
 
@@ -59,3 +59,21 @@ export const assertValidGrid = (html: string, slots: Slot[]): Slot[] => {
   }
   return slots;
 };
+
+/**
+ * Un créneau est-il pertinent pour « mon niveau » ?
+ * - vrai si le créneau porte exactement mon niveau, ou est multi-groupes l'incluant ;
+ * - exception unique à sens unique : un joueur 4.0C voit aussi les créneaux 3.5T (pas l'inverse).
+ */
+export const isSlotForLevel = (slot: Slot, myLevel: LevelCode): boolean => {
+  if (slot.codes.includes(myLevel)) {
+    return true;
+  }
+  if (myLevel === "4.0C" && slot.codes.includes("3.5T")) {
+    return true;
+  }
+  return false;
+};
+
+export const filterSlotsForLevel = (slots: Slot[], myLevel: LevelCode): Slot[] =>
+  slots.filter((slot) => isSlotForLevel(slot, myLevel));
