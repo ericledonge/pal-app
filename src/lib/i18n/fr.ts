@@ -42,4 +42,22 @@ export const fr = {
     feedback: "Donner mon avis",
     version: "Version",
   },
+  preferences: {
+    defaultAllLevels: "Démarrer sur « Tous les niveaux »",
+    themeNote: "Le thème (clair/sombre) suit le réglage de ton appareil.",
+  },
+  feedback: {
+    title: "Donner mon avis",
+    intro: "Une suggestion ou un souci avec l'app ? Dis-le-moi.",
+    category: "Catégorie",
+    categoryBug: "Problème",
+    categoryIdea: "Idée",
+    categoryOther: "Autre",
+    message: "Message",
+    messagePlaceholder: "Décris ta suggestion ou le problème…",
+    send: "Envoyer",
+    success: "Merci ! Ton message a été envoyé.",
+    error: "Échec de l'envoi. Réessaie plus tard.",
+    missingFields: "Choisis une catégorie et écris un message.",
+  },
 } as const;
