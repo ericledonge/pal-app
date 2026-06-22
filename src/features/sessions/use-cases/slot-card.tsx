@@ -33,7 +33,11 @@ export const SlotCard = ({ slot, onPress }: SlotCardProps) => {
     return content;
   }
   return (
-    <Pressable accessibilityRole="button" onPress={onPress}>
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`${slot.heure}, ${slot.levelLabel || slot.kindLabel}, ${slot.countLabel}`}
+      onPress={onPress}
+    >
       {content}
     </Pressable>
   );

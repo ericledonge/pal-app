@@ -100,6 +100,7 @@ export const MatrixLiveView = ({ session }: MatrixLiveViewProps) => {
           <Button
             variant="secondary"
             label="←"
+            accessibilityLabel={t("matrix.previousRound")}
             disabled={currentIndex === 0}
             onPress={session.prevRound}
           />

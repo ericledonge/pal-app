@@ -79,12 +79,14 @@ export const MatrixView = () => {
               <Button
                 variant="secondary"
                 label="−"
+                accessibilityLabel={t("matrix.decreaseTerrains")}
                 onPress={() => session.setTerrains(Math.max(1, config.nbTerrains - 1))}
               />
               <Text variant="stat">{config.nbTerrains}</Text>
               <Button
                 variant="secondary"
                 label="+"
+                accessibilityLabel={t("matrix.increaseTerrains")}
                 onPress={() => session.setTerrains(config.nbTerrains + 1)}
               />
             </View>

@@ -70,6 +70,9 @@ export const fr = {
     versus: "contre",
     noBench: "Personne au banc.",
     endSession: "Terminer la session",
+    decreaseTerrains: "Diminuer le nombre de terrains",
+    increaseTerrains: "Augmenter le nombre de terrains",
+    previousRound: "Ronde précédente",
   },
   profile: {
     title: "Profil",
