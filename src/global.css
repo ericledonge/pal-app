@@ -1,9 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Deux palettes (valeurs RGB pour le support de l'opacité Tailwind). */
+/* Thème CLAIR — référence des maquettes (primaire). */
+@layer base {
+  :root {
+    --color-background: 248 249 251;
+    --color-surface: 255 255 255;
+    --color-surface-muted: 237 238 240;
+    --color-on-surface: 25 28 30;
+    --color-on-surface-muted: 96 100 108;
+    --color-outline: 225 228 232;
+    --color-primary: 255 87 0; /* #ff5700 — accent de marque, identique en clair/sombre */
+    --color-on-primary: 255 255 255;
+    --color-error: 186 26 26;
+  }
+
+  /* Thème SOMBRE — variante Midnight Pro (navy #0b1326), suit le réglage système. */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background: 11 19 38; /* #0b1326 */
+      --color-surface: 23 31 51; /* #171f33 */
+      --color-surface-muted: 19 27 46; /* #131b2e */
+      --color-on-surface: 218 226 253; /* #dae2fd */
+      --color-on-surface-muted: 154 166 196;
+      --color-outline: 45 52 73; /* #2d3449 */
+      --color-primary: 255 87 0; /* #ff5700 — identique */
+      --color-on-primary: 255 255 255;
+      --color-error: 255 180 171; /* #ffb4ab */
+    }
+  }
+}
+
+/* Familles de polices pour le web (les natives sont chargées via expo-font — issue #8). */
 :root {
-  --font-display:
-    Spline Sans, Inter, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,
-    Segoe UI Symbol, Noto Color Emoji;
-  --font-mono:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
-  --font-rounded: "SF Pro Rounded", "Hiragino Maru Gothic ProN", Meiryo, "MS PGothic", sans-serif;
-  --font-serif: Georgia, "Times New Roman", serif;
+  --font-display: Lexend, Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-body: Inter, ui-sans-serif, system-ui, sans-serif;
 }

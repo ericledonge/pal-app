@@ -165,7 +165,21 @@ Priorités de couverture pal-app : **parser HTML** (point de défaillance le plu
 
 ### Échelle typographique
 
-NativeWind ne gère pas `theme.extend.fontSize` de façon fiable (les tokens thémés rendent différemment des valeurs arbitraires). Utiliser `text-[NNpx]` avec une **table canonique** (calée sur `DESIGN.md`) ; ne pas inventer de nouvelles tailles arbitraires. Les tailles Tailwind standards (`text-sm`, `text-base`…) restent disponibles. Établir cette table lors de l'intégration NativeWind.
+NativeWind ne gère pas `theme.extend.fontSize` de façon fiable (les tokens thémés rendent différemment des valeurs arbitraires). Utiliser `text-[NNpx]` avec la **table canonique** ci-dessous (calée sur `design/midnight_pro/DESIGN.md`) ; ne pas inventer de nouvelles tailles. Les tailles Tailwind standards (`text-sm`, `text-base`…) restent disponibles pour le reste.
+
+| Classe | Taille | Usage |
+|---|---|---|
+| `text-[48px]` | 48 | Display / hero (titre de marque) |
+| `text-[32px]` | 32 | Titre d'écran principal |
+| `text-[28px]` | 28 | Titre d'écran (mobile) |
+| `text-[24px]` | 24 | Titre de carte / section |
+| `text-[20px]` | 20 | Chiffres & stats (compteurs, minuteur) |
+| `text-[18px]` | 18 | Corps large |
+| `text-[16px]` | 16 | Corps |
+| `text-[14px]` | 14 | Label / petit corps |
+| `text-[12px]` | 12 | Légende |
+
+Polices : `font-lexend` (titres) et `font-inter` (corps), chargées via expo-font. Couleurs sémantiques (deux thèmes) : `bg-background`, `bg-surface`, `text-on-surface`, `text-on-surface-muted`, `border-outline`, `bg-primary`/`text-on-primary`, `text-error` — définies en variables CSS dans `src/global.css` et basculées par `prefers-color-scheme`.
 
 ### Tokens d'espacement
 
