@@ -23,5 +23,12 @@
   "env": {
     "builtin": true
   },
-  "ignorePatterns": ["design/**", "docs/**", "node_modules/**", ".expo/**", "dist/**"]
+  "ignorePatterns": [
+    "design/**",
+    "docs/**",
+    "node_modules/**",
+    ".expo/**",
+    "dist/**",
+    ".rnstorybook/**"
+  ]
 }

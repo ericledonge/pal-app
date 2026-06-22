@@ -7,5 +7,5 @@
   "sortImports": {
     "order": "asc"
   },
-  "ignorePatterns": ["design/**", "docs/**", "**/*.md", "package-lock.json"]
+  "ignorePatterns": ["design/**", "docs/**", "**/*.md", "package-lock.json", ".rnstorybook/**"]
 }
