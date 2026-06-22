@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ActivityIndicator, ScrollView, View } from "react-native";
 
-import { Card } from "@/components/ui/card";
 import { Chip } from "@/components/ui/chip";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Text } from "@/components/ui/text";
@@ -10,6 +9,7 @@ import { t } from "@/lib/i18n";
 
 import type { AgendaMode } from "../domain/session.service";
 import type { Day } from "../domain/session.types";
+import { SlotCard } from "./slot-card";
 import { useAgenda } from "./use-agenda";
 
 export const AgendaView = () => {
@@ -51,15 +51,7 @@ export const AgendaView = () => {
               {section.plateauLabel}
             </Text>
             {section.slots.map((slot) => (
-              <Card key={slot.id} className="gap-2xs">
-                <View className="flex-row items-center justify-between">
-                  <Text variant="cardTitle">{slot.heure}</Text>
-                  <Text variant="label" className="text-on-surface-muted">
-                    {slot.countLabel}
-                  </Text>
-                </View>
-                <Text variant="body">{slot.levelLabel || slot.kindLabel}</Text>
-              </Card>
+              <SlotCard key={slot.id} slot={slot} />
             ))}
           </View>
         ))}
