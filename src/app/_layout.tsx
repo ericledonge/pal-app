@@ -27,6 +27,7 @@ import { AppState, useColorScheme, View } from "react-native";
 
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
+import { useLevelPreference } from "@/features/level/use-cases/use-level-preference";
 import { initAnalytics } from "@/lib/analytics";
 import { t } from "@/lib/i18n";
 import { initObservability, logger } from "@/lib/logger";
@@ -58,6 +59,23 @@ export const ErrorBoundary = ({ error, retry }: ErrorBoundaryProps) => {
   );
 };
 
+// Masque le splash une fois les polices ET la préférence de niveau chargées (les deux
+// ressources qui conditionnent le premier écran), évitant tout flash. Rendu à l'intérieur du
+// QueryClientProvider pour lire la préférence ; fonctionne quelle que soit la route d'entrée
+// (y compris un deep link direct vers les onglets).
+const SplashGate = ({ fontsReady }: { fontsReady: boolean }) => {
+  const { isLoading } = useLevelPreference();
+  const ready = fontsReady && !isLoading;
+
+  useEffect(() => {
+    if (ready) {
+      void SplashScreen.hideAsync();
+    }
+  }, [ready]);
+
+  return null;
+};
+
 function RootLayout() {
   const colorScheme = useColorScheme();
   const [fontsLoaded, fontError] = useFonts({
@@ -71,13 +89,7 @@ function RootLayout() {
     Inter_700Bold,
   });
 
-  const ready = fontsLoaded || fontError !== null;
-
-  useEffect(() => {
-    if (ready) {
-      void SplashScreen.hideAsync();
-    }
-  }, [ready]);
+  const fontsReady = fontsLoaded || fontError !== null;
 
   // Focus manager TanStack Query : refetch quand l'app revient au premier plan.
   useEffect(() => {
@@ -87,13 +99,10 @@ function RootLayout() {
     return () => subscription.remove();
   }, []);
 
-  if (!ready) {
-    return null;
-  }
-
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <SplashGate fontsReady={fontsReady} />
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="index" />
           <Stack.Screen name="(tabs)" />
