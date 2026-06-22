@@ -21,17 +21,17 @@ export const readMatrixSession = async (): Promise<PersistedMatrix | null> => {
   }
   try {
     const parsed = JSON.parse(raw) as Partial<PersistedMatrix>;
+    const rawPhase = parsed.phase;
+    const rawIndex = parsed.currentIndex;
     if (!isMatrixSession(parsed)) {
       return null;
     }
-    const currentIndex =
-      typeof parsed.currentIndex === "number" && parsed.currentIndex >= 0 ? parsed.currentIndex : 0;
     return {
       effectif: parsed.effectif,
       config: parsed.config,
       rounds: parsed.rounds,
-      phase: parsed.phase === "live" ? "live" : "config",
-      currentIndex,
+      phase: rawPhase === "live" ? "live" : "config",
+      currentIndex: typeof rawIndex === "number" && rawIndex >= 0 ? rawIndex : 0,
     };
   } catch {
     return null;
