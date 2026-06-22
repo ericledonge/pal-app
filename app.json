@@ -9,7 +9,10 @@
     "scheme": "palevis",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "bundleIdentifier": "ca.palevis.app"
+      "bundleIdentifier": "ca.palevis.app",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "ca.palevis.app",
