@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ScrollView, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -12,6 +13,7 @@ import type { LevelCode } from "@/shared/domain/level";
 
 export default function OnboardingScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { setLevel } = useLevelPreference();
   const [selected, setSelected] = useState<LevelCode | null>(null);
   const [saving, setSaving] = useState(false);
@@ -26,7 +28,11 @@ export default function OnboardingScreen() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-background" contentContainerClassName="gap-lg px-lg py-2xl">
+    <ScrollView
+      className="flex-1 bg-background"
+      contentContainerClassName="gap-lg px-lg"
+      contentContainerStyle={{ paddingTop: insets.top + 28, paddingBottom: insets.bottom + 28 }}
+    >
       <View className="gap-2xs">
         <Text variant="title">{t("onboarding.title")}</Text>
         <Text variant="body" className="text-on-surface-muted">
