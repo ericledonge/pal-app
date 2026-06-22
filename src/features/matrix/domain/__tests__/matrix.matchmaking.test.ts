@@ -1,5 +1,5 @@
 import { generateRound, generateRounds } from "../matrix.matchmaking";
-import { someMatrixPlayers } from "./matrix.builders";
+import { aMatrixPlayer, someMatrixPlayers } from "./matrix.builders";
 
 const playingIds = (round: { pairings: { equipeA: string[]; equipeB: string[] }[] }): string[] =>
   round.pairings.flatMap((pairing) => [...pairing.equipeA, ...pairing.equipeB]);
@@ -61,5 +61,25 @@ describe("generateRounds — équité et variété", () => {
       }
     }
     expect(Math.max(...partner.values())).toBeLessThanOrEqual(2);
+  });
+});
+
+describe("modifications en cours de session", () => {
+  it("retrait : les rondes suivantes excluent le joueur retiré (historique pris en compte)", () => {
+    const players = someMatrixPlayers(8);
+    const round1 = generateRound(players, 2, [], 1);
+    const remaining = players.filter((player) => player.id !== players[0].id);
+    const round2 = generateRound(remaining, 2, [round1], 2);
+    const ids2 = [...playingIds(round2), ...round2.bench];
+    expect(ids2).not.toContain(players[0].id);
+    expect(round1.pairings).toHaveLength(2); // la ronde en cours n'est pas modifiée
+  });
+
+  it("ajout : un nouveau joueur entre dans les rondes suivantes", () => {
+    const players = someMatrixPlayers(7);
+    const round1 = generateRound(players, 1, [], 1);
+    const extra = aMatrixPlayer();
+    const round2 = generateRound([...players, extra], 1, [round1], 2);
+    expect([...playingIds(round2), ...round2.bench]).toContain(extra.id);
   });
 });
