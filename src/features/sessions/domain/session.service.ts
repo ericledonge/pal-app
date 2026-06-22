@@ -137,8 +137,10 @@ export const createAgendaViewModel = (
     withNames && options.myLevel ? filterSlotsForLevel(slots, options.myLevel) : slots;
 
   const byPlateau = new Map<Plateau, AgendaSlotViewModel[]>();
+  // sort() sur une copie (spread) : Hermes, le moteur JS de React Native, n'implémente pas
+  // Array.prototype.toSorted (ES2023). La copie évite de muter l'entrée.
   [...visible]
-    .toSorted((left, right) => left.heure.localeCompare(right.heure))
+    .sort((left, right) => left.heure.localeCompare(right.heure))
     .forEach((slot, index) => {
       const list = byPlateau.get(slot.plateau) ?? [];
       list.push(createAgendaSlotViewModel(slot, index, withNames));

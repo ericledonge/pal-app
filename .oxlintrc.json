@@ -10,6 +10,7 @@
     "typescript/no-explicit-any": "warn",
     "typescript/consistent-type-imports": "warn",
     "no-console": "warn",
+    "unicorn/no-array-sort": "off",
     "eqeqeq": "error",
     "prefer-const": "error",
     "import/no-cycle": "error",

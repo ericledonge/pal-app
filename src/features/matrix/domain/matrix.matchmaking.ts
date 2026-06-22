@@ -23,7 +23,8 @@ const shuffled = <T>(items: T[], rng: () => number): T[] => {
   return copy;
 };
 
-const pairKey = (a: string, b: string): string => [a, b].toSorted().join("~");
+// sort() sur un tableau littéral : Hermes (runtime RN) n'a pas Array.prototype.toSorted.
+const pairKey = (a: string, b: string): string => [a, b].sort().join("~");
 
 interface History {
   partner: Map<string, number>;
@@ -106,7 +107,8 @@ export const generateRound = (
   const rng = createRng(seed);
 
   // Banc équitable : on assoit ceux qui ont le moins bénéficié du banc (tiebreak seedé) ; les autres jouent.
-  const ordered = shuffled(effectif, rng).toSorted(
+  // shuffled() renvoie une copie → sort() en place est sûr (Hermes n'a pas toSorted).
+  const ordered = shuffled(effectif, rng).sort(
     (x, y) => (counts.bench.get(x.id) ?? 0) - (counts.bench.get(y.id) ?? 0),
   );
   const benchPlayers = ordered.slice(0, effectif.length - playingCount);
