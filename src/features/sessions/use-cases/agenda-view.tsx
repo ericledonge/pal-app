@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { ActivityIndicator, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
 
 import { Chip } from "@/components/ui/chip";
 import { ScreenHeader } from "@/components/ui/screen-header";
+import { ScreenEmpty, ScreenError, ScreenLoading } from "@/components/ui/screen-state";
 import { Text } from "@/components/ui/text";
 import { usePreferences } from "@/features/preferences/use-cases/use-preferences";
 import { t } from "@/lib/i18n";
@@ -18,31 +19,23 @@ export const AgendaView = () => {
   const [day, setDay] = useState<Day>("today");
   const [mode, setMode] = useState<AgendaMode>(preferences.defaultAllLevels ? "all" : "myLevel");
   const [selected, setSelected] = useState<AgendaSlotViewModel | null>(null);
-  const { sections, isLoading, isError, isEmpty, refresh } = useAgenda(day, mode);
+  const { sections, isLoading, isError, errorKind, isEmpty, refresh } = useAgenda(day, mode);
 
   let body;
   if (isLoading) {
-    body = (
-      <View className="flex-1 items-center justify-center">
-        <ActivityIndicator />
-      </View>
-    );
+    body = <ScreenLoading />;
   } else if (isError) {
     body = (
-      <View className="flex-1 items-center justify-center gap-sm px-lg">
-        <Text variant="body" className="text-center text-error">
-          {t("sessions.error")}
-        </Text>
-        <Chip label={t("common.retry")} onPress={refresh} />
-      </View>
+      <ScreenError
+        message={errorKind === "parsing" ? t("sessions.errorParsing") : t("sessions.errorNetwork")}
+        onRetry={refresh}
+      />
     );
   } else if (isEmpty) {
     body = (
-      <View className="flex-1 items-center justify-center px-lg">
-        <Text variant="body" className="text-center text-on-surface-muted">
-          {mode === "myLevel" ? t("sessions.emptyMyLevel") : t("sessions.empty")}
-        </Text>
-      </View>
+      <ScreenEmpty
+        message={mode === "myLevel" ? t("sessions.emptyMyLevel") : t("sessions.empty")}
+      />
     );
   } else {
     body = (
