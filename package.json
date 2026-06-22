@@ -45,6 +45,7 @@
     "i18n-js": "^4.5.3",
     "jest-expo": "~56.0.5",
     "nativewind": "^4.2.5",
+    "node-html-parser": "^8.0.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.85.3",
