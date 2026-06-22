@@ -1,0 +1,77 @@
+{
+  "/Users/ericledonge/Perso/pal/src/features/_example/domain/example.parser.ts": {
+    "path": "/Users/ericledonge/Perso/pal/src/features/_example/domain/example.parser.ts",
+    "statementMap": {
+      "0": { "start": { "line": 7, "column": 28 }, "end": { "line": 10, "column": 1 } },
+      "1": { "start": { "line": 8, "column": 16 }, "end": { "line": 8, "column": 26 } },
+      "2": { "start": { "line": 9, "column": 2 }, "end": { "line": 9, "column": 40 } }
+    },
+    "fnMap": {
+      "0": {
+        "name": "(anonymous_0)",
+        "decl": { "start": { "line": 7, "column": 28 }, "end": { "line": 7, "column": 29 } },
+        "loc": { "start": { "line": 7, "column": 57 }, "end": { "line": 10, "column": 1 } },
+        "line": 7
+      }
+    },
+    "branchMap": {},
+    "s": { "0": 1, "1": 1, "2": 1 },
+    "f": { "0": 1 },
+    "b": {},
+    "_coverageSchema": "1a1c01bbd47fc00a2c39e90264f33305004495a9",
+    "hash": "3f26fbab2142fafc03b10a355a931b8752228a73"
+  },
+  "/Users/ericledonge/Perso/pal/src/features/_example/domain/example.service.ts": {
+    "path": "/Users/ericledonge/Perso/pal/src/features/_example/domain/example.service.ts",
+    "statementMap": {
+      "0": { "start": { "line": 13, "column": 38 }, "end": { "line": 15, "column": 1 } },
+      "1": { "start": { "line": 14, "column": 2 }, "end": { "line": 14, "column": 59 } }
+    },
+    "fnMap": {
+      "0": {
+        "name": "(anonymous_0)",
+        "decl": { "start": { "line": 13, "column": 38 }, "end": { "line": 13, "column": 39 } },
+        "loc": { "start": { "line": 13, "column": 77 }, "end": { "line": 15, "column": 1 } },
+        "line": 13
+      }
+    },
+    "branchMap": {},
+    "s": { "0": 1, "1": 1 },
+    "f": { "0": 1 },
+    "b": {},
+    "_coverageSchema": "1a1c01bbd47fc00a2c39e90264f33305004495a9",
+    "hash": "9eceae36d3470611bf049882138500859230bcdb"
+  },
+  "/Users/ericledonge/Perso/pal/src/shared/domain/level.ts": {
+    "path": "/Users/ericledonge/Perso/pal/src/shared/domain/level.ts",
+    "statementMap": {
+      "0": { "start": { "line": 5, "column": 22 }, "end": { "line": 15, "column": 10 } },
+      "1": { "start": { "line": 20, "column": 27 }, "end": { "line": 21, "column": 76 } },
+      "2": { "start": { "line": 21, "column": 2 }, "end": { "line": 21, "column": 76 } }
+    },
+    "fnMap": {
+      "0": {
+        "name": "(anonymous_0)",
+        "decl": { "start": { "line": 20, "column": 27 }, "end": { "line": 20, "column": 28 } },
+        "loc": { "start": { "line": 21, "column": 2 }, "end": { "line": 21, "column": 76 } },
+        "line": 21
+      }
+    },
+    "branchMap": {
+      "0": {
+        "loc": { "start": { "line": 21, "column": 2 }, "end": { "line": 21, "column": 76 } },
+        "type": "binary-expr",
+        "locations": [
+          { "start": { "line": 21, "column": 2 }, "end": { "line": 21, "column": 27 } },
+          { "start": { "line": 21, "column": 31 }, "end": { "line": 21, "column": 76 } }
+        ],
+        "line": 21
+      }
+    },
+    "s": { "0": 1, "1": 1, "2": 14 },
+    "f": { "0": 14 },
+    "b": { "0": [14, 12] },
+    "_coverageSchema": "1a1c01bbd47fc00a2c39e90264f33305004495a9",
+    "hash": "09258aedded66ba4067d41579a87a95e51740efc"
+  }
+}

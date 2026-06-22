@@ -46,4 +46,31 @@ Un squelette copiable est fourni dans `src/features/_example/` (à supprimer une
 7. **Pas de Zod** : sûreté de type via interfaces TypeScript ; la sortie du parser est validée par des type guards purs dans le service.
 8. Pas de DI / pattern Provider — imports directs.
 
+## Tests
+
+Harnais **jest-expo** (`npm test`). Conventions :
+
+- **Unitaires** (logique pure) : `features/<feature>/domain/__tests__/` et `shared/domain/__tests__/` — services, parser, view models, filtre. Fixtures via **builder pattern** (`anExampleDto(overrides?)`).
+- **Intégration** (use-cases) : `features/<feature>/use-cases/__tests__/` via `renderHook` + adapter **mocké**, en enveloppant dans un `QueryClientProvider` :
+
+```tsx
+jest.mock("../../domain/<resource>.adapter", () => ({
+  fetch<Resource>: jest.fn(async () => /* DTO factice */),
+}));
+
+const wrapper = ({ children }) => (
+  <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
+    {children}
+  </QueryClientProvider>
+);
+
+const { result } = renderHook(() => use<Action>(...), { wrapper });
+await waitFor(() => expect(result.current.viewModel).not.toBeNull());
+```
+
+- **Pas de test de composant** — Storybook tient ce rôle.
+- Seuil de couverture (`jest.config.js`) sur la logique pure (`*.service.ts`, `*.parser.ts`, `shared/domain`).
+
+> Note : le réglage exact de `renderHook` (RNTL 14 + React 19) reste à valider lors des premières intégrations de use-cases (M1).
+
 Voir aussi `CLAUDE.md` (section Architecture) pour le contexte produit.
