@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Appariements des rondes - Midnight Pro</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=Lexend:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#5b4037",
+                        "error": "#ffb4ab",
+                        "on-background": "#dae2fd",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "secondary-fixed-dim": "#bcc7de",
+                        "inverse-on-surface": "#283044",
+                        "on-error-container": "#ffdad6",
+                        "primary-container": "#ff5701",
+                        "on-secondary": "#263143",
+                        "background": "#0b1326",
+                        "on-primary": "#5c1a00",
+                        "surface-dim": "#0b1326",
+                        "error-container": "#93000a",
+                        "on-surface-variant": "#e5beb2",
+                        "on-surface": "#dae2fd",
+                        "surface": "#0b1326",
+                        "surface-tint": "#ffb59b",
+                        "on-secondary-container": "#aeb9d0",
+                        "on-tertiary-container": "#1c2a3d",
+                        "tertiary-container": "#8392a9",
+                        "on-tertiary-fixed-variant": "#3a485c",
+                        "on-tertiary-fixed": "#0d1c2f",
+                        "outline": "#ab897e",
+                        "surface-container-high": "#222a3d",
+                        "secondary": "#bcc7de",
+                        "primary-fixed-dim": "#ffb59b",
+                        "on-primary-fixed": "#380d00",
+                        "on-error": "#690005",
+                        "surface-container-highest": "#2d3449",
+                        "primary-fixed": "#ffdbcf",
+                        "primary": "#ffb59b",
+                        "surface-bright": "#31394d",
+                        "on-primary-fixed-variant": "#822800",
+                        "inverse-primary": "#aa3700",
+                        "on-secondary-fixed": "#111c2d",
+                        "on-tertiary": "#233144",
+                        "surface-container": "#171f33",
+                        "surface-container-low": "#131b2e",
+                        "tertiary-fixed": "#d5e3fd",
+                        "surface-container-lowest": "#060e20",
+                        "tertiary": "#b9c7e0",
+                        "tertiary-fixed-dim": "#b9c7e0",
+                        "on-primary-container": "#501600",
+                        "secondary-container": "#3e495d",
+                        "secondary-fixed": "#d8e3fb",
+                        "inverse-surface": "#dae2fd",
+                        "surface-variant": "#2d3449"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-padding-desktop": "32px",
+                        "section-gap": "40px",
+                        "container-padding-mobile": "16px",
+                        "gutter": "16px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Lexend"],
+                        "headline-lg": ["Lexend"],
+                        "stats-number": ["Lexend"],
+                        "headline-md": ["Lexend"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "stats-number": ["20px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-glass {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+        /* Hide scrollbar for waiting room */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased md:hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-white/10 shadow-2xl shadow-primary/10 flex justify-between items-center px-4 py-3 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary dark:text-primary active:scale-95 transition-transform duration-200 hover:opacity-80 transition-opacity cursor-pointer">sports_tennis</span>
+</div>
+<h1 class="font-display-lg text-headline-md-mobile tracking-tighter text-primary dark:text-primary">PRO CIRCUIT</h1>
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-white/10 active:scale-95 transition-transform duration-200 cursor-pointer">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A small, circular avatar portrait of a competitive pickleball player with intense lighting, dark mode aesthetic, wearing dark athletic gear." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADm-pkBQIbeOsSjjkcAAW_htmP67fetfT2JUC2Uy4V8RU78Vw1SMYnQenxOQMH9FONDJPtieB0ctGiB2uiMk1cXhUQjmd7WhGHBEAH-OjXuZhk_geOh8c5JKn4dvTi8cez3yqvSI1HgpXGmtMZO5NVtij_xpF7LDVNkf5qKWDjZ_jtX-ycMHFIK2xfoWQ4-VdPhAbghrx9f4byFcAKC-hB0jXwTHq52zviXU24WDrW5xtlCNMYFEnAlN4Fmyx1i7bwFwo0VWjtfAc"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-[72px] pb-[90px] px-container-padding-mobile flex flex-col gap-section-gap min-h-screen">
+<!-- Page Title & Round Selector -->
+<section class="mt-4 flex flex-col items-center gap-2">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-center">Appariements des rondes</h2>
+<div class="inline-flex items-center gap-2 bg-surface-container-high px-4 py-1.5 rounded-full border border-white/10">
+<span class="font-label-md text-label-md text-primary">Ronde 2</span>
+<span class="material-symbols-outlined text-primary text-[18px]">expand_more</span>
+</div>
+</section>
+<!-- Timer Section -->
+<section class="flex flex-col items-center justify-center relative">
+<div class="relative w-56 h-56 flex items-center justify-center">
+<!-- SVG Ring -->
+<svg class="absolute inset-0 w-full h-full transform -rotate-90">
+<circle class="text-surface-container" cx="112" cy="112" fill="transparent" r="104" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-primary-container drop-shadow-[0_0_15px_rgba(255,87,1,0.5)]" cx="112" cy="112" fill="transparent" r="104" stroke="currentColor" stroke-dasharray="653.45" stroke-dashoffset="130" stroke-width="6"></circle>
+</svg>
+<!-- Timer Text -->
+<div class="text-center flex flex-col items-center">
+<span class="font-display-lg text-display-lg text-on-surface tracking-tighter">04:59</span>
+<span class="font-label-md text-label-md text-tertiary uppercase tracking-wider mt-1">Restant</span>
+</div>
+</div>
+<!-- Controls -->
+<div class="flex items-center gap-3 mt-8 w-full justify-center">
+<button class="bg-surface-container-high border border-white/10 text-on-surface font-label-md text-label-md py-3 px-5 rounded-full hover:bg-white/5 transition-colors flex items-center gap-2 shadow-lg">
+<span class="material-symbols-outlined text-[20px]">pause</span>
+                    Pause
+                </button>
+<button class="bg-primary-container text-[#ffffff] font-label-md text-label-md py-3 px-6 rounded-full hover:opacity-90 transition-opacity flex items-center gap-2 shadow-[0_4px_20px_rgba(255,87,1,0.4)]">
+<span class="material-symbols-outlined text-[20px] text-[#ffffff]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                    Démarrer la rotation
+                </button>
+<button class="bg-surface-container-high border border-white/10 text-on-surface font-label-md text-label-md py-3 w-12 rounded-full hover:bg-white/5 transition-colors flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-[20px]">skip_next</span>
+</button>
+</div>
+</section>
+<!-- Current Round (Ronde en cours) -->
+<section class="flex flex-col gap-4">
+<h3 class="font-headline-md text-headline-md border-b border-white/10 pb-2">Ronde en cours</h3>
+<div class="flex flex-col gap-3">
+<!-- Court Card 1 -->
+<div class="bg-surface-container-high bg-glass rounded-xl p-4 border border-white/5 shadow-lg relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary-container"></div>
+<div class="flex justify-between items-center mb-3 pl-2">
+<span class="font-label-md text-label-md text-tertiary">Terrain 01</span>
+<span class="bg-primary-container/20 text-primary-container font-label-md text-[12px] px-2 py-0.5 rounded-full">Actif</span>
+</div>
+<div class="flex items-center justify-between pl-2">
+<div class="flex flex-col gap-1 w-[40%]">
+<span class="font-body-md text-body-md truncate">Alex T.</span>
+<span class="font-body-md text-body-md truncate">Sam R.</span>
+</div>
+<div class="flex flex-col items-center justify-center px-2">
+<span class="font-label-md text-label-md text-tertiary opacity-50">VS</span>
+</div>
+<div class="flex flex-col gap-1 w-[40%] text-right">
+<span class="font-body-md text-body-md truncate">Jordan P.</span>
+<span class="font-body-md text-body-md truncate">Casey L.</span>
+</div>
+</div>
+</div>
+<!-- Court Card 2 -->
+<div class="bg-surface-container-high bg-glass rounded-xl p-4 border border-white/5 shadow-lg relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-secondary"></div>
+<div class="flex justify-between items-center mb-3 pl-2">
+<span class="font-label-md text-label-md text-tertiary">Terrain 02</span>
+</div>
+<div class="flex items-center justify-between pl-2">
+<div class="flex flex-col gap-1 w-[40%]">
+<span class="font-body-md text-body-md truncate">Morgan W.</span>
+<span class="font-body-md text-body-md truncate">Taylor K.</span>
+</div>
+<div class="flex flex-col items-center justify-center px-2">
+<span class="font-label-md text-label-md text-tertiary opacity-50">VS</span>
+</div>
+<div class="flex flex-col gap-1 w-[40%] text-right">
+<span class="font-body-md text-body-md truncate">Riley D.</span>
+<span class="font-body-md text-body-md truncate">Quinn B.</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Waiting Room (Salle d'attente) -->
+<section class="flex flex-col gap-4">
+<h3 class="font-headline-md text-headline-md border-b border-white/10 pb-2 flex items-center justify-between">
+                Salle d'attente
+                <span class="bg-surface-container-highest text-on-surface-variant font-label-md text-[12px] px-2 py-0.5 rounded-full">4 Joueurs</span>
+</h3>
+<div class="flex overflow-x-auto gap-4 pb-2 no-scrollbar">
+<!-- Player 1 -->
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="w-14 h-14 rounded-full bg-surface-container overflow-hidden border-2 border-surface-container-highest">
+<img alt="Player" class="w-full h-full object-cover" data-alt="Close up portrait of a serious pickleball player resting, neon highlights on dark gear, moody cinematic lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR7Qf6Dttu7rQVN7AizFLHDKKxl5Tbkzir0oiROPpmW3bhZV3yKO_4c14L7mtkFou91yhSLfbHGc5NVdlhImxk3Du7cL9mODZWppolex4odFpP9uD15ZsDzs1TdDwehNeEgTIqU-urysrvcl1XAqPrzofSOBRWkn5Zy5geNms3r_167Q-Z4MUfF9fO_paC9Z0_F15f-1Jw26Trd5yhuqBahKFJVomXSbRSDL7S-WSNQec_2SmCtQ9MxFiiXwccGAwg5fifgCDEALE"/>
+</div>
+<span class="font-label-md text-label-md text-center truncate w-full text-secondary">Avery M.</span>
+</div>
+<!-- Player 2 -->
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="w-14 h-14 rounded-full bg-surface-container overflow-hidden border-2 border-surface-container-highest">
+<img alt="Player" class="w-full h-full object-cover" data-alt="Portrait of an athletic person in dark mode setting with subtle orange rim light, looking focused." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA16MoDvmrUT0Zg7laldE75WbFRc3Ql45fgKPzJLTVYcar4bGce0h847tS3dWAqEvq6SH7FjwMVh-m3C9Y6dgM1HWsyE5V4IIhT2ZHzkZyAA9f_w-Xf8QN4tJoZdI6UjnTQdvuqysrLAhx6N-_gylv5Kpmh-HjhwhCUyGExAFjF9a8erWxJbQ2cRod_pxSmVP4-DPc9G0Kd8xapUPZ9kGuYxDlrMntuNoo_6OJO_rLGgvQxMPS7DrOgYSj3AMNlCut_G4aYzsdLX4U"/>
+</div>
+<span class="font-label-md text-label-md text-center truncate w-full text-secondary">Jamie C.</span>
+</div>
+<!-- Player 3 -->
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="w-14 h-14 rounded-full bg-surface-container overflow-hidden border-2 border-surface-container-highest flex items-center justify-center text-tertiary font-headline-md">
+                        DR
+                    </div>
+<span class="font-label-md text-label-md text-center truncate w-full text-secondary">Drew R.</span>
+</div>
+<!-- Player 4 -->
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="w-14 h-14 rounded-full bg-surface-container overflow-hidden border-2 border-surface-container-highest flex items-center justify-center text-tertiary font-headline-md">
+                        PK
+                    </div>
+<span class="font-label-md text-label-md text-center truncate w-full text-secondary">Parker K.</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-surface-container-high/90 dark:bg-surface-container-high/90 backdrop-blur-2xl shadow-[0_-8px_30px_rgb(0,0,0,0.4)] flex justify-around items-center px-2 py-3 w-full pb-safe">
+<!-- Active Tab: Sessions -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-[#ffffff] rounded-xl px-4 py-1.5 active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="font-label-md text-[10px] uppercase tracking-wider">Sessions</span>
+</a>
+<!-- Inactive Tab: Matrix -->
+<a class="flex flex-col items-center justify-center text-on-secondary-container opacity-60 px-4 py-1.5 hover:bg-white/5 rounded-xl active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined mb-1">grid_view</span>
+<span class="font-label-md text-[10px] uppercase tracking-wider">Matrix</span>
+</a>
+<!-- Inactive Tab: Profile -->
+<a class="flex flex-col items-center justify-center text-on-secondary-container opacity-60 px-4 py-1.5 hover:bg-white/5 rounded-xl active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-md text-[10px] uppercase tracking-wider">Profile</span>
+</a>
+</nav>
+</body></html>

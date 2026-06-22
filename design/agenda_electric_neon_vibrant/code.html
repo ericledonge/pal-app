@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Agenda des sessions - Pro Circuit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#333333",
+                        "error": "#ff5252",
+                        "on-background": "#e0e0e0",
+                        "on-secondary-fixed-variant": "#a0a0a0",
+                        "secondary-fixed-dim": "#b0b0b0",
+                        "inverse-on-surface": "#1a1a1a",
+                        "on-error-container": "#ffbaba",
+                        "primary-container": "#ff5700",
+                        "on-secondary": "#1a1a1a",
+                        "background": "#0a0a0a",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#0a0a0a",
+                        "error-container": "#4a0000",
+                        "on-surface-variant": "#a0a0a0",
+                        "on-surface": "#f5f5f5",
+                        "surface": "#121212",
+                        "surface-tint": "#ff5700",
+                        "on-secondary-container": "#d0d0d0",
+                        "on-tertiary-container": "#c0c0c0",
+                        "tertiary-container": "#2a2a2a",
+                        "on-tertiary-fixed-variant": "#a0a0a0",
+                        "on-tertiary-fixed": "#0d1c2f",
+                        "outline": "#444444",
+                        "surface-container-high": "#1f1f1f",
+                        "secondary": "#a0a0a0",
+                        "primary-fixed-dim": "#ff5700",
+                        "on-primary-fixed": "#380d00",
+                        "on-error": "#690005",
+                        "surface-container-highest": "#282828",
+                        "primary-fixed": "#ff884d",
+                        "primary": "#ff5700",
+                        "surface-bright": "#1a1a1a",
+                        "on-primary-fixed-variant": "#822800",
+                        "inverse-primary": "#ff884d",
+                        "on-secondary-fixed": "#e0e0e0",
+                        "on-tertiary": "#e0e0e0",
+                        "surface-container": "#151515",
+                        "surface-container-low": "#0d0d0d",
+                        "tertiary-fixed": "#d5e3fd",
+                        "surface-container-lowest": "#050505",
+                        "tertiary": "#80d0ff",
+                        "tertiary-fixed-dim": "#50b0ff",
+                        "on-primary-container": "#ffffff",
+                        "secondary-container": "#2a2a2a",
+                        "secondary-fixed": "#d0d0d0",
+                        "inverse-surface": "#e0e0e0",
+                        "surface-variant": "#1f1f1f",
+                        "neon-blue": "#00f0ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-padding-desktop": "32px",
+                        "section-gap": "40px",
+                        "container-padding-mobile": "16px",
+                        "gutter": "16px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Lexend"],
+                        "headline-lg": ["Lexend"],
+                        "stats-number": ["Lexend"],
+                        "headline-md": ["Lexend"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "stats-number": ["20px", {"lineHeight": "24px", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+            background-color: #0a0a0a;
+        }
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Electric Neon Utilities */
+        .neon-glow-orange {
+            box-shadow: 0 0 15px rgba(255, 87, 0, 0.4), 0 0 5px rgba(255, 87, 0, 0.2);
+        }
+        
+        .neon-glow-blue {
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), 0 0 5px rgba(0, 240, 255, 0.1);
+        }
+        
+        .neon-text-glow {
+            text-shadow: 0 0 10px rgba(255, 87, 0, 0.6);
+        }
+        
+        .neon-card {
+            background: radial-gradient(circle at center, rgba(255, 87, 0, 0.08) 0%, rgba(18, 18, 18, 0.95) 100%), #121212;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 87, 0, 0.3);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        
+        .neon-card-blue {
+            background: radial-gradient(circle at center, rgba(0, 240, 255, 0.05) 0%, rgba(18, 18, 18, 0.95) 100%), #121212;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .neon-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 87, 0, 0.4), transparent);
+        }
+
+        .neon-divider-blue {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.3), transparent);
+        }
+        
+        @media (min-width: 768px) {
+            main {
+                margin-left: 80px;
+                max-width: calc(1280px - 80px);
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen antialiased flex flex-col pt-[72px] pb-[80px]">
+<!-- TopAppBar -->
+<header class="bg-[#0a0a0a]/90 backdrop-blur-xl text-primary fixed top-0 w-full z-50 border-b border-primary/20 shadow-[0_4px_30px_rgba(255,87,0,0.1)] flex justify-between items-center px-4 py-3 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[28px] hover:opacity-80 transition-opacity active:scale-95 duration-200 cursor-pointer neon-text-glow" data-icon="sports_tennis">sports_tennis</span>
+<h1 class="font-display-lg text-headline-md-mobile md:text-headline-md tracking-tighter text-primary font-extrabold uppercase neon-text-glow">PRO CIRCUIT</h1>
+</div>
+<div class="flex items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest border border-primary/30 overflow-hidden flex items-center justify-center hover:opacity-80 transition-opacity active:scale-95 duration-200 cursor-pointer shadow-[0_0_10px_rgba(255,87,0,0.2)]">
+<img class="w-full h-full object-cover" data-alt="A stylized, high-contrast portrait of a competitive pickleball player wearing a dark visor and neon orange accents. The lighting is cinematic, casting deep shadows against a dark moody background. The overall aesthetic is sleek, modern, and athletic, fitting a premium sports app profile avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuApRbf9uI_96RzrCMhTgignwNNvkoco5yOo7BpqgXp2tJMhuR6r-_gXGyropAYfVv9v8kKnfk5u-FJjNgMA4gljxZ4uN5-2flBrPE0UMVgJNY2qhJ-vUOUAieMCoULzFDp5-mbRSFFX6Q1mCtM_ohTb76l4r3MsGSJIcduddGnSORxOuSlgxcwGlmrsaL-4lMwKmsqsy-uLOPC4U5ovXtFza15jNhV5bvDX4CntKO1HHkK7xu8AwUn2_L306tDAFYYDPObjSFF3dTA"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-[1280px] mx-auto px-container-padding-mobile md:px-container-padding-desktop py-6 flex flex-col gap-section-gap">
+<!-- Header Section -->
+<section class="flex flex-col gap-4">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-white">Agenda des sessions</h2>
+<!-- Controls Row -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+<!-- Day Selector -->
+<div class="flex bg-surface-container-highest rounded-full p-1 border border-white/5 shadow-inner">
+<button class="px-6 py-2 rounded-full bg-primary-container text-on-primary-container font-label-md text-label-md transition-all duration-200 neon-glow-orange">Aujourd'hui</button>
+<button class="px-6 py-2 rounded-full text-on-surface-variant hover:text-white font-label-md text-label-md transition-all duration-200 hover:bg-white/5">Demain</button>
+</div>
+<!-- Level Toggle -->
+<div class="flex items-center gap-3 bg-surface-container-highest p-2 rounded-xl border border-white/5">
+<span class="font-label-md text-label-md text-on-surface-variant">Mon niveau</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-variant rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container peer-checked:neon-glow-orange"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- Sessions List -->
+<section class="flex flex-col gap-6">
+<!-- Session Card 1 (Registered) -->
+<div class="neon-card rounded-2xl p-4 md:p-6 flex flex-col gap-5 relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+<div class="flex justify-between items-start z-10">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-[#1a1a1a] flex items-center justify-center border border-primary/20 text-primary shadow-[inset_0_0_10px_rgba(255,87,0,0.1)]">
+<span class="material-symbols-outlined text-[24px]" data-icon="schedule">schedule</span>
+</div>
+<div>
+<h3 class="font-headline-md text-[20px] font-semibold text-white tracking-wide">09:00 - 11:00</h3>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-md text-label-md mt-1">
+<span class="material-symbols-outlined text-[16px] opacity-70 text-primary" data-icon="location_on">location_on</span>
+<span>Parc - Courts 01-03</span>
+</div>
+</div>
+</div>
+<div class="bg-primary/10 text-primary border border-primary/50 px-3 py-1 rounded-full font-label-md text-[12px] font-bold uppercase tracking-wider flex items-center gap-1 neon-glow-orange">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_5px_#ff5700]"></span>
+                        Inscrit
+                    </div>
+</div>
+<div class="w-full neon-divider my-1"></div>
+<div class="flex flex-col gap-3 z-10">
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface-variant">Joueurs (3/4)</span>
+<span class="font-label-md text-[12px] text-tertiary">Niveau Intermédiaire</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full bg-[#151515] border-2 border-[#2a2a2a] overflow-hidden shadow-md">
+<img class="w-full h-full object-cover" data-alt="A close-up profile shot of a female athlete with intense focus, wearing a dark navy athletic top. The background is a blurred, moody dark setting with subtle neon orange rim lighting highlighting her jawline and hair. High contrast, premium sports aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC59CEBr786fgDZtHkK3NSxSglfUNlPtyyghGLTFvh3C6E7llmHV_4EB8LUaDQQTEpiwR-_azcOnOrE4RYQeO5eIGzjLfrD0ZFOE2rHu-RNFAO93eaRuh0kdKeWAe7vevhXrlmSyK5LHNT1YFT0wLT33S36ruVIBWUILWjUAVhJuRShbPc-tj3jusB0RnUXF93yyBXs_9WSuznT84bIteRh1k70ajwemVzZKmaxqA8tDsYQ7356wRlueYW3fQjLXKGPhjN43nxiBcM"/>
+</div>
+<div class="w-10 h-10 rounded-full bg-[#151515] border-2 border-[#2a2a2a] overflow-hidden shadow-md">
+<img class="w-full h-full object-cover" data-alt="A portrait of a male pickleball player looking directly at the camera. He is wearing a sleek, dark grey athletic shirt. The lighting is dramatic, with deep shadows and a soft, cool blue ambient light contrasting with a warm orange backlight. Professional sports photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3pQvnDubb1p-_5QdwgTAnXQppOg9AaHARbnVCJFjrcqqoFQZuZ3yUxH0AuRzXtzzRKwYpcEqKrxnoSuOyATNOVtdfCCzzJMVCQaN_tXZyk_LaIUwwzawGC8ljsoOmN87BZKdNjwqc4rbQzbb0X6S2FcLPDrJ5sKFqn98qdu3cJxlVbhm_73oKAaXc8ikHDtwhMi_KY1gFcWEeeZFBRUxLGcEWmY0WpDrMDh6RGym-1hc08ww9DQ_MwRr7kKiOJQnuxXbQhvRN8R4"/>
+</div>
+<div class="w-10 h-10 rounded-full bg-primary-container border-2 border-[#2a2a2a] flex items-center justify-center text-white font-stats-number text-[14px] shadow-md z-10 neon-glow-orange">
+                                Moi
+                            </div>
+<div class="w-10 h-10 rounded-full bg-[#1a1a1a] border-2 border-primary/30 border-dashed flex items-center justify-center text-primary hover:bg-primary/10 hover:neon-glow-orange transition-all cursor-pointer shadow-md">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+</div>
+</div>
+<button class="bg-[#1a1a1a] hover:bg-[#222222] text-white font-label-md text-label-md px-4 py-2 rounded-lg border border-white/10 transition-colors flex items-center gap-2">
+                            Détails
+                            <span class="material-symbols-outlined text-[16px] text-primary" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Session Card 2 (Available) -->
+<div class="neon-card-blue rounded-2xl p-4 md:p-6 flex flex-col gap-5 relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300 opacity-95 hover:opacity-100">
+<div class="flex justify-between items-start z-10">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-[#1a1a1a] flex items-center justify-center border border-neon-blue/20 text-neon-blue shadow-[inset_0_0_10px_rgba(0,240,255,0.1)]">
+<span class="material-symbols-outlined text-[24px]" data-icon="schedule">schedule</span>
+</div>
+<div>
+<h3 class="font-headline-md text-[20px] font-semibold text-white tracking-wide">14:00 - 15:30</h3>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-md text-label-md mt-1">
+<span class="material-symbols-outlined text-[16px] opacity-70 text-neon-blue" data-icon="location_on">location_on</span>
+<span>Club Central - Court 05</span>
+</div>
+</div>
+</div>
+<div class="bg-neon-blue/10 text-neon-blue border border-neon-blue/40 px-3 py-1 rounded-full font-label-md text-[12px] uppercase tracking-wider neon-glow-blue">
+                        Ouvert
+                    </div>
+</div>
+<div class="w-full neon-divider-blue my-1"></div>
+<div class="flex flex-col gap-3 z-10">
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface-variant">Joueurs (1/4)</span>
+<span class="font-label-md text-[12px] text-neon-blue/80">Niveau Avancé</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full bg-[#151515] border-2 border-[#2a2a2a] overflow-hidden shadow-md">
+<img class="w-full h-full object-cover" data-alt="A stylized portrait of an athletic male figure in a dimly lit environment. He is wearing a dark, textured sports jacket. Subtle, cool-toned rim lighting shapes his silhouette against a pure black background. The mood is intense, competitive, and sleek." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGn_8a1HY72udi3Px_QCfy8OkU1LE8-s42ZA3ibYLvI98FWyKN2duqiRkzSVzRt8kLx6Z75rr4GWcHbbtBNn3BYEP_FeyKqXNe7WkevC5jBFuedwYgMDMpk4ddENBlToGVuMIBf-d2JMiEvqi6gj2nosCJILtwNckIyPDQtJ-Vrg76qv07KnFTvRwdrktu8GlrLfc-sRkqRai62ig5X3bNNinndnIztIuWMhSOuZW5PUkw14DYEkAdZtbQhSUgE6U1-Z5A1aMKM8c"/>
+</div>
+<div class="w-10 h-10 rounded-full bg-[#1a1a1a] border-2 border-[#2a2a2a] border-dashed flex items-center justify-center text-on-surface-variant shadow-md"></div>
+<div class="w-10 h-10 rounded-full bg-[#1a1a1a] border-2 border-[#2a2a2a] border-dashed flex items-center justify-center text-on-surface-variant shadow-md"></div>
+<div class="w-10 h-10 rounded-full bg-[#1a1a1a] border-2 border-neon-blue/30 border-dashed flex items-center justify-center text-neon-blue hover:bg-neon-blue/10 hover:neon-glow-blue transition-all cursor-pointer shadow-md">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+</div>
+</div>
+<button class="bg-primary hover:bg-[#ff7026] text-white font-label-md text-label-md px-5 py-2 rounded-lg font-semibold transition-colors flex items-center gap-2 neon-glow-orange">
+                            Rejoindre
+                        </button>
+</div>
+</div>
+</div>
+<!-- Session Card 3 (Full) -->
+<div class="bg-[#121212] border border-white/5 rounded-2xl p-4 md:p-6 flex flex-col gap-5 relative overflow-hidden opacity-60 grayscale-[30%]">
+<div class="flex justify-between items-start z-10">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-[#1a1a1a] flex items-center justify-center border border-white/5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[24px]" data-icon="schedule">schedule</span>
+</div>
+<div>
+<h3 class="font-headline-md text-[20px] font-semibold text-on-surface-variant">18:00 - 20:00</h3>
+<div class="flex items-center gap-1 text-on-surface-variant/70 font-label-md text-label-md mt-1">
+<span class="material-symbols-outlined text-[16px] opacity-70" data-icon="location_on">location_on</span>
+<span>Parc - Courts 01-03</span>
+</div>
+</div>
+</div>
+<div class="bg-red-900/20 text-red-400 border border-red-900/50 px-3 py-1 rounded-full font-label-md text-[12px] uppercase tracking-wider">
+                        Complet
+                    </div>
+</div>
+<div class="w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent my-1"></div>
+<div class="flex flex-col gap-3 z-10">
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface-variant/70">Joueurs (4/4)</span>
+<span class="font-label-md text-[12px] text-tertiary/70">Niveau Intermédiaire</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-3 opacity-80">
+<div class="w-10 h-10 rounded-full bg-[#151515] border-2 border-[#2a2a2a] overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-80" data-alt="A portrait of a pickleball player in a dark, moody setting with orange rim lighting. Sleek sports aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUcvcXgAg363P24HmTN9ad_ZNeDxZ4JD0SxkPTvf0LrI9r7T-qebtIJcoQkQJ349HxrgBuMMjSp_gdHVtpm_KEx0jenIBHW8dbp_TrT2ZFTcmHsp2qZMxatHCqXLa0nM0YIIstbQchFAFSCdMgU1NqUtlmwWy71hbfbuRqeOp4YivGPDJDOBsrSU1V69uOCUxPHke5LNUxL0nEjklnpAiSKgnRWUWZ5C8S4Zc20LqbAXUJeJrEMf90IDTsNasC0qQa46wWfoVYlds"/>
+</div>
+<div class="w-10 h-10 rounded-full bg-[#151515] border-2 border-[#2a2a2a] overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-80" data-alt="Another portrait of a pickleball player in a dark setting. Cool tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOFScZl-XddfPiuXrqfKnYo_OQpM7d-3OpBCdvMlvsq93yoZrE42oz7dFYdzkj1xH_9m91iOc97SZWHIfCAfvQnezgRrI7IUy2ULtVz3t3Fl1nSyDUYCyxPtssuATWUc2FB_b0fSlX61yFQBhzdTR5EN3rjK8KuX8HVHSJIfth7AkTnX8cZXxR0udWMsb48w6EmDXnrisreXaZqmZAysEMJqQ1khqOSnEyPCBczUQtuLBDp2_gqklJsyW15vqQdcdr2XPAuKXvVFo"/>
+</div>
+<div class="w-10 h-10 rounded-full bg-[#151515] border-2 border-[#2a2a2a] overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-80" data-alt="A third portrait of a player. Dark background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnyfK5DNZHsJWtCmCQNQkwTP_84ZNhtNDW6PJantF3BHsd2MHtdoiztQ23GXb8S2whU6-5Oed2kGZqFNac_8qcPOEzQs1U_p53T_JwBKS7STi27HQIhAEKBZmtZIRqeCxdvspMwKIo_o2o4Wn7WP5SjNoMp5McabDZjp7lvfjejnc2Rh5cNA48ORCjI7z_p0VE6zs0v8Vm4SG_73KgMbT3LVLD9-gibcQHBw7Gfyy2wuGb-h6qS47UsoFzp7COh3DLHYq_9HkH9vk"/>
+</div>
+<div class="w-10 h-10 rounded-full bg-[#151515] border-2 border-[#2a2a2a] overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-80" data-alt="A fourth portrait of a player. Moody sports style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmJQ8x7aSJIAd9Ox-Ld85h3gkRW6GkQW--fRmMUg3-3Y-tHS7qWZQrPrVSg6Fl5sAd1gd6AXm1E6TzaEIkbPL6sP25kklJMo-Dak00sz0HE2AawLywwHidLYZpXmKLkAFIwkqrSffBjxNLCqiHnsIOjHk2ovgghLIfndWNylTR--Ly-qlV_LEXeAI-whdM-Z6XXziqIWdxetu0pg-NNSLUBuYVHS0EQTv0Idh3n9WCjV7SklYSVLv7NXJntsg2vkXkRxpA4VxGJSY"/>
+</div>
+</div>
+<button class="bg-transparent border border-white/10 text-on-surface-variant/70 font-label-md text-label-md px-4 py-2 rounded-lg cursor-not-allowed">
+                            Complet
+                        </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-[#0a0a0a]/95 backdrop-blur-2xl fixed bottom-0 w-full z-50 rounded-t-xl border-t border-primary/20 shadow-[0_-8px_30px_rgba(255,87,0,0.1)] flex justify-around items-center px-2 py-3 w-full pb-safe">
+<!-- Active Tab: Sessions -->
+<div class="flex flex-col items-center justify-center bg-primary/10 text-primary rounded-xl px-4 py-1.5 active:scale-90 transition-transform duration-150 cursor-pointer border border-primary/20 neon-glow-orange">
+<span class="material-symbols-outlined fill-icon text-[24px]" data-icon="calendar_today" data-weight="fill">calendar_today</span>
+<span class="font-label-md text-[12px] font-medium mt-1">Sessions</span>
+</div>
+<!-- Inactive Tab: Matrix -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 px-4 py-1.5 hover:bg-white/5 rounded-xl active:scale-90 transition-transform duration-150 cursor-pointer">
+<span class="material-symbols-outlined text-[24px]" data-icon="grid_view">grid_view</span>
+<span class="font-label-md text-[12px] font-medium mt-1">Matrix</span>
+</div>
+<!-- Inactive Tab: Profile -->
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 px-4 py-1.5 hover:bg-white/5 rounded-xl active:scale-90 transition-transform duration-150 cursor-pointer">
+<span class="material-symbols-outlined text-[24px]" data-icon="person">person</span>
+<span class="font-label-md text-[12px] font-medium mt-1">Profile</span>
+</div>
+</nav>
+<!-- Desktop Side Nav Spacer (if implemented as side nav on desktop, otherwise empty) -->
+<div class="hidden md:block fixed left-0 top-[72px] bottom-0 w-[80px] bg-[#0a0a0a] border-r border-primary/10 z-40 flex flex-col items-center py-8 gap-8">
+<div class="flex flex-col items-center justify-center text-primary bg-primary/10 border border-primary/20 w-14 h-14 rounded-xl cursor-pointer neon-glow-orange">
+<span class="material-symbols-outlined fill-icon text-[28px]" data-icon="calendar_today" data-weight="fill">calendar_today</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 w-14 h-14 rounded-xl hover:bg-white/5 hover:opacity-100 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-[28px]" data-icon="grid_view">grid_view</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 w-14 h-14 rounded-xl hover:bg-white/5 hover:opacity-100 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-[28px]" data-icon="person">person</span>
+</div>
+</div>
+</body></html>

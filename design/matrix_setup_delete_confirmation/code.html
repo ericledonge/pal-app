@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Action Lévis - Matrix Generator Confirmation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#c6c6c9",
+                        "outline": "#907065",
+                        "on-surface-variant": "#5b4037",
+                        "on-primary-fixed": "#380d00",
+                        "tertiary": "#5a5c5e",
+                        "surface-variant": "#e1e2e4",
+                        "surface-tint": "#aa3700",
+                        "secondary-fixed-dim": "#ffba20",
+                        "on-tertiary-fixed": "#1a1c1e",
+                        "on-surface": "#191c1e",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#fcfcff",
+                        "on-secondary-container": "#6b4b00",
+                        "surface-container-low": "#f3f4f6",
+                        "secondary-fixed": "#ffdea8",
+                        "surface-container-high": "#e7e8ea",
+                        "on-tertiary-fixed-variant": "#454749",
+                        "on-secondary-fixed": "#271900",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#e2e2e5",
+                        "primary-container": "#cf4500",
+                        "background": "#f8f9fb",
+                        "on-primary-container": "#fffbff",
+                        "inverse-surface": "#2e3132",
+                        "tertiary-container": "#737577",
+                        "outline-variant": "#e5beb2",
+                        "secondary-container": "#feb700",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#e1e2e4",
+                        "primary-fixed": "#ffdbcf",
+                        "primary": "#a63600",
+                        "inverse-primary": "#ffb59b",
+                        "secondary": "#7c5800",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f8f9fb",
+                        "surface-container": "#edeef0",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d9dadc",
+                        "surface": "#f8f9fb",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "on-primary-fixed-variant": "#822800",
+                        "inverse-on-surface": "#f0f1f3",
+                        "primary-fixed-dim": "#ffb59b",
+                        "on-error-container": "#93000a",
+                        "on-background": "#191c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "margin-tablet": "32px",
+                        "gutter": "16px",
+                        "base": "4px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "xl": "32px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Lexend"],
+                        "label-lg": ["Lexend"],
+                        "body-md": ["Lexend"],
+                        "label-sm": ["Lexend"],
+                        "body-lg": ["Lexend"],
+                        "headline-md": ["Lexend"],
+                        "headline-sm": ["Lexend"],
+                        "timer-display": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "timer-display": ["48px", { "lineHeight": "48px", "letterSpacing": "-0.04em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen relative overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-outline-variant transition-colors duration-200 flex justify-between items-center w-full px-margin-mobile h-14 docked full-width top-0 z-40 fixed">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary font-bold">sports_tennis</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Action Lévis</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container rounded-full p-2 cursor-pointer transition-colors" data-icon="search">search</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container rounded-full p-2 cursor-pointer transition-colors" data-icon="account_circle">account_circle</span>
+</div>
+</header>
+<!-- Main Content (Blurred Background) -->
+<main class="pt-[72px] pb-[80px] px-margin-mobile md:px-margin-tablet filter blur-sm transition-all duration-300 h-full w-full pointer-events-none select-none">
+<div class="max-w-4xl mx-auto flex flex-col gap-lg">
+<section>
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-md">Matrix Generator</h2>
+<div class="flex gap-4 mb-md overflow-x-auto pb-2 scrollbar-hide">
+<button class="px-4 py-2 rounded-full bg-primary text-on-primary font-label-sm text-label-sm whitespace-nowrap">Pro</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant bg-surface font-label-sm text-label-sm whitespace-nowrap">Intermediate</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant bg-surface font-label-sm text-label-sm whitespace-nowrap">Beginner</button>
+</div>
+</section>
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Player Card 1 (Simulated target for deletion) -->
+<div class="bg-surface border border-outline-variant rounded-lg p-md flex items-center justify-between relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center overflow-hidden">
+<img alt="Player" class="w-full h-full object-cover" data-alt="A close-up studio portrait of a confident athlete wearing a bright orange athletic top, set against a clean, light gray background. High-key lighting highlights the subject's features, embodying a vibrant, energetic sports aesthetic suitable for an app profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBv3Zaptfw4aUxnpaXhz6nVy2Ln9TZpoUGuah1s2tzVZ0hiUZk4oy9KJyDyBA1-FegtsfIQlTjC8EOG4fD_2bjLvUsPcAlng62Cplx1NYGS3hxryTQLB8dnu2Rqvuptz4phGpOmsJ2-TTurWYEdqdX20pTPxuMlHFlJ0Whq_2AJd-SERGHI1XzFVRWK7O_fTGEAEBzF2RIqI6olEyA5uxlQgmab8C4GwOZqnMEgye7jBmqQwbs7SdDKE4QgUfxBHG9IdxGZdFBnNxk"/>
+</div>
+<div>
+<h3 class="font-label-lg text-label-lg text-on-surface">Alexandre Dubois</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">star</span> Pro
+                            </p>
+</div>
+</div>
+<button aria-label="Remove player" class="text-error hover:bg-error-container p-2 rounded-full transition-colors pointer-events-none">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<!-- Player Card 2 -->
+<div class="bg-surface border border-outline-variant rounded-lg p-md flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-on-surface-variant text-[24px]">person</span>
+</div>
+<div>
+<h3 class="font-label-lg text-label-lg text-on-surface">Marie Tremblay</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">star</span> Pro
+                            </p>
+</div>
+</div>
+<button class="text-on-surface-variant hover:bg-surface-container p-2 rounded-full transition-colors pointer-events-none">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-40 flex justify-around items-center h-16 px-4 bg-surface border-t border-outline-variant docked full-width md:hidden filter blur-sm">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:opacity-80 scale-95 transition-transform duration-150 w-full" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-sm text-label-sm">Sessions</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold hover:opacity-80 scale-95 transition-transform duration-150 w-full" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="grid_view" data-weight="fill">grid_view</span>
+<span class="font-label-sm text-label-sm">Matrix</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:opacity-80 scale-95 transition-transform duration-150 w-full" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="tune">tune</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<!-- Overlay & Dialog -->
+<div aria-describedby="dialog-description" aria-labelledby="dialog-title" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center bg-on-background/40 backdrop-blur-sm p-margin-mobile" role="dialog">
+<div class="bg-surface rounded-xl shadow-lg border border-outline-variant w-full max-w-[400px] overflow-hidden transform transition-all scale-100 opacity-100">
+<div class="p-lg text-center">
+<div class="w-16 h-16 rounded-full bg-error-container text-error mx-auto flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-[32px]">warning</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-2" id="dialog-title">Supprimer Alexandre Dubois?</h2>
+<p class="font-body-md text-body-md text-on-surface-variant" id="dialog-description">
+                    Cette action retirera ce joueur de la matrice actuelle. Vous pourrez l'ajouter à nouveau plus tard.
+                </p>
+</div>
+<div class="bg-surface-container-low p-md flex gap-md justify-end border-t border-outline-variant">
+<button class="px-6 py-2 rounded font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container transition-colors">
+                    Annuler
+                </button>
+<button class="px-6 py-2 rounded font-label-lg text-label-lg bg-primary text-on-primary hover:bg-primary/90 transition-colors shadow-sm">
+                    Supprimer
+                </button>
+</div>
+</div>
+</div>
+</body></html>

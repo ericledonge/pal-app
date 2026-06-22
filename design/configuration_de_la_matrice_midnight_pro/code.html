@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Configuration de la matrice</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=Lexend:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-variant": "#5b4037",
+                    "error": "#ffb4ab",
+                    "on-background": "#dae2fd",
+                    "on-secondary-fixed-variant": "#3c475a",
+                    "secondary-fixed-dim": "#bcc7de",
+                    "inverse-on-surface": "#283044",
+                    "on-error-container": "#ffdad6",
+                    "primary-container": "#ff5701",
+                    "on-secondary": "#263143",
+                    "background": "#0b1326",
+                    "on-primary": "#5c1a00",
+                    "surface-dim": "#0b1326",
+                    "error-container": "#93000a",
+                    "on-surface-variant": "#e5beb2",
+                    "on-surface": "#dae2fd",
+                    "surface": "#0b1326",
+                    "surface-tint": "#ffb59b",
+                    "on-secondary-container": "#aeb9d0",
+                    "on-tertiary-container": "#1c2a3d",
+                    "tertiary-container": "#8392a9",
+                    "on-tertiary-fixed-variant": "#3a485c",
+                    "on-tertiary-fixed": "#0d1c2f",
+                    "outline": "#ab897e",
+                    "surface-container-high": "#222a3d",
+                    "secondary": "#bcc7de",
+                    "primary-fixed-dim": "#ffb59b",
+                    "on-primary-fixed": "#380d00",
+                    "on-error": "#690005",
+                    "surface-container-highest": "#2d3449",
+                    "primary-fixed": "#ffdbcf",
+                    "primary": "#ffb59b",
+                    "surface-bright": "#31394d",
+                    "on-primary-fixed-variant": "#822800",
+                    "inverse-primary": "#aa3700",
+                    "on-secondary-fixed": "#111c2d",
+                    "on-tertiary": "#233144",
+                    "surface-container": "#171f33",
+                    "surface-container-low": "#131b2e",
+                    "tertiary-fixed": "#d5e3fd",
+                    "surface-container-lowest": "#060e20",
+                    "tertiary": "#b9c7e0",
+                    "tertiary-fixed-dim": "#b9c7e0",
+                    "on-primary-container": "#501600",
+                    "secondary-container": "#3e495d",
+                    "secondary-fixed": "#d8e3fb",
+                    "inverse-surface": "#dae2fd",
+                    "surface-variant": "#2d3449"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-padding-desktop": "32px",
+                    "section-gap": "40px",
+                    "container-padding-mobile": "16px",
+                    "gutter": "16px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Lexend"],
+                    "headline-lg": ["Lexend"],
+                    "stats-number": ["Lexend"],
+                    "headline-md": ["Lexend"],
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Lexend"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "stats-number": ["20px", {"lineHeight": "24px", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #2d3449; border-radius: 10px; }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen antialiased flex flex-col font-body-md text-body-md">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-white/10 shadow-2xl shadow-primary/10 flex justify-between items-center px-4 py-3">
+<div class="flex items-center gap-2 hover:opacity-80 transition-opacity active:scale-95 duration-200 cursor-pointer">
+<span class="material-symbols-outlined text-primary dark:text-primary">sports_tennis</span>
+<span class="font-display-lg text-headline-md-mobile tracking-tighter text-primary dark:text-primary">PRO CIRCUIT</span>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-white/10 hover:opacity-80 transition-opacity cursor-pointer">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A close-up, high-quality portrait photo of an athletic individual in their late 20s. They are wearing modern, dark-toned sportswear. The lighting is dramatic, highlighting their features against a dark, moody background with subtle neon orange accents reflecting on their skin, conveying a competitive sports vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4XG6a3yFDvPcOdwCMXyzs8zaNOQKcd1hJv3sMVOVRtrF4OCyTqzW_x8kkZCC5bSBlIhr9_7W-bPC5EeAG_zD93li7bbEJpOoc5TJpmOCWb4VsAfetQ5am30KUNKkvfRjc9WCd4NUXIEkn9h-mytp70HuQ-vA8yt5gxNjNml-OIv2CJBbL9-sQtL9e1lGqICiXqgepLtIwrtiTi-O147fsRhcBTSigjBUaJmKcvXL3rmd-fH0q4fDEllMvznaRwkHdKUUu1XfQRVg"/>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 w-full max-w-md mx-auto pt-24 pb-32 px-container-padding-mobile flex flex-col gap-6">
+<!-- Header -->
+<div class="flex flex-col gap-1">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Générateur de Matrice</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Configurez la rotation pour votre session.</p>
+</div>
+<!-- Courts Configuration -->
+<section class="bg-surface-container rounded-xl p-5 border border-white/5 relative overflow-hidden group">
+<!-- Decorative gradient orb -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-primary-container/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="flex items-center justify-between relative z-10">
+<div class="flex flex-col">
+<span class="font-headline-md text-stats-number text-on-surface">Courts disponibles</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Définit le nombre de matchs simultanés</span>
+</div>
+<!-- Stepper -->
+<div class="flex items-center gap-4 bg-surface-container-highest rounded-lg p-1 border border-white/10">
+<button aria-label="Decrease courts" class="w-8 h-8 rounded flex items-center justify-center text-on-surface hover:bg-white/5 active:scale-90 transition-all text-xl">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<span class="font-stats-number text-stats-number text-primary-container w-4 text-center">3</span>
+<button aria-label="Increase courts" class="w-8 h-8 rounded flex items-center justify-center text-on-surface hover:bg-white/5 active:scale-90 transition-all text-xl">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Player Selection -->
+<section class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-stats-number text-on-surface">Joueurs (12)</h2>
+<button class="font-label-md text-label-md text-primary-container hover:text-primary transition-colors">
+                    Tout sélectionner
+                </button>
+</div>
+<!-- Player List -->
+<div class="flex flex-col gap-3">
+<!-- Player Item 1 (Selected) -->
+<label class="flex items-center gap-4 p-3 bg-primary-container/10 border border-primary-container rounded-xl cursor-pointer hover:bg-primary-container/20 transition-colors">
+<div class="relative flex items-center justify-center">
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="w-6 h-6 rounded-full border-2 border-primary-container bg-primary-container flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[16px] text-on-primary font-bold">check</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest border border-white/10">
+<img class="w-full h-full object-cover" data-alt="Profile photo of an athletic man in a dark tennis shirt, moody lighting with deep navy background and slight orange edge light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJtqrUE9i5BBZp4W-MBlTrvAYK20Rqy7I27cL3EZIiWKUN3G5TETC4H5MefTStqhaniqohhgWVkrRrKnmKVCl3GjbdLaZNW-c_0TaCBop6Pqwc5iCkEO5cveLt-ixAGucdXZyS-E5Q_KxhjIEuDzTPFzudVjmV8tQqcUYbcwYNU_crg8iy3-oS1M4ObulqGAYHKWKgKcGwJypnryg4aGICeRvA15ZXtq9mP-v0byDkz1nbkZ_aG37wKqoeeD2M69wrYMxNZOTHeFQ"/>
+</div>
+<div class="flex flex-col flex-1">
+<span class="font-label-md text-label-md text-on-surface">Alexandre Dubois</span>
+<span class="font-body-md text-[12px] text-on-surface-variant">Niveau: Avancé</span>
+</div>
+</label>
+<!-- Player Item 2 (Selected) -->
+<label class="flex items-center gap-4 p-3 bg-primary-container/10 border border-primary-container rounded-xl cursor-pointer hover:bg-primary-container/20 transition-colors">
+<div class="relative flex items-center justify-center">
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="w-6 h-6 rounded-full border-2 border-primary-container bg-primary-container flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[16px] text-on-primary font-bold">check</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest border border-white/10">
+<img class="w-full h-full object-cover" data-alt="Profile photo of an athletic woman holding a pickleball paddle, confident expression, dramatic dark lighting with high contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnJ8JaaR57NSqE6K-3ALkICBtnj4Sp1fBdc6cftOde8ccWn1ar6uVNTQAztJKZgmqNjb2DmHGUiRTiOTTOj2kLMljmnXPZIm-rfqxZwCBTIzW5Uj6sN4st-weELbb27_N9QYZKW-fmU4QEHr_kcCz5EdWlC9DaRR4RX7NZHogTl9KJZameRHPUFLWADSAKjs_Lso7aLWhhFqvrCs2ScGMZHmsW6DUbtY5TrDArQcnR3BtNihwNii-HaNgXfW5ttSYUx5tEpCOyd5s"/>
+</div>
+<div class="flex flex-col flex-1">
+<span class="font-label-md text-label-md text-on-surface">Sophie Martin</span>
+<span class="font-body-md text-[12px] text-on-surface-variant">Niveau: Intermédiaire</span>
+</div>
+</label>
+<!-- Player Item 3 (Unselected) -->
+<label class="flex items-center gap-4 p-3 bg-surface-container border border-white/5 rounded-xl cursor-pointer hover:bg-white/5 transition-colors">
+<div class="relative flex items-center justify-center">
+<input class="peer sr-only" type="checkbox"/>
+<div class="w-6 h-6 rounded-full border-2 border-on-surface-variant/50 bg-transparent flex items-center justify-center transition-colors peer-checked:bg-primary-container peer-checked:border-primary-container">
+<span class="material-symbols-outlined text-[16px] text-transparent peer-checked:text-on-primary font-bold">check</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest border border-white/10">
+<img class="w-full h-full object-cover" data-alt="Profile photo of a young man, sporty casual wear, dark moody background, professional sports app style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBj4zjR97nQYuyDivJ1hURp4sDxEjhaCVEfee_E-Y90UVhy46HjWpfpLFsh1aK_NlgLi1qP1uwIW155Q89h-89NgWqprnaboydS_QyS8IWZBWd7Mf0CpBA-0Mcip9O53fbIHUndXbJvZgzSGEEYEzDmLSWrAYwecYsYFAJ6xB5WA-sY5CatcxOIseNqTd0pZEQbrE1ctpNzM0fCwjTxN9ZFT7pPDAlifMBWlqB76t6uhco1dSi17mk7nN09AqGH3tJODjH0RUW_QGM"/>
+</div>
+<div class="flex flex-col flex-1">
+<span class="font-label-md text-label-md text-on-surface">Lucas Bernard</span>
+<span class="font-body-md text-[12px] text-on-surface-variant">Niveau: Débutant</span>
+</div>
+</label>
+<!-- Player Item 4 (Selected) -->
+<label class="flex items-center gap-4 p-3 bg-primary-container/10 border border-primary-container rounded-xl cursor-pointer hover:bg-primary-container/20 transition-colors">
+<div class="relative flex items-center justify-center">
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="w-6 h-6 rounded-full border-2 border-primary-container bg-primary-container flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[16px] text-on-primary font-bold">check</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-surface-container-highest border border-white/10 text-on-surface font-stats-number text-stats-number">
+                        EM
+                    </div>
+<div class="flex flex-col flex-1">
+<span class="font-label-md text-label-md text-on-surface">Emma Petit</span>
+<span class="font-body-md text-[12px] text-on-surface-variant">Niveau: Avancé</span>
+</div>
+</label>
+</div>
+</section>
+<!-- Primary Action Button -->
+<div class="mt-6">
+<button class="w-full py-4 bg-primary-container text-on-primary rounded-xl font-label-md text-label-md font-bold shadow-[0_0_20px_rgba(255,87,1,0.2)] hover:shadow-[0_0_30px_rgba(255,87,1,0.4)] hover:bg-primary transition-all active:scale-95">
+                Générer la Matrice
+            </button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-surface-container-high/90 dark:bg-surface-container-high/90 backdrop-blur-2xl border-t border-white/5 shadow-[0_-8px_30px_rgb(0,0,0,0.4)] flex justify-around items-center px-2 py-3 pb-safe md:hidden">
+<!-- Inactive Tab -->
+<button class="flex flex-col items-center justify-center text-on-secondary-container opacity-60 px-4 py-1.5 hover:bg-white/5 rounded-xl transition-all">
+<span class="material-symbols-outlined mb-1">calendar_today</span>
+<span class="font-label-md text-label-md">Sessions</span>
+</button>
+<!-- Active Tab (Matrix) -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1.5 active:scale-90 transition-transform duration-150 hover:bg-white/5">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="font-label-md text-label-md">Matrix</span>
+</button>
+<!-- Inactive Tab -->
+<button class="flex flex-col items-center justify-center text-on-secondary-container opacity-60 px-4 py-1.5 hover:bg-white/5 rounded-xl transition-all">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</button>
+</nav>
+</body></html>

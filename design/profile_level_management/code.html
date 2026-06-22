@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profile &amp; Settings - Pickleball Action Lévis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#5a5c5e",
+                        "surface-container-highest": "#e1e2e4",
+                        "secondary-fixed-dim": "#ffba20",
+                        "surface-container-high": "#e7e8ea",
+                        "on-secondary-container": "#6b4b00",
+                        "surface-container-low": "#f3f4f6",
+                        "primary-fixed": "#ffdbcf",
+                        "surface-tint": "#aa3700",
+                        "tertiary-fixed": "#e2e2e5",
+                        "surface-dim": "#d9dadc",
+                        "primary": "#a63600",
+                        "inverse-primary": "#ffb59b",
+                        "surface-variant": "#e1e2e4",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#cf4500",
+                        "on-primary-fixed-variant": "#822800",
+                        "surface": "#f8f9fb",
+                        "on-surface-variant": "#5b4037",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#ffb59b",
+                        "on-primary-container": "#fffbff",
+                        "on-surface": "#191c1e",
+                        "background": "#f8f9fb",
+                        "on-tertiary-container": "#fcfcff",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#f0f1f3",
+                        "on-primary-fixed": "#380d00",
+                        "on-background": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#feb700",
+                        "surface-container": "#edeef0",
+                        "tertiary-fixed-dim": "#c6c6c9",
+                        "outline-variant": "#e5beb2",
+                        "tertiary-container": "#737577",
+                        "outline": "#907065",
+                        "on-tertiary-fixed-variant": "#454749",
+                        "inverse-surface": "#2e3132",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffdea8",
+                        "on-secondary-fixed": "#271900",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "secondary": "#7c5800",
+                        "surface-bright": "#f8f9fb",
+                        "on-tertiary-fixed": "#1a1c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "sm": "8px",
+                        "gutter": "16px",
+                        "base": "4px",
+                        "xs": "4px",
+                        "margin-mobile": "16px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "margin-tablet": "32px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Lexend"],
+                        "headline-lg": ["Lexend"],
+                        "body-md": ["Lexend"],
+                        "label-lg": ["Lexend"],
+                        "headline-md": ["Lexend"],
+                        "timer-display": ["Lexend"],
+                        "label-sm": ["Lexend"],
+                        "headline-sm": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "timer-display": ["48px", { "lineHeight": "48px", "letterSpacing": "-0.04em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[style*="'FILL' 1"] {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim text-primary dark:text-primary-fixed-dim font-headline-sm text-headline-sm fixed top-0 w-full z-50 flat no shadows flex justify-between items-center px-margin-mobile h-16 transition-colors duration-200">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-full p-2 cursor-pointer text-on-surface-variant dark:text-on-surface-variant transition-colors duration-200" data-icon="menu">menu</span>
+<span class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed-dim">Pickleball Action Lévis</span>
+</div>
+<div class="flex items-center">
+<img alt="user_profile_avatar" class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="A small, circular avatar portrait of an athletic user in bright outdoor lighting, modern flat UI aesthetic, crisp clean background, high legibility." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCN7DN2TLdVOj4P7KIp0J0YccGL_-DRWdUniedNyZBFNpJnomXjNUQNCqm6Jnll98JdKBoplXxQOyv9gLJhQQxo5VSzL5ZJPHJQ42ubpsH8RmaurGbvrREtvTaKg_IUSriNu1gwOgQp-lCb66NriPWq1WmoHPX1b39yI8RkuAdisup_gtBlX8tOM5-DBSSxiBrkPFOLhGUlcYEH1Olxce0Qd2O32lnyRX-2ceeYFJ46QzcZqVzhEaUqYSF7MYpwqA6ksYVHA6TNenc"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-20 pb-28 px-margin-mobile md:px-margin-tablet flex flex-col gap-lg max-w-3xl mx-auto w-full">
+<!-- Profile Header -->
+<section class="flex flex-col items-center justify-center bg-surface-container-lowest rounded-xl p-lg border border-outline-variant/30">
+<div class="relative mb-md">
+<img alt="Lévis Player Profile" class="w-24 h-24 rounded-full object-cover border-4 border-surface" data-alt="A close up, athletic profile portrait of a pickleball player in crisp daylight, dynamic modern sporting context, high key lighting, white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdH_0aPKqf8-zi8ZevQzEj6j7E5iJUE-FzX7xUrlnVXl1MwRp0aX5rMKSXLPKJcV1ZFtSwRj4C3xDp-EEjR92gtn6NE--HswYrlIoB86NVQ4DHOnIH0c8ZBC9lDnrOQZaGSsEAKOgTAZJN9_jrtpN7cFPqhbzIwqBKP9WFox6ayzA7qA568R6E5JGVcKZ3bo_TcDlHp2TP_sZyN0Po8dWOghqc2EZvoRAjAc_jIi0R9A3nehkM7YRCI_HIqtTpAwHQ61XP7kbVyYU"/>
+<div class="absolute bottom-0 right-0 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm px-2 py-1 rounded-full border-2 border-surface flex items-center gap-xs shadow-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+                     3.5T
+                </div>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface">Lévis Player</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Active since March 2023</p>
+</section>
+<!-- Bento Grid Layout for Settings -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Skill Level Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 p-md flex flex-col relative overflow-hidden group">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex items-center justify-between mb-md">
+<h2 class="font-label-lg text-label-lg text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="trending_up">trending_up</span>
+                        My Skill Level
+                    </h2>
+<span class="bg-surface-container text-on-surface font-label-sm text-label-sm px-2 py-1 rounded-md">3.5T</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md flex-grow">Your current level determines match recommendations and visibility in competitive matrices.</p>
+<button class="w-full bg-primary text-on-primary font-label-lg text-label-lg py-2 rounded-lg flex items-center justify-center gap-sm transition-transform active:scale-[0.98]">
+                    Change Level
+                    <span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</section>
+<!-- Preferences Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 p-md flex flex-col">
+<h2 class="font-label-lg text-label-lg text-on-surface flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-tertiary" data-icon="tune">tune</span>
+                    Preferences
+                </h2>
+<div class="flex flex-col gap-sm flex-grow">
+<!-- Dark Mode Toggle -->
+<div class="flex items-center justify-between p-sm rounded-lg hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="dark_mode">dark_mode</span>
+<span class="font-body-md text-body-md text-on-surface">Dark Mode</span>
+</div>
+<div class="w-10 h-6 bg-surface-container-high rounded-full relative flex items-center px-1">
+<div class="w-4 h-4 bg-on-surface-variant rounded-full transition-transform duration-200 shadow-sm"></div>
+</div>
+</div>
+<!-- Notifications -->
+<div class="flex items-center justify-between p-sm rounded-lg hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+<span class="font-body-md text-body-md text-on-surface">Notifications</span>
+</div>
+<div class="w-10 h-6 bg-primary rounded-full relative flex items-center px-1 justify-end">
+<div class="w-4 h-4 bg-on-primary rounded-full transition-transform duration-200 shadow-sm"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Account Settings Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 p-md flex flex-col md:col-span-2">
+<h2 class="font-label-lg text-label-lg text-on-surface flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-tertiary" data-icon="person">person</span>
+                    Account
+                </h2>
+<div class="flex flex-col">
+<a class="flex items-center justify-between p-sm rounded-lg hover:bg-surface-container-low transition-colors border-b border-surface-variant last:border-0" href="#">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="lock">lock</span>
+<span class="font-body-md text-body-md text-on-surface">Privacy &amp; Security</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-sm rounded-lg hover:bg-surface-container-low transition-colors border-b border-surface-variant last:border-0" href="#">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="help">help</span>
+<span class="font-body-md text-body-md text-on-surface">Help &amp; Support</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</a>
+<div class="mt-md pt-sm border-t border-outline-variant/30">
+<button class="w-full flex items-center justify-center gap-sm py-2 px-4 rounded-lg bg-transparent border-[1.5px] border-error text-error font-label-lg text-label-lg transition-colors hover:bg-error-container/20">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                            Log Out
+                        </button>
+</div>
+</div>
+</section>
+</div>
+<div class="text-center font-label-sm text-label-sm text-on-surface-variant/70 mt-auto">
+            Version 1.0.4 (Build 42)
+        </div>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface dark:bg-surface-dim text-primary dark:text-primary-fixed-dim font-label-sm text-label-sm fixed bottom-0 w-full z-50 flat no shadows flex justify-around items-center h-20 pb-safe px-base md:hidden">
+<!-- Inactive Tab -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="calendar_month">calendar_month</span>
+<span>Agenda</span>
+</a>
+<!-- Inactive Tab -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="grid_view">grid_view</span>
+<span>Matrices</span>
+</a>
+<!-- Inactive Tab -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="trending_up">trending_up</span>
+<span>Level</span>
+</a>
+<!-- Active Tab -->
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-container text-on-secondary-container dark:text-secondary-fixed-dim rounded-full px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span>Profile</span>
+</a>
+</nav>
+</body></html>

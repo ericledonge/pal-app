@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sessions - Action Lévis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Hide scrollbar for horizontal scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#271900",
+                        "inverse-primary": "#ffb59b",
+                        "surface-container-low": "#f3f4f6",
+                        "tertiary-fixed": "#e2e2e5",
+                        "surface-container": "#edeef0",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#e1e2e4",
+                        "primary-fixed": "#ffdbcf",
+                        "on-error": "#ffffff",
+                        "primary": "#a63600",
+                        "on-primary-fixed-variant": "#822800",
+                        "surface-bright": "#f8f9fb",
+                        "secondary-fixed": "#ffdea8",
+                        "inverse-surface": "#2e3132",
+                        "secondary-container": "#feb700",
+                        "surface-variant": "#e1e2e4",
+                        "tertiary-fixed-dim": "#c6c6c9",
+                        "tertiary": "#5a5c5e",
+                        "on-primary-container": "#fffbff",
+                        "error-container": "#ffdad6",
+                        "on-surface-variant": "#5b4037",
+                        "on-surface": "#191c1e",
+                        "surface": "#f8f9fb",
+                        "surface-dim": "#d9dadc",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "inverse-on-surface": "#f0f1f3",
+                        "secondary-fixed-dim": "#ffba20",
+                        "outline-variant": "#e5beb2",
+                        "error": "#ba1a1a",
+                        "on-background": "#191c1e",
+                        "background": "#f8f9fb",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#cf4500",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#1a1c1e",
+                        "outline": "#907065",
+                        "on-tertiary-fixed-variant": "#454749",
+                        "surface-container-high": "#e7e8ea",
+                        "secondary": "#7c5800",
+                        "primary-fixed-dim": "#ffb59b",
+                        "on-primary-fixed": "#380d00",
+                        "on-secondary-container": "#6b4b00",
+                        "surface-tint": "#aa3700",
+                        "tertiary-container": "#737577",
+                        "on-tertiary-container": "#fcfcff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "base": "4px",
+                        "margin-tablet": "32px",
+                        "xs": "4px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Lexend"],
+                        "headline-lg": ["Lexend"],
+                        "headline-md": ["Lexend"],
+                        "body-lg": ["Lexend"],
+                        "body-md": ["Lexend"],
+                        "label-sm": ["Lexend"],
+                        "headline-sm": ["Lexend"],
+                        "timer-display": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "timer-display": ["48px", { "lineHeight": "48px", "letterSpacing": "-0.04em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-lg antialiased pb-24 md:pb-0 pt-14 selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-background border-b border-outline-variant dark:border-outline flex justify-between items-center px-margin-mobile h-14">
+<button class="text-on-surface-variant dark:text-on-tertiary-fixed-variant hover:bg-surface-container dark:hover:bg-surface-container-highest transition-colors duration-200 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="sports_tennis">sports_tennis</span>
+</button>
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">
+<img alt="Action Lévis Logo" class="h-8 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMGD-0wuz3ygpaezhormh_7_zJ6QQ86TWJ4mIezhcdX02_8OblJlKwHWBC3Dvx6uv5bxwFoWSoJL8DlK7wJ--Nhbs9pg41N1zXkiUQItW2hOCHq0wFgSQaAtgnd4BfYy1lkpYF55RyofzvwPX4x8KO_8gkqCY8EHM2eMdvX2ZEYf6WrQiEbxL6eyyQXzqxkkqVF3YKALfRK20oNjsUqjM3x-3yTv9VfwjAtE6Zkm-F-v_d-ZwqXslZP8zroKmWioLMN7HEL-gpTWI"/>
+</div>
+<div class="w-10"></div> <!-- Placeholder for balance -->
+</header>
+<main class="max-w-3xl mx-auto px-margin-mobile md:px-margin-tablet py-md">
+<!-- Segmented Control (Tabs) -->
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface mb-md">Agenda des sessions</h1><div class="bg-surface-container-high rounded-lg p-xs flex mb-lg relative">
+<button class="flex-1 py-2 font-label-lg text-label-lg text-center rounded-md bg-surface-container-lowest text-on-surface shadow-sm transition-all duration-200 z-10" id="tab-today">
+                Aujourd'hui
+            </button>
+<button class="flex-1 py-2 font-label-lg text-label-lg text-center rounded-md text-on-surface-variant hover:bg-surface-container transition-all duration-200 z-10" id="tab-tomorrow">
+                Demain
+            </button>
+</div>
+<!-- Toggle Section -->
+<div class="flex items-center justify-between mb-lg bg-surface-container-lowest p-md rounded-xl border border-outline-variant shadow-sm">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Mon niveau</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Afficher uniquement les sessions pour 3.5T</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" id="level-toggle" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Sessions List -->
+<div class="space-y-md">
+<!-- Session Card 1 (My Level - Expanded) -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden transition-all duration-300" id="session-card-1">
+<div class="flex">
+<div class="w-2 bg-primary flex-shrink-0"></div>
+<div class="p-md flex-1">
+<div class="flex justify-between items-start mb-sm">
+<div class="flex items-center space-x-sm">
+<span class="material-symbols-outlined text-primary" data-icon="schedule">schedule</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">09:00 - 11:00</span>
+</div><div class="flex items-center space-x-xs bg-[#e8f5e9] text-[#2e7d32] px-2 py-1 rounded-full font-label-sm text-label-sm ml-sm"><span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'wght' 700;">check</span><span class="">Inscrit</span></div>
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm">
+                                3.5T
+                            </span>
+</div>
+<div class="grid grid-cols-2 gap-sm mb-md">
+<div class="flex items-center text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-tertiary mr-xs" data-icon="location_on" style='font-variation-settings: "FILL" 1;'>location_on</span>
+                                Parc - Courts 01-03
+                            </div>
+<div class="flex items-center justify-end text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-tertiary mr-xs" data-icon="group">group</span>
+                                24/24 Complet
+                            </div>
+</div>
+<!-- Expandable Registered Players -->
+<div class="mt-sm pt-sm border-t border-outline-variant" id="registered-players-1">
+<button class="w-full flex items-center justify-between text-primary font-label-lg text-label-lg py-xs hover:opacity-80 transition-opacity" onclick="togglePlayers('players-list-1', 'icon-1')">
+                                Joueurs inscrits
+                                <span class="material-symbols-outlined" data-icon="expand_less" id="icon-1">expand_less</span>
+</button>
+<div class="mt-sm grid grid-cols-2 gap-y-xs gap-x-sm font-body-md text-body-md text-on-surface" id="players-list-1">
+<div class="flex items-center space-x-xs"><div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-xs font-bold text-on-surface">JD</div><span class="">John Doe</span></div>
+<div class="flex items-center space-x-xs"><div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-xs font-bold text-on-surface">JS</div><span class="">Jane Smith</span></div>
+<div class="flex items-center space-x-xs"><div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-xs font-bold text-on-surface">MB</div><span class="">Mike Brown</span></div>
+<div class="flex items-center space-x-xs"><div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-xs font-bold text-on-surface">SJ</div><span class="">Sarah Jones</span></div>
+<div class="col-span-2 text-on-surface-variant text-center mt-xs text-xs italic">+ 20 autres</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Session Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex transition-all duration-300">
+<div class="w-2 bg-surface-variant flex-shrink-0"></div>
+<div class="p-md flex-1">
+<div class="flex justify-between items-start mb-sm">
+<div class="flex items-center space-x-sm">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="schedule">schedule</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">11:00 - 13:00</span>
+</div>
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-label-sm">
+                            3.5C &amp; 3.5T
+                        </span>
+</div>
+<div class="grid grid-cols-2 gap-sm mb-md">
+<div class="flex items-center text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-tertiary mr-xs" data-icon="location_on" style='font-variation-settings: "FILL" 1;'>location_on</span>
+                            Parc - Courts 04-06
+                        </div>
+<div class="flex items-center justify-end text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-tertiary mr-xs" data-icon="group">group</span>
+                            18/24
+                        </div>
+</div>
+</div>
+</div>
+<!-- Session Card 3 (Other Level - Hidden when toggle is on) -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex transition-all duration-300 other-level-card hidden">
+<div class="w-2 bg-surface-variant flex-shrink-0"></div>
+<div class="p-md flex-1">
+<div class="flex justify-between items-start mb-sm">
+<div class="flex items-center space-x-sm">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="schedule">schedule</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">13:00 - 15:00</span>
+</div>
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm">
+                            4.0+
+                        </span>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div class="flex items-center text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-tertiary mr-xs" data-icon="location_on" style='font-variation-settings: "FILL" 1;'>location_on</span>
+                            Parc - Courts 01-02
+                        </div>
+<div class="flex items-center justify-end text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-tertiary mr-xs" data-icon="group">group</span>
+                            10/16
+                        </div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center h-16 px-4 bg-surface dark:bg-background border-t border-outline-variant dark:border-outline md:hidden">
+<button class="flex flex-col items-center justify-center text-primary dark:text-secondary-fixed-dim font-bold scale-95 active:scale-90 transition-transform duration-150 hover:opacity-80">
+<span class="material-symbols-outlined" data-icon="calendar_today" style='font-variation-settings: "FILL" 1;'>calendar_today</span>
+<span class="font-label-sm text-label-sm mt-1">Sessions</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-fixed-variant scale-95 active:scale-90 transition-transform duration-150 hover:opacity-80">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-label-sm text-label-sm mt-1">Matrice</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-fixed-variant scale-95 active:scale-90 transition-transform duration-150 hover:opacity-80">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+<span class="font-label-sm text-label-sm mt-1">Paramètres</span>
+</button>
+</nav>
+<script>
+        // Simple JS for interaction demonstration
+        
+        // Tab switching logic
+        const tabToday = document.getElementById('tab-today');
+        const tabTomorrow = document.getElementById('tab-tomorrow');
+
+        tabToday.addEventListener('click', () => {
+            tabToday.classList.add('bg-surface-container-lowest', 'text-on-surface', 'shadow-sm');
+            tabToday.classList.remove('text-on-surface-variant', 'hover:bg-surface-container');
+            
+            tabTomorrow.classList.remove('bg-surface-container-lowest', 'text-on-surface', 'shadow-sm');
+            tabTomorrow.classList.add('text-on-surface-variant', 'hover:bg-surface-container');
+        });
+
+        tabTomorrow.addEventListener('click', () => {
+            tabTomorrow.classList.add('bg-surface-container-lowest', 'text-on-surface', 'shadow-sm');
+            tabTomorrow.classList.remove('text-on-surface-variant', 'hover:bg-surface-container');
+            
+            tabToday.classList.remove('bg-surface-container-lowest', 'text-on-surface', 'shadow-sm');
+            tabToday.classList.add('text-on-surface-variant', 'hover:bg-surface-container');
+        });
+
+        // Toggle logic for My Level vs All Levels
+        const levelToggle = document.getElementById('level-toggle');
+        const otherLevelCards = document.querySelectorAll('.other-level-card');
+        const registeredPlayersSection = document.getElementById('registered-players-1');
+
+        levelToggle.addEventListener('change', (e) => {
+            if(e.target.checked) {
+                // Show only my level, show players
+                otherLevelCards.forEach(card => card.classList.add('hidden'));
+                registeredPlayersSection.classList.remove('hidden');
+            } else {
+                // Show all levels, hide players for simplicity in this demo
+                otherLevelCards.forEach(card => card.classList.remove('hidden'));
+                registeredPlayersSection.classList.add('hidden');
+            }
+        });
+
+        // Toggle Expandable Players List
+        function togglePlayers(listId, iconId) {
+            const list = document.getElementById(listId);
+            const icon = document.getElementById(iconId);
+            
+            if (list.classList.contains('hidden')) {
+                list.classList.remove('hidden');
+                icon.textContent = 'expand_less';
+            } else {
+                list.classList.add('hidden');
+                icon.textContent = 'expand_more';
+            }
+        }
+    </script>
+</body></html>
