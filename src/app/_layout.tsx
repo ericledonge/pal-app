@@ -10,12 +10,15 @@ import {
   Lexend_600SemiBold,
   Lexend_700Bold,
 } from "@expo-google-fonts/lexend";
+import { focusManager, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
+import { AppState, useColorScheme } from "react-native";
+
+import { queryClient } from "@/lib/query-client";
 
 import "@/global.css";
 
@@ -43,22 +46,31 @@ export default function RootLayout() {
     }
   }, [ready]);
 
-  // Emplacement prévu pour les providers globaux (ex. QueryClientProvider — issue #9).
+  // Focus manager TanStack Query : refetch quand l'app revient au premier plan.
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (status) => {
+      focusManager.setFocused(status === "active");
+    });
+    return () => subscription.remove();
+  }, []);
+
   if (!ready) {
     return null;
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen
-          name="onboarding"
-          options={{ presentation: "modal", headerShown: true, title: "Bienvenue" }}
-        />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen
+            name="onboarding"
+            options={{ presentation: "modal", headerShown: true, title: "Bienvenue" }}
+          />
+        </Stack>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
