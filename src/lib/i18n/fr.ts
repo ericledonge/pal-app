@@ -26,7 +26,13 @@ export const fr = {
   },
   sessions: {
     title: "Sessions",
-    subtitle: "Consultation des présences — à venir.",
+    today: "Aujourd'hui",
+    tomorrow: "Demain",
+    myLevel: "Mon niveau",
+    allLevels: "Tous les niveaux",
+    empty: "Aucun créneau pour ce jour.",
+    emptyMyLevel: "Aucun créneau à ton niveau pour ce jour.",
+    error: "Impossible de charger les présences.",
   },
   matrix: {
     title: "Matrice",

@@ -1,14 +1,6 @@
-import { Stack } from "expo-router";
-import { Text, View } from "react-native";
+import { AgendaView } from "@/features/sessions/use-cases/agenda-view";
 
-import { t } from "@/lib/i18n";
-
+// Écran wrapper mince : rend la view (aucun appel de hook de use-case ici).
 export default function SessionsScreen() {
-  return (
-    <View className="flex-1 items-center justify-center gap-sm bg-background px-xl">
-      <Stack.Screen options={{ title: t("sessions.title") }} />
-      <Text className="font-lexend text-[28px] text-on-surface">{t("sessions.title")}</Text>
-      <Text className="font-inter text-[16px] text-on-surface-muted">{t("sessions.subtitle")}</Text>
-    </View>
-  );
+  return <AgendaView />;
 }
