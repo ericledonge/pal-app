@@ -16,7 +16,9 @@
     "import/no-unassigned-import": "off",
     "react/rules-of-hooks": "error",
     "react/exhaustive-deps": "warn",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "react/no-unstable-nested-components": ["warn", { "allowAsProps": true }],
+    "react/style-prop-object": "off"
   },
   "env": {
     "builtin": true
