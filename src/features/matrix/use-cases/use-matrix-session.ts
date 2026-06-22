@@ -1,5 +1,10 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+import {
+  clearMatrixSession,
+  readMatrixSession,
+  writeMatrixSession,
+} from "../domain/matrix-session.storage";
 import { generateRound } from "../domain/matrix.matchmaking";
 import {
   addGuest as addGuestToEffectif,
@@ -26,6 +31,34 @@ export const useMatrixSession = () => {
   const [rounds, setRounds] = useState<Round[]>([]);
   const [phase, setPhase] = useState<MatrixPhase>("config");
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [hydrated, setHydrated] = useState(false);
+
+  // Reprise : restaure une session persistée au lancement.
+  useEffect(() => {
+    let active = true;
+    void readMatrixSession().then((saved) => {
+      if (active && saved) {
+        setEffectif(saved.effectif);
+        setConfig(saved.config);
+        setRounds(saved.rounds);
+        setPhase(saved.phase);
+        setCurrentIndex(saved.currentIndex);
+      }
+      if (active) {
+        setHydrated(true);
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // Persiste l'état après hydratation (à chaque changement).
+  useEffect(() => {
+    if (hydrated) {
+      void writeMatrixSession({ effectif, config, rounds, phase, currentIndex });
+    }
+  }, [hydrated, effectif, config, rounds, phase, currentIndex]);
 
   const addPresents = useCallback((players: MatrixPlayer[]) => {
     setEffectif((current) => addPlayers(current, players));
@@ -64,6 +97,7 @@ export const useMatrixSession = () => {
   }, []);
 
   const endSession = useCallback(() => {
+    void clearMatrixSession();
     setRounds([]);
     setCurrentIndex(0);
     setPhase("config");
