@@ -1,18 +1,15 @@
-import { StyleSheet } from "react-native";
+import { Text, View } from "react-native";
 
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
+import { t } from "@/lib/i18n";
 
 export default function OnboardingScreen() {
   // Placeholder sans logique — la sélection du niveau arrive à l'issue #16.
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title">Bienvenue</ThemedText>
-      <ThemedText>Onboarding (sélection du niveau) à venir.</ThemedText>
-    </ThemedView>
+    <View className="flex-1 items-center justify-center gap-sm bg-background px-xl">
+      <Text className="font-lexend text-[28px] text-on-surface">{t("onboarding.title")}</Text>
+      <Text className="font-inter text-[16px] text-on-surface-muted">
+        {t("onboarding.subtitle")}
+      </Text>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: "center", justifyContent: "center", gap: 12, padding: 24 },
-});

@@ -1,13 +1,15 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 
+import { t } from "@/lib/i18n";
+
 export default function TabsLayout() {
   return (
     <Tabs screenOptions={{ headerShown: false }}>
       <Tabs.Screen
         name="sessions"
         options={{
-          title: "Sessions",
+          title: t("tabs.sessions"),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar-outline" color={color} size={size} />
           ),
@@ -16,7 +18,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="matrice"
         options={{
-          title: "Matrice",
+          title: t("tabs.matrix"),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="grid-outline" color={color} size={size} />
           ),
@@ -25,7 +27,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="profil"
         options={{
-          title: "Profil",
+          title: t("tabs.profile"),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" color={color} size={size} />
           ),
