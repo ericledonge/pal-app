@@ -32,8 +32,16 @@ Application mobile (iOS + Android) pour le club **Pickleball Action Lévis**. De
 
 ```bash
 npx expo start            # Démarre le serveur de dev (i = iOS, a = Android)
+npm test                  # Lance la suite Jest (jest-expo)
 npm run validate          # Point fixe : format → fix lint → vérifie que tout passe
+
+# Build & distribution (EAS) — nécessite `eas login` puis `eas init` une fois (compte Expo) :
+eas build --profile development   # dev client, distribution interne
+eas build --profile preview       # build interne (canal preview)
+eas build --profile production    # artefacts stores .ipa / .aab (canal production)
 ```
+
+Identifiants d'app : `ios.bundleIdentifier` et `android.package` = `ca.palevis.app`. Profils de build définis dans `eas.json` (`development` / `preview` / `production`).
 
 ## Règle de validation
 
