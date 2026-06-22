@@ -47,7 +47,7 @@ export const Button = ({
       {loading ? (
         <ActivityIndicator color="#ffffff" />
       ) : (
-        <Text className={cn("font-inter text-[15px] font-semibold", LABEL[variant])}>{label}</Text>
+        <Text className={cn("font-inter-bold text-[15px]", LABEL[variant])}>{label}</Text>
       )}
     </Pressable>
   );
