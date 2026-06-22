@@ -92,6 +92,7 @@ export type AgendaMode = "myLevel" | "all";
 export interface AgendaSlotViewModel {
   id: string;
   heure: string;
+  plateauLabel: string;
   levelLabel: string;
   kindLabel: string;
   count: number;
@@ -114,6 +115,7 @@ const createAgendaSlotViewModel = (
 ): AgendaSlotViewModel => ({
   id: `${slot.plateau}-${slot.heure}-${slot.codes.join("_")}-${index}`,
   heure: slot.heure,
+  plateauLabel: PLATEAU_LABELS[slot.plateau],
   levelLabel: slot.codes.length > 0 ? slot.codes.join(" & ") : slot.labels.join(", "),
   kindLabel: KIND_LABELS[slot.kind],
   count: slot.count,

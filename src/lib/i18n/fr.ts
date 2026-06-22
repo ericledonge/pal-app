@@ -9,6 +9,7 @@ export const fr = {
     retry: "Réessayer",
     cancel: "Annuler",
     save: "Enregistrer",
+    close: "Fermer",
   },
   tabs: {
     sessions: "Sessions",
@@ -33,6 +34,8 @@ export const fr = {
     empty: "Aucun créneau pour ce jour.",
     emptyMyLevel: "Aucun créneau à ton niveau pour ce jour.",
     error: "Impossible de charger les présences.",
+    registrants: "Inscrits",
+    noRegistrants: "Aucun inscrit pour l'instant.",
   },
   matrix: {
     title: "Matrice",

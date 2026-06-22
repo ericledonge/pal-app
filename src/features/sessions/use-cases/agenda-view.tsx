@@ -7,15 +7,17 @@ import { Text } from "@/components/ui/text";
 import { usePreferences } from "@/features/preferences/use-cases/use-preferences";
 import { t } from "@/lib/i18n";
 
-import type { AgendaMode } from "../domain/session.service";
+import type { AgendaMode, AgendaSlotViewModel } from "../domain/session.service";
 import type { Day } from "../domain/session.types";
 import { SlotCard } from "./slot-card";
+import { SlotDetail } from "./slot-detail";
 import { useAgenda } from "./use-agenda";
 
 export const AgendaView = () => {
   const { preferences } = usePreferences();
   const [day, setDay] = useState<Day>("today");
   const [mode, setMode] = useState<AgendaMode>(preferences.defaultAllLevels ? "all" : "myLevel");
+  const [selected, setSelected] = useState<AgendaSlotViewModel | null>(null);
   const { sections, isLoading, isError, isEmpty, refresh } = useAgenda(day, mode);
 
   let body;
@@ -51,7 +53,11 @@ export const AgendaView = () => {
               {section.plateauLabel}
             </Text>
             {section.slots.map((slot) => (
-              <SlotCard key={slot.id} slot={slot} />
+              <SlotCard
+                key={slot.id}
+                slot={slot}
+                onPress={mode === "myLevel" ? () => setSelected(slot) : undefined}
+              />
             ))}
           </View>
         ))}
@@ -89,6 +95,7 @@ export const AgendaView = () => {
         </View>
       </View>
       {body}
+      <SlotDetail slot={selected} onClose={() => setSelected(null)} />
     </View>
   );
 };
