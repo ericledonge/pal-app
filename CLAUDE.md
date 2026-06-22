@@ -41,7 +41,7 @@ eas build --profile preview       # build interne (canal preview)
 eas build --profile production    # artefacts stores .ipa / .aab (canal production)
 ```
 
-Identifiants d'app : `ios.bundleIdentifier` et `android.package` = `ca.palevis.app`. Profils de build définis dans `eas.json` (`development` / `preview` / `production`).
+Identifiants d'app : `ios.bundleIdentifier` et `android.package` = `ca.palevis.app`. Profils de build définis dans `eas.json` (`development` / `preview` / `production`). Versioning/signature : [`docs/RELEASE.md`](docs/RELEASE.md). Correctif d'urgence du parser via OTA : [`docs/OTA-RUNBOOK.md`](docs/OTA-RUNBOOK.md).
 
 ## Règle de validation
 
