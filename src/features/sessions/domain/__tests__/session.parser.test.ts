@@ -8,9 +8,10 @@ const fixture = (name: string): string => readFileSync(join(__dirname, "fixtures
 describe("parseGrid — modèle réel (un créneau par groupe horaire)", () => {
   const slots = parseGrid(fixture("grid-parc-real.html"), "parc");
 
-  it("assemble un créneau par groupe (Réservée/Libre exclus)", () => {
-    // Blocs A, B, C, D → 4 créneaux ; la Réservée (E) et la plage Libre (F) ne sont pas des séances.
-    expect(slots).toHaveLength(4);
+  it("assemble un créneau par groupe (Réservée/Libre/vide exclus)", () => {
+    // Blocs A, B, C, D (codes) + G (jeu libre) → 5 créneaux ;
+    // Réservée (E), plage Libre (F) et « N libres » vide non attribué (H) ne sont pas des séances.
+    expect(slots).toHaveLength(5);
   });
 
   it("rattache le plateau passé en paramètre et le type « groupe »", () => {
@@ -38,11 +39,21 @@ describe("parseGrid — modèle réel (un créneau par groupe horaire)", () => {
     expect(d?.codes).toEqual(expect.arrayContaining(["3.0T", "3.5C"]));
   });
 
-  it("gère « Complet » : code présent, 0 inscrit listé, libellé conservé", () => {
+  it("gère « Complet » : code présent, 0 inscrit listé", () => {
     const c = slots.find((slot) => slot.heure === "12:00");
     expect(c?.codes).toEqual(["2.5T"]);
     expect(c?.count).toBe(0);
-    expect(c?.labels).toContain("Complet");
+  });
+
+  it("émet une séance de jeu libre (Bloquée sans code) avec son libellé et 0 code", () => {
+    const g = slots.find((slot) => slot.heure === "21:00");
+    expect(g?.codes).toEqual([]);
+    expect(g?.labels).toContain("Jeu ouvert abonnés");
+    expect(g?.inscrits.map((r) => r.nom)).toEqual(["Gaston Provost"]);
+  });
+
+  it("ignore un créneau « N libres » non attribué (ni code, ni nom, ni libellé)", () => {
+    expect(slots.find((slot) => slot.heure === "22:00")).toBeUndefined();
   });
 
   it("n'invente pas d'inscrit à partir d'un code (« 3.5T » n'est pas un nom)", () => {

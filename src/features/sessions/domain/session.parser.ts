@@ -94,38 +94,51 @@ export const parseGrid = (html: string, plateau: Plateau): Slot[] => {
     }
   }
 
-  // 2. Assemble un créneau par groupe : code(s) des cartes « Bloquée », roster de la carte « libres ».
+  // 2. Assemble un créneau par groupe. Les cartes « Bloquée » portent soit un CODE de niveau,
+  //    soit un libellé spécial (« Jeu libre public », « Jeu ouvert abonnés »…). Le roster vient
+  //    de la carte « N libres » / « Complet ».
   const slots: Slot[] = [];
   for (const cards of byRange.values()) {
     const codes: LevelCode[] = [];
-    const seen = new Set<LevelCode>();
+    const seenCode = new Set<LevelCode>();
+    const labels: string[] = [];
+    const seenLabel = new Set<string>();
     for (const card of cards) {
+      if (!/bloqu/i.test(card.caption)) {
+        continue;
+      }
       if (hasLevelCode(card.subject)) {
         for (const code of parseCodes(card.subject)) {
-          if (!seen.has(code)) {
-            seen.add(code);
+          if (!seenCode.has(code)) {
+            seenCode.add(code);
             codes.push(code);
           }
+        }
+      } else {
+        const label = card.subject.replace(/\s+/g, " ").trim();
+        if (label && !seenLabel.has(label)) {
+          seenLabel.add(label);
+          labels.push(label);
         }
       }
     }
 
     const rosterCard = cards.find((card) => isRosterCaption(card.caption));
+    const inscrits = rosterCard ? splitNames(rosterCard.subject) : [];
 
-    // Un groupe = une carte roster (séance) OU au moins un code (court bloqué pour un niveau).
-    // Les plages sans roster ni code (Réservée individuelle / Libre / n/d) ne sont pas des séances.
-    if (!rosterCard && codes.length === 0) {
+    // Une vraie séance porte un code de niveau, OU des inscrits, OU un libellé (jeu libre).
+    // Une plage « N libres » vide (créneau non encore attribué) est ignorée.
+    if (codes.length === 0 && inscrits.length === 0 && labels.length === 0) {
       continue;
     }
 
-    const inscrits = rosterCard ? splitNames(rosterCard.subject) : [];
     slots.push({
       heure: rosterCard?.start ?? cards[0].start,
       plateau,
       terrains: [],
       kind: "groupe",
       codes,
-      labels: rosterCard ? [rosterCard.caption] : [],
+      labels,
       inscrits,
       count: inscrits.length,
     });
