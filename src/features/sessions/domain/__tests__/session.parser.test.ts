@@ -29,6 +29,11 @@ describe("parseGrid — modèle réel (un créneau par groupe horaire)", () => {
     expect(slots.filter((slot) => slot.heure === "08:00")).toHaveLength(1);
   });
 
+  it("rattache les courts depuis le ClientState (par plage horaire)", () => {
+    expect(slots.find((slot) => slot.heure === "08:00")?.terrains).toEqual(["01", "02"]);
+    expect(slots.find((slot) => slot.heure === "20:00")?.terrains).toEqual(["06"]);
+  });
+
   it("reconnaît les codes multi-groupes « 2.5C & 2.5T »", () => {
     const b = slots.find((slot) => slot.heure === "20:00");
     expect(b?.codes).toEqual(expect.arrayContaining(["2.5C", "2.5T"]));

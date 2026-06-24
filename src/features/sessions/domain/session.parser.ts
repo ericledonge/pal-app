@@ -2,7 +2,7 @@ import { type HTMLElement, parse } from "node-html-parser";
 
 import { isLevelCode, type LevelCode } from "@/shared/domain/level";
 
-import type { Plateau, Registrant, Slot } from "./session.types";
+import type { Court, Plateau, Registrant, Slot } from "./session.types";
 
 // Parser pur (HTML → Slot[]). Spécifique à pal-app, tolérant aux formats variables.
 // Cœur fragile de la feature : en cas de changement du HTML, corrigeable via EAS Update.
@@ -60,6 +60,67 @@ interface RawCard {
   subject: string;
 }
 
+interface StateAppointment {
+  start?: string;
+  end?: string;
+  subject?: string;
+  resources?: { key?: string }[];
+}
+
+const COURT_NUM_RE = /Court\s*0*(\d+)/i;
+const hhmm = (value?: string): string | undefined => /(\d{1,2}:\d{2})/.exec(value ?? "")?.[1];
+
+/**
+ * Extrait, depuis le ClientState Telerik embarqué dans le HTML, la liste des courts par plage
+ * horaire. La propriété est doublement encodée : `"appointments":"[{\"start\":…}]"`.
+ * Renvoie une map « 08:00 - 10:00 » → { "01", "02"… }. Tolérant : map vide si le JSON est absent.
+ */
+const extractCourtsByRange = (html: string): Map<string, Set<string>> => {
+  const map = new Map<string, Set<string>>();
+  const grab = <T>(prop: string): T[] => {
+    const match = new RegExp(`"${prop}":"((?:\\\\.|[^"\\\\])*)"`).exec(html);
+    if (!match) {
+      return [];
+    }
+    try {
+      return JSON.parse(JSON.parse(`"${match[1]}"`)) as T[];
+    } catch {
+      return [];
+    }
+  };
+
+  const courtByKey = new Map<string, string>();
+  for (const resource of grab<{ key?: string; text?: string }>("resources")) {
+    const num = resource.text ? COURT_NUM_RE.exec(resource.text)?.[1] : undefined;
+    if (resource.key && num) {
+      courtByKey.set(resource.key, num.padStart(2, "0"));
+    }
+  }
+
+  for (const appt of grab<StateAppointment>("appointments")) {
+    // Ignore les plages sans contenu (n/d / Libre) : elles ne font pas partie de la séance.
+    if (!appt.subject?.trim()) {
+      continue;
+    }
+    const start = hhmm(appt.start);
+    const end = hhmm(appt.end);
+    if (!start || !end) {
+      continue;
+    }
+    const range = `${start} - ${end}`;
+    const courts = map.get(range) ?? new Set<string>();
+    for (const resource of appt.resources ?? []) {
+      const court = resource.key ? courtByKey.get(resource.key) : undefined;
+      if (court) {
+        courts.add(court);
+      }
+    }
+    map.set(range, courts);
+  }
+
+  return map;
+};
+
 const readCard = (apt: HTMLElement): RawCard | null => {
   const hours =
     apt.querySelector(".appointment-card-hours")?.text.replace(/\s+/g, " ").trim() ?? "";
@@ -77,6 +138,7 @@ const readCard = (apt: HTMLElement): RawCard | null => {
 
 export const parseGrid = (html: string, plateau: Plateau): Slot[] => {
   const root = parse(normalize(html));
+  const courtsByRange = extractCourtsByRange(html);
 
   // 1. Regroupe les cartes par plage horaire complète (« 08:00 - 10:00 »).
   const byRange = new Map<string, RawCard[]>();
@@ -98,7 +160,7 @@ export const parseGrid = (html: string, plateau: Plateau): Slot[] => {
   //    soit un libellé spécial (« Jeu libre public », « Jeu ouvert abonnés »…). Le roster vient
   //    de la carte « N libres » / « Complet ».
   const slots: Slot[] = [];
-  for (const cards of byRange.values()) {
+  for (const [range, cards] of byRange) {
     const codes: LevelCode[] = [];
     const seenCode = new Set<LevelCode>();
     const labels: string[] = [];
@@ -132,10 +194,11 @@ export const parseGrid = (html: string, plateau: Plateau): Slot[] => {
       continue;
     }
 
+    const terrains = [...(courtsByRange.get(range) ?? [])].sort() as Court[];
     slots.push({
       heure: rosterCard?.start ?? cards[0].start,
       plateau,
-      terrains: [],
+      terrains,
       kind: "groupe",
       codes,
       labels,
