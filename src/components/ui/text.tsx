@@ -19,10 +19,10 @@ const VARIANT_CLASS: Record<TextVariant, string> = {
   subtitle: "font-lexend text-[28px] text-on-surface",
   cardTitle: "font-lexend text-[24px] text-on-surface",
   stat: "font-lexend text-[20px] text-on-surface",
-  bodyLg: "font-inter text-[18px] text-on-surface",
-  body: "font-inter text-[16px] text-on-surface",
-  label: "font-inter text-[14px] text-on-surface-muted",
-  caption: "font-inter text-[12px] text-on-surface-muted",
+  bodyLg: "font-inter text-[20px] text-on-surface",
+  body: "font-inter text-[18px] text-on-surface",
+  label: "font-inter text-[16px] text-on-surface-muted",
+  caption: "font-inter text-[14px] text-on-surface-muted",
 };
 
 export interface TextUIProps extends TextProps {

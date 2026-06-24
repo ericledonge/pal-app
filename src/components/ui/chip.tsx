@@ -22,7 +22,7 @@ export const Chip = ({ label, selected = false, className, ...props }: ChipProps
     >
       <Text
         className={cn(
-          "font-inter text-[12px]",
+          "font-inter text-[14px]",
           selected ? "text-on-primary" : "text-on-surface-muted",
         )}
       >

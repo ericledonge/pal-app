@@ -11,7 +11,7 @@ export const Input = ({ className, ...props }: InputProps) => {
     <TextInput
       placeholderTextColor="#9aa6c4"
       className={cn(
-        "rounded-xl border border-outline bg-surface px-md py-sm font-inter text-[16px] text-on-surface",
+        "rounded-xl border border-outline bg-surface px-md py-sm font-inter text-[18px] text-on-surface",
         className,
       )}
       {...props}
