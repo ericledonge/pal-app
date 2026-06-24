@@ -1,106 +1,134 @@
-import { parse } from "node-html-parser";
+import { type HTMLElement, parse } from "node-html-parser";
 
 import { isLevelCode, type LevelCode } from "@/shared/domain/level";
 
-import type { Plateau, Slot, SlotKind } from "./session.types";
+import type { Plateau, Registrant, Slot } from "./session.types";
 
 // Parser pur (HTML → Slot[]). Spécifique à pal-app, tolérant aux formats variables.
 // Cœur fragile de la feature : en cas de changement du HTML, corrigeable via EAS Update.
 // Aucun import react / react-native / @tanstack/react-query.
 //
-// Limite connue : l'association créneau → court(s) (colonnes du RadScheduler) n'est pas
-// encore reconstruite (terrains = []). Heure, plateau, niveau, compte et noms le sont.
+// Modèle réel du RadScheduler (vérifié en prod) : pour une même PLAGE HORAIRE, le groupe est
+// éclaté en plusieurs cartes `.rsApt` :
+//   - une carte « roster » (caption « N libres » ou « Complet ») dont `.appointment-card-subject`
+//     liste les NOMS des inscrits ;
+//   - plusieurs cartes « Bloquée » (une par court occupé) dont le subject est le CODE de niveau
+//     (« 3.5T », « 2.5T & 3.0C », « 2.0C&T »… parfois en minuscule « 3.5c »).
+// L'attribut `title` de la carte est un tooltip générique, JAMAIS le code. On regroupe donc les
+// cartes par plage horaire et on assemble un seul créneau (code + roster) par groupe.
 
-const SPECIAL_LABELS = ["Open Play", "Jeu libre public", "Groupe ouvert"];
-
-/** Décode les entités utiles pour que les sélecteurs de classe et les codes fonctionnent. */
 const normalize = (html: string): string => html.replace(/&#32;/g, " ").replace(/&amp;/g, "&");
 
-/** Extrait les codes de niveau, gérant « 2.5C & 2.5T » et le raccourci « 2.0C&T ». */
+/** Une plage contient-elle un code de niveau (casse insensible) ? */
+const LEVEL_CODE_RE = /[234]\.[05][ct]/i;
+const hasLevelCode = (value: string): boolean => LEVEL_CODE_RE.test(value);
+
+/** Caption d'une carte « roster » : « N libres » (avec un nombre) ou « Complet ». Pas « Libre » seul. */
+const isRosterCaption = (caption: string): boolean =>
+  /\d+\s*libres/i.test(caption) || /complet/i.test(caption);
+
+/** Extrait les codes de niveau, gérant « 2.5C & 2.5T », le raccourci « 2.0C&T » et la casse. */
 const parseCodes = (raw: string): LevelCode[] => {
   const codes = new Set<LevelCode>();
-  for (const match of raw.matchAll(/([234]\.[05])([CT])/g)) {
-    const code = `${match[1]}${match[2]}`;
+  const add = (prefix: string, suffix: string) => {
+    const code = `${prefix}${suffix.toUpperCase()}`;
     if (isLevelCode(code)) {
       codes.add(code);
     }
+  };
+  for (const match of raw.matchAll(/([234]\.[05])([ct])/gi)) {
+    add(match[1], match[2]);
   }
-  for (const match of raw.matchAll(/([234]\.[05])([CT])\s*&\s*([CT])\b/g)) {
-    for (const suffix of [match[2], match[3]]) {
-      const code = `${match[1]}${suffix}`;
-      if (isLevelCode(code)) {
-        codes.add(code);
-      }
-    }
+  for (const match of raw.matchAll(/([234]\.[05])([ct])\s*&\s*([ct])\b/gi)) {
+    add(match[1], match[2]);
+    add(match[1], match[3]);
   }
   return [...codes];
 };
 
-const detectKind = (caption: string, hasNames: boolean): SlotKind => {
-  if (/bloqu/i.test(caption)) {
-    return "bloquee";
+const splitNames = (subject: string): Registrant[] =>
+  subject
+    .split(/\r?\n/)
+    .map((name) => name.trim())
+    .filter((name) => name.length > 0)
+    .map((nom) => ({ nom }));
+
+interface RawCard {
+  range: string;
+  start: string;
+  caption: string;
+  subject: string;
+}
+
+const readCard = (apt: HTMLElement): RawCard | null => {
+  const hours =
+    apt.querySelector(".appointment-card-hours")?.text.replace(/\s+/g, " ").trim() ?? "";
+  const start = /(\d{1,2}:\d{2})/.exec(hours)?.[1] ?? "";
+  if (!start) {
+    return null;
   }
-  if (/r[ée]serv/i.test(caption)) {
-    return "reservee";
-  }
-  if (/\d+\s*libres/i.test(caption)) {
-    return "groupe";
-  }
-  if (/libre/i.test(caption)) {
-    return "libre";
-  }
-  return hasNames ? "groupe" : "nd";
+  return {
+    range: hours,
+    start,
+    caption: apt.querySelector(".appointment-card-type .caption")?.text.trim() ?? "",
+    subject: apt.querySelector(".appointment-card-subject")?.text ?? "",
+  };
 };
 
 export const parseGrid = (html: string, plateau: Plateau): Slot[] => {
   const root = parse(normalize(html));
-  const slots: Slot[] = [];
 
+  // 1. Regroupe les cartes par plage horaire complète (« 08:00 - 10:00 »).
+  const byRange = new Map<string, RawCard[]>();
   for (const apt of root.querySelectorAll(".rsApt")) {
     try {
-      const title = apt.getAttribute("title") ?? "";
-      const caption = apt.querySelector(".appointment-card-type .caption")?.text.trim() ?? "";
-      const hours = apt.querySelector(".appointment-card-hours")?.text.trim() ?? "";
-      const heure = /(\d{1,2}:\d{2})/.exec(hours)?.[1] ?? "";
-      const labelText = apt.querySelector(".appointment-card-label")?.text.trim() ?? "";
-      const subject = apt.querySelector(".appointment-card-subject")?.text ?? "";
-
-      const inscrits = subject
-        .split(/\r?\n/)
-        .map((name) => name.trim())
-        .filter((name) => name.length > 0)
-        .map((nom) => ({ nom }));
-
-      const codes = parseCodes(title);
-
-      const labels = new Set<string>();
-      if (labelText) {
-        labels.add(labelText);
-      }
-      for (const special of SPECIAL_LABELS) {
-        if (title.includes(special) || subject.includes(special)) {
-          labels.add(special);
-        }
-      }
-
-      // Ignore proprement une carte totalement vide (markup inattendu / placeholder).
-      if (!heure && !caption && codes.length === 0 && inscrits.length === 0) {
+      const card = readCard(apt);
+      if (!card) {
         continue;
       }
-
-      slots.push({
-        heure,
-        plateau,
-        terrains: [],
-        kind: detectKind(caption, inscrits.length > 0),
-        codes,
-        labels: [...labels],
-        inscrits,
-        count: inscrits.length,
-      });
+      const list = byRange.get(card.range) ?? [];
+      list.push(card);
+      byRange.set(card.range, list);
     } catch {
       // Tolérant : une carte au markup inattendu est ignorée sans faire échouer le parsing.
     }
+  }
+
+  // 2. Assemble un créneau par groupe : code(s) des cartes « Bloquée », roster de la carte « libres ».
+  const slots: Slot[] = [];
+  for (const cards of byRange.values()) {
+    const codes: LevelCode[] = [];
+    const seen = new Set<LevelCode>();
+    for (const card of cards) {
+      if (hasLevelCode(card.subject)) {
+        for (const code of parseCodes(card.subject)) {
+          if (!seen.has(code)) {
+            seen.add(code);
+            codes.push(code);
+          }
+        }
+      }
+    }
+
+    const rosterCard = cards.find((card) => isRosterCaption(card.caption));
+
+    // Un groupe = une carte roster (séance) OU au moins un code (court bloqué pour un niveau).
+    // Les plages sans roster ni code (Réservée individuelle / Libre / n/d) ne sont pas des séances.
+    if (!rosterCard && codes.length === 0) {
+      continue;
+    }
+
+    const inscrits = rosterCard ? splitNames(rosterCard.subject) : [];
+    slots.push({
+      heure: rosterCard?.start ?? cards[0].start,
+      plateau,
+      terrains: [],
+      kind: "groupe",
+      codes,
+      labels: rosterCard ? [rosterCard.caption] : [],
+      inscrits,
+      count: inscrits.length,
+    });
   }
 
   return slots;

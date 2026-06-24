@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
+import { logger } from "@/lib/logger";
+
 import { fetchTodayGrid, fetchTomorrowGrid } from "./session.adapter";
 import { parseGrid } from "./session.parser";
 import { assertValidGrid } from "./session.service";
@@ -11,7 +13,17 @@ const SESSIONS_KEY = ["sessions"] as const;
 // HttpError (réseau/HTTP) et GridParseError (parsing) sont distinguables par le consommateur.
 const fetchGrid = async (day: Day, plateau: Plateau): Promise<Slot[]> => {
   const html = day === "today" ? await fetchTodayGrid(plateau) : await fetchTomorrowGrid(plateau);
-  return assertValidGrid(html, parseGrid(html, plateau));
+  const slots = assertValidGrid(html, parseGrid(html, plateau));
+  if (__DEV__) {
+    // Diagnostic du parsing (cœur fragile de la feature) : nb de créneaux + codes/inscrits vus.
+    logger.info(
+      `[sessions] ${day}/${plateau} → ${slots.length} créneaux | ` +
+        slots
+          .map((slot) => `${slot.heure} ${slot.codes.join("&") || "(sans code)"}×${slot.count}`)
+          .join(", "),
+    );
+  }
+  return slots;
 };
 
 /** Présences d'un (jour, plateau). Clé de cache distincte par combinaison ; staleTime court. */

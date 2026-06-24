@@ -64,9 +64,13 @@ export const assertValidGrid = (html: string, slots: Slot[]): Slot[] => {
 /**
  * Un créneau est-il pertinent pour « mon niveau » ?
  * - vrai si le créneau porte exactement mon niveau, ou est multi-groupes l'incluant ;
+ * - une séance sans code (jeu libre / ouvert à tous) est pertinente pour tout le monde ;
  * - exception unique à sens unique : un joueur 4.0C voit aussi les créneaux 3.5T (pas l'inverse).
  */
 export const isSlotForLevel = (slot: Slot, myLevel: LevelCode): boolean => {
+  if (slot.codes.length === 0) {
+    return true;
+  }
   if (slot.codes.includes(myLevel)) {
     return true;
   }

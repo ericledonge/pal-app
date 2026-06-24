@@ -1,22 +1,33 @@
 <div class="RadScheduler&#32;RadScheduler_Bootstrap">
 <div class="appointments">
-<div id="BookingScheduler_99_0" title="3.0C" class="rsApt&#32;rsAptColor">
-<div class="rsAptContent">
-<div class="appointment-card-content">
-<div class="appointment-card-type"><span class="caption">Bloquée</span></div>
-</div>
-</div>
-</div>
+
+<!-- Carte totalement vide (markup inattendu) : ignorée sans crash -->
 <div class="rsApt&#32;rsAptColor"></div>
-<div id="BookingScheduler_98_0" title="2.0C&amp;T" class="rsApt&#32;rsAptColor">
-<div class="rsAptContent">
-<div class="appointment-card-content">
+
+<!-- Carte sans heure (pas de plage horaire) : ignorée -->
+<div class="rsApt&#32;rsAptColor" title="tooltip">
+<div class="rsAptContent"><div class="appointment-card-content">
+<div class="appointment-card-type"><span class="caption">Bloquée</span></div>
+<div class="appointment-card-subject"><span class="wrap" title="3.0C">3.0C</span></div>
+</div></div>
+</div>
+
+<!-- Bloc 18:00-20:00, raccourci multi-groupes compact « 2.0C&T » (→ 2.0C + 2.0T) -->
+<div class="rsApt&#32;rsAptColor" title="tooltip">
+<div class="rsAptContent"><div class="appointment-card-content">
 <div class="appointment-card-type"><span class="caption">3 libres</span></div>
 <div class="appointment-card-hours"><span>18:00 - 20:00</span></div>
 <div class="appointment-card-subject"><span class="wrap" title="Alice&#32;Tremblay&#13;&#10;Bob&#32;Roy">Alice Tremblay
 Bob Roy</span></div>
+</div></div>
 </div>
+<div class="rsApt&#32;rsAptColor" title="tooltip">
+<div class="rsAptContent"><div class="appointment-card-content">
+<div class="appointment-card-type"><span class="caption">Bloquée</span></div>
+<div class="appointment-card-hours"><span>18:00 - 20:00</span></div>
+<div class="appointment-card-subject"><span class="wrap" title="2.0C&amp;T">2.0C&amp;T</span></div>
+</div></div>
 </div>
-</div>
+
 </div>
 </div>

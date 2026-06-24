@@ -5,34 +5,58 @@ import { parseGrid } from "../session.parser";
 
 const fixture = (name: string): string => readFileSync(join(__dirname, "fixtures", name), "utf-8");
 
-describe("parseGrid — grille réelle (parc)", () => {
+describe("parseGrid — modèle réel (un créneau par groupe horaire)", () => {
   const slots = parseGrid(fixture("grid-parc-real.html"), "parc");
 
-  it("extrait des créneaux", () => {
-    expect(slots.length).toBeGreaterThan(0);
+  it("assemble un créneau par groupe (Réservée/Libre exclus)", () => {
+    // Blocs A, B, C, D → 4 créneaux ; la Réservée (E) et la plage Libre (F) ne sont pas des séances.
+    expect(slots).toHaveLength(4);
   });
 
-  it("rattache le plateau passé en paramètre", () => {
-    expect(slots.every((slot) => slot.plateau === "parc")).toBe(true);
+  it("rattache le plateau passé en paramètre et le type « groupe »", () => {
+    expect(slots.every((slot) => slot.plateau === "parc" && slot.kind === "groupe")).toBe(true);
   });
 
-  it("compte les inscrits par le nombre de noms listés", () => {
-    const withNames = slots.find((slot) => slot.inscrits.length > 0);
-    expect(withNames).toBeDefined();
-    expect(withNames?.count).toBe(withNames?.inscrits.length);
+  it("regroupe code (cartes Bloquée) et roster (carte « N libres ») d'un même horaire", () => {
+    const a = slots.find((slot) => slot.heure === "08:00");
+    expect(a?.codes).toEqual(["3.5T"]);
+    expect(a?.count).toBe(3);
+    expect(a?.inscrits.map((r) => r.nom)).toEqual(["Alice Tremblay", "Bob Roy", "Claire Gagnon"]);
   });
 
-  it("reconnaît des codes multi-groupes (écriture « & »)", () => {
-    expect(slots.some((slot) => slot.codes.length > 1)).toBe(true);
+  it("ne duplique pas un groupe par court bloqué (plusieurs Bloquée → 1 créneau)", () => {
+    expect(slots.filter((slot) => slot.heure === "08:00")).toHaveLength(1);
   });
 
-  it("reconnaît les plages bloquées", () => {
-    expect(slots.some((slot) => slot.kind === "bloquee")).toBe(true);
+  it("reconnaît les codes multi-groupes « 2.5C & 2.5T »", () => {
+    const b = slots.find((slot) => slot.heure === "20:00");
+    expect(b?.codes).toEqual(expect.arrayContaining(["2.5C", "2.5T"]));
+  });
+
+  it("normalise la casse des codes (« 3.5c » → « 3.5C »)", () => {
+    const d = slots.find((slot) => slot.heure === "18:00");
+    expect(d?.codes).toEqual(expect.arrayContaining(["3.0T", "3.5C"]));
+  });
+
+  it("gère « Complet » : code présent, 0 inscrit listé, libellé conservé", () => {
+    const c = slots.find((slot) => slot.heure === "12:00");
+    expect(c?.codes).toEqual(["2.5T"]);
+    expect(c?.count).toBe(0);
+    expect(c?.labels).toContain("Complet");
+  });
+
+  it("n'invente pas d'inscrit à partir d'un code (« 3.5T » n'est pas un nom)", () => {
+    const names = slots.flatMap((slot) => slot.inscrits.map((r) => r.nom));
+    expect(names).not.toContain("3.5T");
+  });
+
+  it("ignore les réservations individuelles (sans code de niveau)", () => {
+    const names = slots.flatMap((slot) => slot.inscrits.map((r) => r.nom));
+    expect(names).not.toContain("Jean Privé");
   });
 
   it("extrait une heure de début au format HH:MM", () => {
-    const withHour = slots.find((slot) => slot.heure.length > 0);
-    expect(withHour?.heure).toMatch(/^\d{1,2}:\d{2}$/);
+    expect(slots.every((slot) => /^\d{1,2}:\d{2}$/.test(slot.heure))).toBe(true);
   });
 });
 

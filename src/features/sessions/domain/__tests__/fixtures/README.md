@@ -1,19 +1,25 @@
 # Fixtures HTML — grille de présences
 
 Échantillons pour tester le parser (`session.parser.ts`) et sa validation sans réseau.
+**Noms anonymisés** (jamais de vraies données de joueurs dans le dépôt).
 
-| Fichier | Origine | Description |
-|---|---|---|
-| `grid-parc-real.html` | **parc, aujourd'hui** — capturé le 2026-06-22 sur `pickleballenligne.com` (allégé : scripts/styles retirés, 45 cartes `rsApt` réelles) | Cas réels : « X libres » + noms, « Bloquée », « Réservée », libellé « limite », codes simples et **multi-groupes** (attribut `title` du `div.rsApt`, ex. `3.0C &#32;&amp;&#32; 3.0T`) |
-| `grid-empty.html` | Forgée | Grille sans aucune carte (journée vide / aucun créneau) |
-| `grid-degraded.html` | Forgée | Markup volontairement dégradé : carte sans heure ni sujet, carte vide, écriture multi-groupes compacte `2.0C&amp;T` — vérifie la tolérance du parser |
+| Fichier | Description |
+|---|---|
+| `grid-parc-real.html` | Modélise la **structure réelle** de `pickleballenligne.com` (vérifiée en prod le 2026-06-24). Blocs : groupe `3.5T` avec roster, multi-groupes `2.5C & 2.5T`, `Complet` sans noms, code en minuscule `3.0T & 3.5c`, plus une `Réservée` et une plage `Libre` (qui ne doivent PAS produire de créneau). |
+| `grid-empty.html` | Grille sans aucune carte (journée vide / aucun créneau). |
+| `grid-degraded.html` | Markup dégradé : carte vide, carte sans heure, et raccourci multi-groupes compact `2.0C&T` — vérifie la tolérance. |
 
-## Structure d'une carte (rappel)
+## Structure réelle d'un groupe (rappel important)
 
-- `div.rsApt.rsAptColor` — attribut **`title`** = code(s) de groupe / libellé (ex. `3.0C & 3.0T`).
-- `.appointment-card-type .caption` — `« X libres »` (plage de groupe avec liste) · `« Bloquée »` · `« Réservée »`.
-- `.appointment-card-hours span` — plage horaire `« 08:00 - 10:00 »`.
-- `.appointment-card-label span` — libellé spécial (`« limite »`, etc.).
-- `.appointment-card-subject span` — **noms des inscrits**, séparés par retours-ligne (le nombre de noms = nombre d'inscrits).
+Pour une **même plage horaire**, le RadScheduler éclate un groupe en plusieurs cartes `div.rsApt` :
 
-> Les espaces dans les attributs sont encodés `&#32;` et les retours-ligne `&#13;&#10;` — le parser doit les décoder.
+- **Carte roster** — `.appointment-card-type .caption` = `« N libres »` ou `« Complet »` ;
+  `.appointment-card-subject` = **noms des inscrits** (séparés par retours-ligne).
+- **Cartes « Bloquée »** (une par court occupé) — `.appointment-card-subject` = **code de niveau**
+  (`3.5T`, `2.5T & 3.0C`, `2.0C&T`… parfois en **minuscule** `3.5c`).
+- `.appointment-card-hours span` = plage `« 08:00 - 10:00 »` (clé de regroupement).
+
+> ⚠️ L'attribut **`title`** de la carte est un **tooltip générique** (« Cette plage horaire n'est
+> plus disponible… »), **jamais** le code — piège historique à l'origine d'un bug en prod.
+> Le parser regroupe par plage horaire, prend le code des cartes « Bloquée » et le roster de la
+> carte « libres ». Espaces encodés `&#32;`, retours-ligne `&#13;&#10;`, `&` en `&amp;`.
