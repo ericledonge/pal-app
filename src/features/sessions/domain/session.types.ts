@@ -20,6 +20,8 @@ export interface Registrant {
 export interface Slot {
   /** Heure de début, ex. « 18:00 ». */
   heure: string;
+  /** Heure de fin, ex. « 20:00 » (vide si non déterminée). */
+  heureFin: string;
   plateau: Plateau;
   /** Court(s) couverts par ce créneau. */
   terrains: Court[];
@@ -31,4 +33,6 @@ export interface Slot {
   inscrits: Registrant[];
   /** Nombre d'inscrits = nombre de noms listés (plus fiable que max − libres). */
   count: number;
+  /** Places encore libres (depuis « N libres ») ; null si complet ou inconnu. */
+  placesLibres: number | null;
 }

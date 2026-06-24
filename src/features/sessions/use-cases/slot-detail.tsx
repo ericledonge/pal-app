@@ -18,11 +18,9 @@ export const SlotDetail = ({ slot, onClose }: SlotDetailProps) => {
       <View className="flex-1 gap-md bg-background px-lg pt-2xl">
         {slot ? (
           <>
-            <Text variant="title">{slot.heure}</Text>
+            <Text variant="title">{slot.horaire}</Text>
             <Text variant="body" className="text-on-surface-muted">
-              {[slot.plateauLabel, slot.levelLabel || slot.kindLabel, slot.terrainsLabel]
-                .filter(Boolean)
-                .join(" · ")}
+              {[slot.lieuLabel, slot.levelLabel].filter(Boolean).join(" · ")}
             </Text>
 
             <Text variant="label">

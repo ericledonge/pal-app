@@ -28,6 +28,7 @@ export const isValidSlot = (value: unknown): value is Slot => {
   const slot = value as Record<string, unknown>;
   return (
     typeof slot.heure === "string" &&
+    typeof slot.heureFin === "string" &&
     typeof slot.plateau === "string" &&
     PLATEAUX.has(slot.plateau as Plateau) &&
     typeof slot.kind === "string" &&
@@ -39,7 +40,8 @@ export const isValidSlot = (value: unknown): value is Slot => {
     slot.labels.every((label) => typeof label === "string") &&
     Array.isArray(slot.inscrits) &&
     slot.inscrits.every(isRegistrant) &&
-    typeof slot.count === "number"
+    typeof slot.count === "number" &&
+    (slot.placesLibres === null || typeof slot.placesLibres === "number")
   );
 };
 
@@ -96,11 +98,19 @@ export type AgendaMode = "myLevel" | "all";
 export interface AgendaSlotViewModel {
   id: string;
   heure: string;
+  /** Plage horaire formatée, ex. « 09:00 - 11:00 ». */
+  horaire: string;
   plateauLabel: string;
+  /** Lieu + courts, ex. « Parc · Courts 01-05 ». */
+  lieuLabel: string;
   levelLabel: string;
+  /** Vrai si multi-groupes (≥ 2 codes) → mise en avant distincte (badge secondaire). */
+  multiNiveau: boolean;
   kindLabel: string;
   count: number;
   countLabel: string;
+  /** Capacité, ex. « 11/30 » ou « Complet ». */
+  capaciteLabel: string;
   terrainsLabel: string;
   /** Noms des inscrits — peuplé uniquement en mode « Mon niveau ». */
   inscrits: string[];
@@ -112,21 +122,60 @@ export interface AgendaSection {
   slots: AgendaSlotViewModel[];
 }
 
+/** Formate des courts triés en plages contiguës : ["01","02","03","05"] → « 01-03, 05 ». */
+const formatCourts = (terrains: Slot["terrains"]): string => {
+  const nums = terrains.map((court) => Number(court)).sort((left, right) => left - right);
+  if (nums.length === 0) {
+    return "";
+  }
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const runs: string[] = [];
+  let start = nums[0];
+  let prev = nums[0];
+  for (const n of nums.slice(1)) {
+    if (n === prev + 1) {
+      prev = n;
+      continue;
+    }
+    runs.push(start === prev ? pad(start) : `${pad(start)}-${pad(prev)}`);
+    start = n;
+    prev = n;
+  }
+  runs.push(start === prev ? pad(start) : `${pad(start)}-${pad(prev)}`);
+  return runs.join(", ");
+};
+
 const createAgendaSlotViewModel = (
   slot: Slot,
   index: number,
   withNames: boolean,
-): AgendaSlotViewModel => ({
-  id: `${slot.plateau}-${slot.heure}-${slot.codes.join("_")}-${index}`,
-  heure: slot.heure,
-  plateauLabel: PLATEAU_LABELS[slot.plateau],
-  levelLabel: slot.codes.length > 0 ? slot.codes.join(" & ") : slot.labels.join(", "),
-  kindLabel: KIND_LABELS[slot.kind],
-  count: slot.count,
-  countLabel: `${slot.count} ${slot.count > 1 ? "inscrits" : "inscrit"}`,
-  terrainsLabel: slot.terrains.join(", "),
-  inscrits: withNames ? slot.inscrits.map((registrant) => registrant.nom) : [],
-});
+): AgendaSlotViewModel => {
+  const courts = formatCourts(slot.terrains);
+  const total = slot.placesLibres === null ? null : slot.count + slot.placesLibres;
+  const countLabel = `${slot.count} ${slot.count > 1 ? "inscrits" : "inscrit"}`;
+  return {
+    id: `${slot.plateau}-${slot.heure}-${slot.codes.join("_")}-${index}`,
+    heure: slot.heure,
+    horaire: slot.heureFin ? `${slot.heure} - ${slot.heureFin}` : slot.heure,
+    plateauLabel: PLATEAU_LABELS[slot.plateau],
+    lieuLabel: courts
+      ? `${PLATEAU_LABELS[slot.plateau]} · ${slot.terrains.length > 1 ? "Courts" : "Court"} ${courts}`
+      : PLATEAU_LABELS[slot.plateau],
+    levelLabel: slot.codes.length > 0 ? slot.codes.join(" & ") : slot.labels.join(", "),
+    multiNiveau: slot.codes.length > 1,
+    kindLabel: KIND_LABELS[slot.kind],
+    count: slot.count,
+    countLabel,
+    capaciteLabel:
+      slot.placesLibres === null
+        ? "Complet"
+        : total && total > 0
+          ? `${slot.count}/${total}`
+          : countLabel,
+    terrainsLabel: courts,
+    inscrits: withNames ? slot.inscrits.map((registrant) => registrant.nom) : [],
+  };
+};
 
 /**
  * View model de l'agenda : trié par heure, groupé/étiqueté par plateau (parc puis patinoire).

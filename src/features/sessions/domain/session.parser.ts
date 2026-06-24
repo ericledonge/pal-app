@@ -194,9 +194,17 @@ export const parseGrid = (html: string, plateau: Plateau): Slot[] => {
       continue;
     }
 
+    let placesLibres: number | null = 0;
+    if (rosterCard) {
+      placesLibres = /complet/i.test(rosterCard.caption)
+        ? null
+        : Number(/(\d+)\s*libres/i.exec(rosterCard.caption)?.[1] ?? 0);
+    }
+
     const terrains = [...(courtsByRange.get(range) ?? [])].sort() as Court[];
     slots.push({
       heure: rosterCard?.start ?? cards[0].start,
+      heureFin: /\d{1,2}:\d{2}\s*-\s*(\d{1,2}:\d{2})/.exec(range)?.[1] ?? "",
       plateau,
       terrains,
       kind: "groupe",
@@ -204,6 +212,7 @@ export const parseGrid = (html: string, plateau: Plateau): Slot[] => {
       labels,
       inscrits,
       count: inscrits.length,
+      placesLibres,
     });
   }
 

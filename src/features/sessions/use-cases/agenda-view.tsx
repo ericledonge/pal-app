@@ -50,11 +50,7 @@ export const AgendaView = () => {
               {section.plateauLabel}
             </Text>
             {section.slots.map((slot) => (
-              <SlotCard
-                key={slot.id}
-                slot={slot}
-                onPress={mode === "myLevel" ? () => setSelected(slot) : undefined}
-              />
+              <SlotCard key={slot.id} slot={slot} onShowAll={() => setSelected(slot)} />
             ))}
           </View>
         ))}
