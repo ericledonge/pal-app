@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## État du projet
 
-Ce dépôt est en **phase de conception** : il ne contient encore **aucun code applicatif** (pas de `package.json`, pas de scaffolding Expo, pas de tests). Il contient la spécification, les maquettes, et les conventions ci-dessous. La prochaine étape est l'initialisation du projet Expo qui devra suivre **exactement** ces patterns, repris du projet de référence **PickleSync** (`picklesync-app`) et adaptés aux contraintes de pal-app.
+Le scaffolding Expo est **en place** et le développement est bien avancé. Le dépôt contient `package.json`, `app.json`, `eas.json`, la config Metro/Babel/Jest, l'outillage OXC, et une arborescence `src/` fournie : primitives UI (`src/components/ui/` + stories Storybook), navigation par onglets (Expo Router), les features **sessions**, **matrix**, **level**, **preferences**, **feedback**, l'i18n français, et une suite de tests (services, parser, filtre, matrice + fixtures HTML). Les commandes ci-dessous sont **exécutables**.
 
-Tant que le scaffolding n'existe pas, les commandes ci-dessous sont la **cible** et ne sont pas encore exécutables.
+Les patterns architecturaux décrits ci-dessous sont repris du projet de référence **PickleSync** (`picklesync-app`) et adaptés aux contraintes de pal-app (pas d'auth, pas de backend, parsing HTML). Tout nouveau code doit les suivre.
 
 ## Documents de référence
 
@@ -61,9 +61,10 @@ React Native + Expo (SDK récent, **typed routes** + **React Compiler** activés
 src/
 ├── app/                              # Expo Router (écrans = wrappers minces)
 │   ├── _layout.tsx
-│   └── (app)/
+│   ├── index.tsx onboarding.tsx select-level.tsx feedback.tsx
+│   └── (tabs)/                       # navigation par onglets : sessions, matrice, profil
 ├── features/
-│   └── <feature>/                    # sessions, matrix, onboarding…
+│   └── <feature>/                    # sessions, matrix, level, preferences, feedback (+ _example)
 │       ├── domain/
 │       │   ├── <resource>.adapter.ts     # IO : fetch HTML / endpoints → DTO typés
 │       │   ├── <resource>.parser.ts      # HTML → DTO (pur) — spécifique à pal-app
@@ -74,7 +75,9 @@ src/
 │           └── <name>-view.tsx           # composants présentationnels
 ├── components/
 │   └── ui/                           # primitives partagées (Button, Text, Card, Chip…) + *.stories.tsx
-└── lib/                              # transverse (http, parsing, config, date.utils, format.utils, logger)
+├── shared/
+│   └── domain/                       # modèle transverse aux features (ex. level.ts)
+└── lib/                              # transverse (http, config, format.utils, logger, i18n, analytics, query-client)
 assets/
 ├── images/
 └── icons/
@@ -104,7 +107,7 @@ Les dépendances vont **vers le bas uniquement** : View → Use Case → Reposit
 **Câblage des écrans Expo Router** — Les écrans de `src/app/` sont des wrappers **ultra-minces** : ils rendent la view et passent callbacks de navigation + params de route. **Aucun appel de hook de use-case dans l'écran.**
 
 ```typescript
-// app/(app)/sessions/index.tsx
+// app/(tabs)/sessions/index.tsx
 import { AgendaView } from "@/features/sessions/use-cases/agenda-view";
 
 export default function SessionsScreen() {
@@ -219,7 +222,7 @@ Voir un éventuel `docs/CODE-STYLE-REACT.md` à porter depuis PickleSync.
 
 Outils basés **OXC** (Rust), pas ESLint/Prettier.
 
-- **oxlint** (`oxlint.config.ts`) : `correctness: error`, `suspicious/perf: warn`, `no-explicit-any: warn`, `consistent-type-imports: warn`, `no-console: warn`, `eqeqeq: error`, `prefer-const: error`, `import/no-cycle: error`, règles React hooks.
+- **oxlint** (`.oxlintrc.json`) : `correctness: error`, `suspicious/perf: warn`, `no-explicit-any: warn`, `consistent-type-imports: warn`, `no-console: warn`, `eqeqeq: error`, `prefer-const: error`, `import/no-cycle: error`, règles React hooks.
 - **oxfmt** (`.oxfmtrc.json`) : `printWidth: 100`, guillemets doubles, virgules finales, points-virgules. **Tri des imports** : builtin → external → interne (`@/*`) → relatif → style, alphabétique ascendant dans chaque groupe.
 
 ## Configuration Expo
@@ -227,10 +230,10 @@ Outils basés **OXC** (Rust), pas ESLint/Prettier.
 - **Typed routes** + **React Compiler** activés (`experiments`).
 - **Portrait only**.
 - **Clair + sombre** (`userInterfaceStyle: "automatic"`) — maquettes en clair, sombre en variante.
-- **Scheme de deep link** : à fixer (proposition `palevis://`).
+- **Scheme de deep link** : `palevis` (fixé dans `app.json`).
 - **Splash** : aux couleurs de la marque, logo centré (variante claire/sombre).
 
-## Dépendances clés (cible)
+## Dépendances clés
 
 | Package | Usage |
 |---|---|
@@ -240,12 +243,12 @@ Outils basés **OXC** (Rust), pas ESLint/Prettier.
 | `react-native-reanimated` / `react-native-gesture-handler` | Animations / gestes (minuteur, rotations) |
 | `expo-image` | Images optimisées |
 | `react-native-screens` / `react-native-safe-area-context` | Conteneurs natifs / safe area |
-| _(parser HTML)_ | Lib JS de parsing tolérante (ex. `node-html-parser`) — à valider en RN/Hermes |
-| _(stockage)_ | `@react-native-async-storage/async-storage` ou MMKV pour la préférence de niveau |
+| `node-html-parser` | Parsing HTML tolérant de la grille `pickleballenligne.com` |
+| `@react-native-async-storage/async-storage` | Stockage de la préférence de niveau et des préférences |
 | `@sentry/react-native` | Suivi d'erreurs + détection à distance d'une casse du parser ; `logger.ts` intégré |
 | `@amplitude/analytics-react-native` | Analytics produit |
 
-> **Non repris de PickleSync** : `better-auth`/`@better-auth/expo` (pas d'auth), `api-client`/`env.ts` (pas de backend ni multi-env), `expo-symbols`/`expo-glass-effect` (optionnels).
+> **Non repris de PickleSync** : `better-auth`/`@better-auth/expo` (pas d'auth), `api-client`/`env.ts` (pas de backend ni multi-env).
 
 ## Choix arrêtés et décisions en attente
 
@@ -257,10 +260,11 @@ Outils basés **OXC** (Rust), pas ESLint/Prettier.
 - **Matrice — effectif** : pré-chargé depuis les **réponses aux sondages** (présences F1) ; pas de répertoire de membres ; invités saisis manuellement.
 - **Portée** : **mono-appareil**, un seul coordonnateur sur place (pas de sync multi-appareils → pas de backend/store partagé).
 - **Feedback** : envoi par courriel vers **eric.ledonge@pm.me** via **Web3Forms** (POST + clé d'accès publique, sans backend ; alternatives : EmailJS, ou Resend via une API Route Expo).
+- **Scheme de deep link** : **`palevis`** (fixé dans `app.json`).
+- **Parsing HTML** : **`node-html-parser`** (installé).
 
-**En attente** (détails d'implémentation, non bloquants) :
-- **Scheme de deep link** (`palevis://` ?) et **lib de parsing HTML** (`node-html-parser` ?).
+**En attente** : aucune décision bloquante.
 
 ## Outillage de cette session
 
-Les outils **Argent** MCP (simulateur iOS / émulateur Android / Chromium) sont disponibles pour exécuter, tester et profiler l'app une fois scaffoldée. Toujours passer par les outils de découverte (`describe` / `debugger-component-tree`) avant tout tap — voir la règle Argent globale.
+Les outils **Argent** MCP (simulateur iOS / émulateur Android / Chromium) sont disponibles pour exécuter, tester et profiler l'app. Toujours passer par les outils de découverte (`describe` / `debugger-component-tree`) avant tout tap — voir la règle Argent globale.
