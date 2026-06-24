@@ -86,12 +86,9 @@ export const SlotCard = ({ slot, onShowAll }: SlotCardProps) => {
             <Ionicons name={expanded ? "chevron-up" : "chevron-down"} size={18} color={muted} />
           </Pressable>
           {expanded ? (
-            <View className="flex-row flex-wrap">
+            <View className="gap-xs">
               {preview.map((nom, index) => (
-                <View
-                  key={`${nom}-${index}`}
-                  className="w-1/2 flex-row items-center gap-2xs py-2xs pr-sm"
-                >
+                <View key={`${nom}-${index}`} className="flex-row items-center gap-sm">
                   <View className="h-7 w-7 items-center justify-center rounded-full bg-surface-muted">
                     <Text variant="caption" className="font-inter-semibold text-on-surface">
                       {initials(nom)}
@@ -103,12 +100,8 @@ export const SlotCard = ({ slot, onShowAll }: SlotCardProps) => {
                 </View>
               ))}
               {extra > 0 ? (
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={onShowAll}
-                  className="w-full items-center pt-xs"
-                >
-                  <Text variant="caption" className="text-on-surface-muted">
+                <Pressable accessibilityRole="button" onPress={onShowAll} className="pt-2xs">
+                  <Text variant="caption" className="text-primary">
                     + {extra} {extra > 1 ? "autres" : "autre"}
                   </Text>
                 </Pressable>
