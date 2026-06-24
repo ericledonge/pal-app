@@ -7,16 +7,14 @@ import { ScreenEmpty, ScreenError, ScreenLoading } from "@/components/ui/screen-
 import { Text } from "@/components/ui/text";
 import { t } from "@/lib/i18n";
 
-import type { AgendaMode, AgendaSlotViewModel } from "../domain/session.service";
+import type { AgendaMode } from "../domain/session.service";
 import type { Day } from "../domain/session.types";
 import { SlotCard } from "./slot-card";
-import { SlotDetail } from "./slot-detail";
 import { useAgenda } from "./use-agenda";
 
 export const AgendaView = () => {
   const [day, setDay] = useState<Day>("today");
   const [mode, setMode] = useState<AgendaMode>("myLevel");
-  const [selected, setSelected] = useState<AgendaSlotViewModel | null>(null);
   const { sections, isLoading, isError, isRefreshing, errorKind, isEmpty, refresh } = useAgenda(
     day,
     mode,
@@ -50,7 +48,7 @@ export const AgendaView = () => {
               {section.plateauLabel}
             </Text>
             {section.slots.map((slot) => (
-              <SlotCard key={slot.id} slot={slot} onShowAll={() => setSelected(slot)} />
+              <SlotCard key={slot.id} slot={slot} />
             ))}
           </View>
         ))}
@@ -88,7 +86,6 @@ export const AgendaView = () => {
         </View>
       </View>
       {body}
-      <SlotDetail slot={selected} onClose={() => setSelected(null)} />
     </View>
   );
 };
