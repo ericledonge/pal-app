@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { NativeTabs } from "expo-router/unstable-native-tabs";
 
 import { t } from "@/lib/i18n";
+import { palette } from "@/lib/theme";
 
 // Onglets natifs (react-native-screens) : barre liquid glass automatique sur iOS 26+,
 // Material 3 sur Android. On ne fixe PAS de `backgroundColor` — il rendrait la barre
@@ -9,7 +10,7 @@ import { t } from "@/lib/i18n";
 // Icônes : SF Symbols sur iOS (rendu natif), repli Ionicons via `src` sur Android.
 export default function TabsLayout() {
   return (
-    <NativeTabs tintColor="#ff5700">
+    <NativeTabs tintColor={palette.light.primary}>
       <NativeTabs.Trigger name="sessions">
         <NativeTabs.Trigger.Icon
           sf="calendar"

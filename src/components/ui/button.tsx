@@ -1,6 +1,8 @@
-import { ActivityIndicator, Pressable, type PressableProps, Text } from "react-native";
+import { ActivityIndicator, Pressable, type PressableProps } from "react-native";
 
+import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/cn";
+import { useThemeColors } from "@/lib/theme";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost";
 
@@ -31,7 +33,15 @@ export const Button = ({
   className,
   ...props
 }: ButtonProps) => {
+  const colors = useThemeColors();
   const isDisabled = disabled || loading;
+  // Le spinner reprend la couleur du libellé du variant (blanc sur primary, on-surface sur
+  // secondary, accent sur ghost) — sinon il serait invisible sur les fonds clairs.
+  const spinnerColor: Record<ButtonVariant, string> = {
+    primary: colors.onPrimary,
+    secondary: colors.onSurface,
+    ghost: colors.primary,
+  };
   return (
     <Pressable
       accessibilityRole="button"
@@ -45,9 +55,11 @@ export const Button = ({
       {...props}
     >
       {loading ? (
-        <ActivityIndicator color="#ffffff" />
+        <ActivityIndicator color={spinnerColor[variant]} />
       ) : (
-        <Text className={cn("font-inter-bold text-[18px]", LABEL[variant])}>{label}</Text>
+        <Text variant="body" weight="bold" className={LABEL[variant]}>
+          {label}
+        </Text>
       )}
     </Pressable>
   );

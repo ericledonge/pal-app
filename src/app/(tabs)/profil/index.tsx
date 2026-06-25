@@ -2,7 +2,6 @@ import { Ionicons } from "@expo/vector-icons";
 import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
-import { useColorScheme } from "nativewind";
 import type { ComponentProps, ReactNode } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 
@@ -14,6 +13,7 @@ import { useLevelPreference } from "@/features/level/use-cases/use-level-prefere
 import type { ThemeMode } from "@/features/preferences/domain/preferences.storage";
 import { usePreferences } from "@/features/preferences/use-cases/use-preferences";
 import { t } from "@/lib/i18n";
+import { useThemeColors } from "@/lib/theme";
 
 const PRIVACY_URL = "https://ericledonge.github.io/pal-app/privacy.html";
 
@@ -61,13 +61,13 @@ const SettingsRow = ({
 
 export default function ProfilScreen() {
   const router = useRouter();
-  const { colorScheme } = useColorScheme();
+  const colors = useThemeColors();
   const { level } = useLevelPreference();
   const { preferences, setPreference } = usePreferences();
   const version = Constants.expoConfig?.version ?? "—";
 
-  const iconColor = colorScheme === "dark" ? "#dae2fd" : "#1a1c1e";
-  const mutedColor = colorScheme === "dark" ? "#9aa6c4" : "#60646c";
+  const iconColor = colors.onSurface;
+  const mutedColor = colors.onSurfaceMuted;
 
   const themeOptions: { mode: ThemeMode; label: string }[] = [
     { mode: "system", label: t("profile.themeSystem") },

@@ -12,8 +12,56 @@ import { t } from "@/lib/i18n";
 
 import type { AgendaMode } from "../domain/session.service";
 import type { Day } from "../domain/session.types";
-import { SlotCard } from "./slot-card";
+import { PlateauSection } from "./plateau-section";
 import { useAgenda } from "./use-agenda";
+
+type AgendaContentProps = Pick<
+  ReturnType<typeof useAgenda>,
+  "sections" | "isLoading" | "isError" | "isRefreshing" | "errorKind" | "isEmpty" | "refresh"
+> & { mode: AgendaMode };
+
+const AgendaContent = ({
+  sections,
+  mode,
+  isLoading,
+  isError,
+  isRefreshing,
+  errorKind,
+  isEmpty,
+  refresh,
+}: AgendaContentProps) => {
+  if (isLoading) {
+    return <ScreenLoading />;
+  }
+
+  if (isError) {
+    return (
+      <ScreenError
+        message={errorKind === "parsing" ? t("sessions.errorParsing") : t("sessions.errorNetwork")}
+        onRetry={refresh}
+      />
+    );
+  }
+
+  if (isEmpty) {
+    return (
+      <ScreenEmpty
+        message={mode === "myLevel" ? t("sessions.emptyMyLevel") : t("sessions.empty")}
+      />
+    );
+  }
+
+  return (
+    <ScrollView
+      contentContainerClassName="gap-md px-lg pb-2xl"
+      refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={refresh} />}
+    >
+      {sections.map((section) => (
+        <PlateauSection key={section.plateau} section={section} />
+      ))}
+    </ScrollView>
+  );
+};
 
 export const AgendaView = () => {
   const [day, setDay] = useState<Day>("today");
@@ -21,42 +69,6 @@ export const AgendaView = () => {
   const { colorScheme } = useColorScheme();
   const { sections, myLevel, isLoading, isError, isRefreshing, errorKind, isEmpty, refresh } =
     useAgenda(day, mode);
-
-  let body;
-  if (isLoading) {
-    body = <ScreenLoading />;
-  } else if (isError) {
-    body = (
-      <ScreenError
-        message={errorKind === "parsing" ? t("sessions.errorParsing") : t("sessions.errorNetwork")}
-        onRetry={refresh}
-      />
-    );
-  } else if (isEmpty) {
-    body = (
-      <ScreenEmpty
-        message={mode === "myLevel" ? t("sessions.emptyMyLevel") : t("sessions.empty")}
-      />
-    );
-  } else {
-    body = (
-      <ScrollView
-        contentContainerClassName="gap-md px-lg pb-2xl"
-        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={refresh} />}
-      >
-        {sections.map((section) => (
-          <View key={section.plateau} className="gap-sm">
-            <Text variant="label" className="text-on-surface-muted">
-              {section.plateauLabel}
-            </Text>
-            {section.slots.map((slot) => (
-              <SlotCard key={slot.id} slot={slot} />
-            ))}
-          </View>
-        ))}
-      </ScrollView>
-    );
-  }
 
   return (
     <View className="flex-1 bg-background">
@@ -86,7 +98,16 @@ export const AgendaView = () => {
           />
         </Card>
       </View>
-      {body}
+      <AgendaContent
+        sections={sections}
+        mode={mode}
+        isLoading={isLoading}
+        isError={isError}
+        isRefreshing={isRefreshing}
+        errorKind={errorKind}
+        isEmpty={isEmpty}
+        refresh={refresh}
+      />
     </View>
   );
 };
