@@ -6,11 +6,11 @@ import { ScreenEmpty, ScreenError, ScreenLoading } from "@/components/ui/screen-
 import { t } from "@/lib/i18n";
 import { useTabBarScrollPadding } from "@/lib/safe-area";
 
+import { CourtAreaSection } from "../components/court-area-section";
+import { DaySelector } from "../components/day-selector";
+import { LevelSelector } from "../components/level-selector";
 import type { AgendaMode } from "../domain/session.service";
 import type { Day } from "../domain/session.types";
-import { CourtAreaSection } from "./court-area-section";
-import { DaySelector } from "./day-selector";
-import { LevelSelector } from "./level-selector";
 import { useAgenda } from "./use-agenda";
 
 type AgendaContentProps = Pick<

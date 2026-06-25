@@ -13,44 +13,63 @@ interface SlotCardProps {
   slot: AgendaSlotViewModel;
 }
 
-// Carte d'un créneau : horaire, badge de niveau, lieu + courts, capacité, et liste complète
-// des inscrits (dépliable). Conçue pour tolérer l'agrandissement du texte (Dynamic Type) :
-// les rangées passent à la ligne plutôt que de déborder ou tronquer.
 export const SlotCard = ({ slot }: SlotCardProps) => {
-  const { onSurfaceMuted } = useThemeColors();
+  const { onSurfaceMuted, primary, secondary } = useThemeColors();
   const [expanded, setExpanded] = useState(false);
   const hasRoster = slot.inscrits.length > 0;
 
   return (
-    <Card className="gap-sm border-l-4 border-l-primary p-md">
-      <View className="flex-row flex-wrap items-center justify-between gap-2xs">
+    <Card
+      className="gap-sm border-l-4 p-md"
+      style={{ borderLeftColor: slot.matchesMyLevel ? primary : secondary }}
+    >
+      {/* Horaire + badge niveau aligné sous l'heure */}
+      <View className="gap-2xs">
         <View className="flex-row items-center gap-2xs">
           <Ionicons name="time-outline" size={18} color={onSurfaceMuted} />
           <Text variant="cardTitle">{slot.horaire}</Text>
         </View>
         {slot.levelLabel ? (
-          <View className="rounded-full bg-primary/15 px-sm py-2xs">
-            <Text variant="caption" weight="semibold" className="text-primary">
+          <View
+            className="ml-[24px] self-start rounded-full px-sm py-2xs"
+            style={{
+              backgroundColor: slot.matchesMyLevel ? "rgba(255,87,0,0.15)" : "rgba(255,184,0,0.20)",
+            }}
+          >
+            <Text
+              variant="label"
+              weight="semibold"
+              className={slot.matchesMyLevel ? "text-primary" : "text-on-surface-muted"}
+            >
               {slot.levelLabel}
             </Text>
           </View>
         ) : null}
       </View>
 
-      <View className="flex-row items-start justify-between gap-sm">
-        <View className="flex-1 flex-row items-start gap-2xs">
+      {/* Lieu : court area, courts et capacité en colonne */}
+      <View className="gap-2xs">
+        <View className="flex-row items-center gap-2xs">
           <Ionicons
             name="location-outline"
             size={16}
             color={onSurfaceMuted}
             style={{ marginTop: 2 }}
           />
-          <Text variant="label" className="flex-1 text-on-surface-muted">
-            {slot.lieuLabel}
+          <Text variant="label" className="text-on-surface-muted">
+            {slot.courtAreaLabel}
           </Text>
         </View>
-        <View className="flex-row items-center gap-2xs">
-          <Ionicons name="people-outline" size={16} color={onSurfaceMuted} />
+        {slot.terrainsLabel ? (
+          <View className="ml-[22px] flex-row items-center gap-2xs">
+            <Ionicons name="grid-outline" size={14} color={onSurfaceMuted} />
+            <Text variant="label" className="text-on-surface-muted">
+              {slot.terrains.length > 1 ? "Courts" : "Court"} {slot.terrainsLabel}
+            </Text>
+          </View>
+        ) : null}
+        <View className="ml-[22px] flex-row items-center gap-2xs">
+          <Ionicons name="people-outline" size={14} color={onSurfaceMuted} />
           <Text variant="label" className="text-on-surface-muted">
             {slot.capaciteLabel}
           </Text>

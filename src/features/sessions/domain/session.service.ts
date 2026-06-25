@@ -119,6 +119,10 @@ export interface AgendaSlotViewModel {
   /** Capacité, ex. « 11/30 » ou « Complet ». */
   capaciteLabel: string;
   terrainsLabel: string;
+  /** Numéros de courts bruts, ex. ["01","02","03"]. */
+  terrains: string[];
+  /** Vrai si le créneau porte le niveau de l'utilisateur (orange) ; faux sinon (or). */
+  matchesMyLevel: boolean;
   /** Noms des inscrits — peuplé uniquement en mode « Mon niveau ». */
   inscrits: string[];
 }
@@ -156,6 +160,7 @@ const createAgendaSlotViewModel = (
   slot: Slot,
   index: number,
   withNames: boolean,
+  myLevel: LevelCode | null,
 ): AgendaSlotViewModel => {
   const courts = formatCourts(slot.terrains);
   const total = slot.placesLibres === null ? null : slot.count + slot.placesLibres;
@@ -180,6 +185,8 @@ const createAgendaSlotViewModel = (
           ? `${slot.count}/${total}`
           : countLabel,
     terrainsLabel: courts,
+    terrains: slot.terrains,
+    matchesMyLevel: myLevel !== null && slot.codes.length > 0 && isSlotForLevel(slot, myLevel),
     inscrits: withNames ? slot.inscrits.map((registrant) => registrant.nom) : [],
   };
 };
@@ -204,7 +211,7 @@ export const createAgendaViewModel = (
     .sort((left, right) => (toMinutes(left.heure) ?? 0) - (toMinutes(right.heure) ?? 0))
     .forEach((slot, index) => {
       const list = byCourtArea.get(slot.courtArea) ?? [];
-      list.push(createAgendaSlotViewModel(slot, index, withNames));
+      list.push(createAgendaSlotViewModel(slot, index, withNames, options.myLevel));
       byCourtArea.set(slot.courtArea, list);
     });
 
