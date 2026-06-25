@@ -5,15 +5,15 @@ import { Text } from "@/components/ui/text";
 import type { AgendaSection } from "../domain/session.service";
 import { SlotCard } from "./slot-card";
 
-interface PlateauSectionProps {
+interface CourtAreaSectionProps {
   section: AgendaSection;
 }
 
-// Un plateau de l'agenda (parc / patinoire) : libellé du lieu suivi de ses créneaux.
-export const PlateauSection = ({ section }: PlateauSectionProps) => (
+// Une court area de l'agenda (parc / patinoire) : libellé du lieu suivi de ses créneaux.
+export const CourtAreaSection = ({ section }: CourtAreaSectionProps) => (
   <View className="gap-sm">
     <Text variant="label" className="text-on-surface-muted">
-      {section.plateauLabel}
+      {section.courtAreaLabel}
     </Text>
     {section.slots.map((slot) => (
       <SlotCard key={slot.id} slot={slot} />

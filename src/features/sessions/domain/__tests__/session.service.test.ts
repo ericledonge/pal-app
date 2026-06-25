@@ -10,8 +10,8 @@ describe("isValidSlot", () => {
     expect(isValidSlot(aSlot({ codes: ["9.9Z"] as never }))).toBe(false);
   });
 
-  it("rejette un plateau inconnu", () => {
-    expect(isValidSlot(aSlot({ plateau: "lune" as never }))).toBe(false);
+  it("rejette un courtArea inconnu", () => {
+    expect(isValidSlot(aSlot({ courtArea: "lune" as never }))).toBe(false);
   });
 
   it("rejette un type de plage inconnu", () => {

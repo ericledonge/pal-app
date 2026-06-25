@@ -1,7 +1,7 @@
 import { isLevelCode, type LevelCode } from "@/shared/domain/level";
 
-import { PLATEAU_LABELS } from "./session.constants";
-import type { Plateau, Slot, SlotKind } from "./session.types";
+import { COURT_AREA_LABELS } from "./session.constants";
+import type { CourtArea, Slot, SlotKind } from "./session.types";
 
 // Logique pure : validation de la sortie du parser par type guards (PAS de Zod).
 // Aucun import react / react-native / @tanstack/react-query.
@@ -13,7 +13,7 @@ export class GridParseError extends Error {
   }
 }
 
-const PLATEAUX = new Set<Plateau>(["parc", "patinoire"]);
+const COURT_AREAS = new Set<CourtArea>(["parc", "patinoire"]);
 const SLOT_KINDS = new Set<SlotKind>(["groupe", "bloquee", "reservee", "libre", "nd"]);
 
 const isRegistrant = (value: unknown): boolean =>
@@ -29,8 +29,8 @@ export const isValidSlot = (value: unknown): value is Slot => {
   return (
     typeof slot.heure === "string" &&
     typeof slot.heureFin === "string" &&
-    typeof slot.plateau === "string" &&
-    PLATEAUX.has(slot.plateau as Plateau) &&
+    typeof slot.courtArea === "string" &&
+    COURT_AREAS.has(slot.courtArea as CourtArea) &&
     typeof slot.kind === "string" &&
     SLOT_KINDS.has(slot.kind as SlotKind) &&
     Array.isArray(slot.terrains) &&
@@ -100,7 +100,7 @@ export interface AgendaSlotViewModel {
   heure: string;
   /** Plage horaire formatée, ex. « 09:00 - 11:00 ». */
   horaire: string;
-  plateauLabel: string;
+  courtAreaLabel: string;
   /** Lieu + courts, ex. « Parc · Courts 01-05 ». */
   lieuLabel: string;
   levelLabel: string;
@@ -117,8 +117,8 @@ export interface AgendaSlotViewModel {
 }
 
 export interface AgendaSection {
-  plateau: Plateau;
-  plateauLabel: string;
+  courtArea: CourtArea;
+  courtAreaLabel: string;
   slots: AgendaSlotViewModel[];
 }
 
@@ -154,13 +154,13 @@ const createAgendaSlotViewModel = (
   const total = slot.placesLibres === null ? null : slot.count + slot.placesLibres;
   const countLabel = `${slot.count} ${slot.count > 1 ? "inscrits" : "inscrit"}`;
   return {
-    id: `${slot.plateau}-${slot.heure}-${slot.codes.join("_")}-${index}`,
+    id: `${slot.courtArea}-${slot.heure}-${slot.codes.join("_")}-${index}`,
     heure: slot.heure,
     horaire: slot.heureFin ? `${slot.heure} - ${slot.heureFin}` : slot.heure,
-    plateauLabel: PLATEAU_LABELS[slot.plateau],
+    courtAreaLabel: COURT_AREA_LABELS[slot.courtArea],
     lieuLabel: courts
-      ? `${PLATEAU_LABELS[slot.plateau]} · ${slot.terrains.length > 1 ? "Courts" : "Court"} ${courts}`
-      : PLATEAU_LABELS[slot.plateau],
+      ? `${COURT_AREA_LABELS[slot.courtArea]} · ${slot.terrains.length > 1 ? "Courts" : "Court"} ${courts}`
+      : COURT_AREA_LABELS[slot.courtArea],
     levelLabel: slot.codes.length > 0 ? slot.codes.join(" & ") : slot.labels.join(", "),
     multiNiveau: slot.codes.length > 1,
     kindLabel: KIND_LABELS[slot.kind],
@@ -178,7 +178,7 @@ const createAgendaSlotViewModel = (
 };
 
 /**
- * View model de l'agenda : trié par heure, groupé/étiqueté par plateau (parc puis patinoire).
+ * View model de l'agenda : trié par heure, groupé/étiqueté par court area (parc puis patinoire).
  * Mode « Mon niveau » → filtre par niveau + inclut les inscrits ; « Tous » → résumé sans noms.
  */
 export const createAgendaViewModel = (
@@ -189,23 +189,23 @@ export const createAgendaViewModel = (
   const visible =
     withNames && options.myLevel ? filterSlotsForLevel(slots, options.myLevel) : slots;
 
-  const byPlateau = new Map<Plateau, AgendaSlotViewModel[]>();
+  const byCourtArea = new Map<CourtArea, AgendaSlotViewModel[]>();
   // sort() sur une copie (spread) : Hermes, le moteur JS de React Native, n'implémente pas
   // Array.prototype.toSorted (ES2023). La copie évite de muter l'entrée.
   [...visible]
     .sort((left, right) => left.heure.localeCompare(right.heure))
     .forEach((slot, index) => {
-      const list = byPlateau.get(slot.plateau) ?? [];
+      const list = byCourtArea.get(slot.courtArea) ?? [];
       list.push(createAgendaSlotViewModel(slot, index, withNames));
-      byPlateau.set(slot.plateau, list);
+      byCourtArea.set(slot.courtArea, list);
     });
 
-  const order: Plateau[] = ["parc", "patinoire"];
+  const order: CourtArea[] = ["parc", "patinoire"];
   return order
-    .map((plateau) => ({
-      plateau,
-      plateauLabel: PLATEAU_LABELS[plateau],
-      slots: byPlateau.get(plateau) ?? [],
+    .map((courtArea) => ({
+      courtArea,
+      courtAreaLabel: COURT_AREA_LABELS[courtArea],
+      slots: byCourtArea.get(courtArea) ?? [],
     }))
     .filter((section) => section.slots.length > 0);
 };

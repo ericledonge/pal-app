@@ -14,8 +14,8 @@ describe("parseGrid — modèle réel (un créneau par groupe horaire)", () => {
     expect(slots).toHaveLength(5);
   });
 
-  it("rattache le plateau passé en paramètre et le type « groupe »", () => {
-    expect(slots.every((slot) => slot.plateau === "parc" && slot.kind === "groupe")).toBe(true);
+  it("rattache le courtArea passé en paramètre et le type « groupe »", () => {
+    expect(slots.every((slot) => slot.courtArea === "parc" && slot.kind === "groupe")).toBe(true);
   });
 
   it("regroupe code (cartes Bloquée) et roster (carte « N libres ») d'un même horaire", () => {

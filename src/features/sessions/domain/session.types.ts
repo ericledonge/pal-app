@@ -2,7 +2,7 @@ import type { LevelCode } from "@/shared/domain/level";
 
 // Types purs du domaine « présences » (F1). Aucune dépendance entrante vers d'autres couches.
 
-export type Plateau = "parc" | "patinoire";
+export type CourtArea = "parc" | "patinoire";
 
 /** Jour consultable (la grille publique ne donne accès qu'à aujourd'hui et demain). */
 export type Day = "today" | "tomorrow";
@@ -22,7 +22,7 @@ export interface Slot {
   heure: string;
   /** Heure de fin, ex. « 20:00 » (vide si non déterminée). */
   heureFin: string;
-  plateau: Plateau;
+  courtArea: CourtArea;
   /** Court(s) couverts par ce créneau. */
   terrains: Court[];
   kind: SlotKind;

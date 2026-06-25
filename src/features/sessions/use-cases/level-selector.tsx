@@ -6,16 +6,12 @@ import { Text } from "@/components/ui/text";
 import { t } from "@/lib/i18n";
 
 type LevelSelectorProps = {
-  myLevel: string;
+  myLevel: string | null;
   mode: "myLevel" | "all";
   onModeChange: (mode: "myLevel" | "all") => void;
 };
 
-export const LevelSelector = ({
-  myLevel,
-  mode,
-  onModeChange,
-}: LevelSelectorProps) => {
+export const LevelSelector = ({ myLevel, mode, onModeChange }: LevelSelectorProps) => {
   return (
     <Card className="flex-row items-center justify-between gap-md p-md">
       <View className="flex-1 gap-2xs">

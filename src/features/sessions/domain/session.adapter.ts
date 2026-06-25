@@ -1,14 +1,14 @@
 import { HttpError, httpGet, httpPostForm } from "@/lib/http";
 
-import { PLATEAU_URLS } from "./session.constants";
-import type { Plateau } from "./session.types";
+import { COURT_AREA_URLS } from "./session.constants";
+import type { CourtArea } from "./session.types";
 
 // Frontière IO : renvoie le HTML brut de la grille. Aucun parsing métier ici
 // (l'extraction des champs cachés ci-dessous est de la mécanique de postback ASP.NET).
 
-/** « Aujourd'hui » : simple GET sur l'URL du plateau. */
-export const fetchTodayGrid = async (plateau: Plateau): Promise<string> => {
-  const { body } = await httpGet(PLATEAU_URLS[plateau]);
+/** « Aujourd'hui » : simple GET sur l'URL de la court area. */
+export const fetchTodayGrid = async (courtArea: CourtArea): Promise<string> => {
+  const { body } = await httpGet(COURT_AREA_URLS[courtArea]);
   return body;
 };
 
@@ -47,13 +47,13 @@ const extractSchedulerTarget = (html: string): string | null => {
  * champs tels quels, en n'écrasant que `__EVENTTARGET` et `__EVENTARGUMENT`. Le ViewState
  * chiffré n'étant pas fabricable, l'approche en deux temps est obligatoire.
  */
-export const fetchTomorrowGrid = async (plateau: Plateau): Promise<string> => {
-  const url = PLATEAU_URLS[plateau];
+export const fetchTomorrowGrid = async (courtArea: CourtArea): Promise<string> => {
+  const url = COURT_AREA_URLS[courtArea];
   const { body: getBody, cookies } = await httpGet(url);
 
   const target = extractSchedulerTarget(getBody);
   if (!target) {
-    throw new HttpError("http", `Contrôle BookingScheduler introuvable (${plateau}).`);
+    throw new HttpError("http", `Contrôle BookingScheduler introuvable (${courtArea}).`);
   }
 
   const fields = extractHiddenInputs(getBody);

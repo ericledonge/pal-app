@@ -6,7 +6,7 @@ import { useGrid } from "../domain/session.repository";
 import { type AgendaMode, createAgendaViewModel, GridParseError } from "../domain/session.service";
 import type { Day } from "../domain/session.types";
 
-// Hook orchestrateur (glue uniquement) : combine les deux plateaux du jour, lit le niveau
+// Hook orchestrateur (glue uniquement) : combine les deux court areas du jour, lit le niveau
 // persisté, applique le mode via le service de présentation. Aucune logique métier ici.
 export const useAgenda = (day: Day, mode: AgendaMode) => {
   const { level } = useLevelPreference();

@@ -3,26 +3,26 @@ import { aSlot } from "./session.builders";
 
 const SLOTS = [
   aSlot({
-    plateau: "patinoire",
+    courtArea: "patinoire",
     heure: "20:00",
     codes: ["3.5T"],
     inscrits: [{ nom: "Ana" }],
     count: 1,
   }),
   aSlot({
-    plateau: "parc",
+    courtArea: "parc",
     heure: "18:00",
     codes: ["3.0C"],
     inscrits: [{ nom: "Bo" }, { nom: "Cy" }],
     count: 2,
   }),
-  aSlot({ plateau: "parc", heure: "08:00", codes: ["4.0C"], inscrits: [], count: 0 }),
+  aSlot({ courtArea: "parc", heure: "08:00", codes: ["4.0C"], inscrits: [], count: 0 }),
 ];
 
 describe("createAgendaViewModel", () => {
   it("mode « Tous » : groupé parc→patinoire, trié par heure, sans noms", () => {
     const vm = createAgendaViewModel(SLOTS, { mode: "all", myLevel: null });
-    expect(vm.map((section) => section.plateau)).toEqual(["parc", "patinoire"]);
+    expect(vm.map((section) => section.courtArea)).toEqual(["parc", "patinoire"]);
     expect(vm[0].slots.map((slot) => slot.heure)).toEqual(["08:00", "18:00"]);
     expect(vm.flatMap((section) => section.slots).every((slot) => slot.inscrits.length === 0)).toBe(
       true,

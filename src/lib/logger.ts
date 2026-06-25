@@ -2,7 +2,7 @@
 // Logger transverse intégré à Sentry. Importé directement partout (pas de DI/Provider).
 //
 // Au-delà du suivi de crash, c'est le levier pour détecter À DISTANCE une casse du parser
-// HTML en production (point de défaillance le plus probable) : `logger.error(err, { jour, plateau })`.
+// HTML en production (point de défaillance le plus probable) : `logger.error(err, { jour, courtArea })`.
 //
 // Comportement : en dev → console (pas d'envoi réseau). En prod → Sentry, uniquement si un DSN
 // est fourni via EXPO_PUBLIC_SENTRY_DSN. Aucune PII envoyée (sendDefaultPii: false).

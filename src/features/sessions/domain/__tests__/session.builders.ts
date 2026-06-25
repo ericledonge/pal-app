@@ -4,7 +4,7 @@ import type { Slot } from "../session.types";
 export const aSlot = (overrides?: Partial<Slot>): Slot => ({
   heure: "18:00",
   heureFin: "20:00",
-  plateau: "parc",
+  courtArea: "parc",
   terrains: [],
   kind: "groupe",
   codes: ["3.0C"],

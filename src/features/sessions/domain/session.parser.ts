@@ -2,7 +2,7 @@ import { type HTMLElement, parse } from "node-html-parser";
 
 import { isLevelCode, type LevelCode } from "@/shared/domain/level";
 
-import type { Court, Plateau, Registrant, Slot } from "./session.types";
+import type { Court, CourtArea, Registrant, Slot } from "./session.types";
 
 // Parser pur (HTML → Slot[]). Spécifique à pal-app, tolérant aux formats variables.
 // Cœur fragile de la feature : en cas de changement du HTML, corrigeable via EAS Update.
@@ -136,7 +136,7 @@ const readCard = (apt: HTMLElement): RawCard | null => {
   };
 };
 
-export const parseGrid = (html: string, plateau: Plateau): Slot[] => {
+export const parseGrid = (html: string, courtArea: CourtArea): Slot[] => {
   const root = parse(normalize(html));
   const courtsByRange = extractCourtsByRange(html);
 
@@ -205,7 +205,7 @@ export const parseGrid = (html: string, plateau: Plateau): Slot[] => {
     slots.push({
       heure: rosterCard?.start ?? cards[0].start,
       heureFin: /\d{1,2}:\d{2}\s*-\s*(\d{1,2}:\d{2})/.exec(range)?.[1] ?? "",
-      plateau,
+      courtArea,
       terrains,
       kind: "groupe",
       codes,
