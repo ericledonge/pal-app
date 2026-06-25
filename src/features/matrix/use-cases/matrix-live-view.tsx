@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Text } from "@/components/ui/text";
 import { t } from "@/lib/i18n";
+import { useTabBarScrollPadding } from "@/lib/safe-area";
 
 import { MatchTimer } from "./match-timer";
 import { useMatchTimer } from "./use-match-timer";
@@ -20,6 +21,7 @@ interface MatrixLiveViewProps {
 export const MatrixLiveView = ({ session }: MatrixLiveViewProps) => {
   const { effectif, config, currentRound, currentIndex } = session;
   const timer = useMatchTimer(config.dureeMatchMin);
+  const bottomPadding = useTabBarScrollPadding();
   const [guest, setGuest] = useState("");
 
   const nameOf = useMemo(() => {
@@ -35,7 +37,10 @@ export const MatrixLiveView = ({ session }: MatrixLiveViewProps) => {
   return (
     <View className="flex-1 bg-background">
       <ScreenHeader title={`${t("matrix.round")} ${currentRound?.numero ?? 1}`} />
-      <ScrollView contentContainerClassName="gap-md px-lg py-md">
+      <ScrollView
+        contentContainerClassName="gap-md px-lg pt-md"
+        contentContainerStyle={{ paddingBottom: bottomPadding }}
+      >
         <Card className="items-center">
           <MatchTimer
             remainingMs={timer.remainingMs}

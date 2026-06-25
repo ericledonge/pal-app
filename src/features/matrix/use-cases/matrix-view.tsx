@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Text } from "@/components/ui/text";
 import { t } from "@/lib/i18n";
+import { useTabBarScrollPadding } from "@/lib/safe-area";
 
 import { normalizeName } from "../domain/matrix.service";
 import { MatrixLiveView } from "./matrix-live-view";
@@ -17,6 +18,7 @@ import { usePresentPlayers } from "./use-present-players";
 export const MatrixView = () => {
   const { players: presents } = usePresentPlayers();
   const session = useMatrixSession();
+  const bottomPadding = useTabBarScrollPadding();
   const { effectif, config, phase } = session;
   const [guest, setGuest] = useState("");
   const [selection, setSelection] = useState<Set<string>>(new Set());
@@ -71,7 +73,10 @@ export const MatrixView = () => {
   return (
     <View className="flex-1 bg-background">
       <ScreenHeader title={t("matrix.title")} />
-      <ScrollView contentContainerClassName="gap-md px-lg py-md">
+      <ScrollView
+        contentContainerClassName="gap-md px-lg pt-md"
+        contentContainerStyle={{ paddingBottom: bottomPadding }}
+      >
         <Card className="gap-sm">
           <View className="flex-row items-center justify-between">
             <Text variant="label">{t("matrix.terrains")}</Text>

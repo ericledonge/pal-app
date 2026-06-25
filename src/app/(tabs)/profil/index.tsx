@@ -13,6 +13,7 @@ import { useLevelPreference } from "@/features/level/use-cases/use-level-prefere
 import type { ThemeMode } from "@/features/preferences/domain/preferences.storage";
 import { usePreferences } from "@/features/preferences/use-cases/use-preferences";
 import { t } from "@/lib/i18n";
+import { useTabBarScrollPadding } from "@/lib/safe-area";
 import { useThemeColors } from "@/lib/theme";
 
 const PRIVACY_URL = "https://ericledonge.github.io/pal-app/privacy.html";
@@ -62,6 +63,7 @@ const SettingsRow = ({
 export default function ProfilScreen() {
   const router = useRouter();
   const colors = useThemeColors();
+  const bottomPadding = useTabBarScrollPadding();
   const { level } = useLevelPreference();
   const { preferences, setPreference } = usePreferences();
   const version = Constants.expoConfig?.version ?? "—";
@@ -78,7 +80,10 @@ export default function ProfilScreen() {
   return (
     <View className="flex-1 bg-background">
       <ScreenHeader title={t("profile.title")} />
-      <ScrollView contentContainerClassName="gap-md px-lg py-md">
+      <ScrollView
+        contentContainerClassName="gap-md px-lg pt-md"
+        contentContainerStyle={{ paddingBottom: bottomPadding }}
+      >
         <SettingsRow
           icon="tennisball-outline"
           iconColor={iconColor}
