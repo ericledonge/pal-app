@@ -38,6 +38,7 @@ export const useAgenda = (day: Day, mode: AgendaMode) => {
 
   return {
     sections,
+    myLevel: level,
     isLoading,
     isError,
     isRefreshing,

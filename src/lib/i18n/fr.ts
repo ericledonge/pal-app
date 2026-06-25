@@ -34,6 +34,8 @@ export const fr = {
     tomorrow: "Demain",
     myLevel: "Mon niveau",
     allLevels: "Tous les niveaux",
+    myLevelFilterSubtitle: "Afficher uniquement les sessions pour %{level}",
+    myLevelFilterSubtitleGeneric: "Afficher uniquement les sessions de mon niveau",
     empty: "Aucun créneau pour ce jour.",
     emptyMyLevel: "Aucun créneau à ton niveau pour ce jour.",
     errorNetwork: "Connexion impossible. Vérifie ta connexion et réessaie.",

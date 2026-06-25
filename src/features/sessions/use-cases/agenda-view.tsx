@@ -3,9 +3,10 @@ import { useColorScheme } from "nativewind";
 import { useState } from "react";
 import { RefreshControl, ScrollView, View } from "react-native";
 
-import { Chip } from "@/components/ui/chip";
+import { Card } from "@/components/ui/card";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { ScreenEmpty, ScreenError, ScreenLoading } from "@/components/ui/screen-state";
+import { Switch } from "@/components/ui/switch";
 import { Text } from "@/components/ui/text";
 import { t } from "@/lib/i18n";
 
@@ -18,10 +19,8 @@ export const AgendaView = () => {
   const [day, setDay] = useState<Day>("today");
   const [mode, setMode] = useState<AgendaMode>("myLevel");
   const { colorScheme } = useColorScheme();
-  const { sections, isLoading, isError, isRefreshing, errorKind, isEmpty, refresh } = useAgenda(
-    day,
-    mode,
-  );
+  const { sections, myLevel, isLoading, isError, isRefreshing, errorKind, isEmpty, refresh } =
+    useAgenda(day, mode);
 
   let body;
   if (isLoading) {
@@ -71,18 +70,21 @@ export const AgendaView = () => {
           }
           appearance={colorScheme === "dark" ? "dark" : "light"}
         />
-        <View className="flex-row gap-sm">
-          <Chip
-            label={t("sessions.myLevel")}
-            selected={mode === "myLevel"}
-            onPress={() => setMode("myLevel")}
+        <Card className="flex-row items-center justify-between gap-md p-md">
+          <View className="flex-1 gap-2xs">
+            <Text variant="cardTitle">{t("sessions.myLevel")}</Text>
+            <Text variant="label">
+              {myLevel
+                ? t("sessions.myLevelFilterSubtitle", { level: myLevel })
+                : t("sessions.myLevelFilterSubtitleGeneric")}
+            </Text>
+          </View>
+          <Switch
+            value={mode === "myLevel"}
+            onValueChange={(on) => setMode(on ? "myLevel" : "all")}
+            accessibilityLabel={t("sessions.myLevel")}
           />
-          <Chip
-            label={t("sessions.allLevels")}
-            selected={mode === "all"}
-            onPress={() => setMode("all")}
-          />
-        </View>
+        </Card>
       </View>
       {body}
     </View>
