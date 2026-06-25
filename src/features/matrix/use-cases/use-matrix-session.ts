@@ -65,6 +65,16 @@ export const useMatrixSession = () => {
   const addPresents = useCallback((players: MatrixPlayer[]) => {
     setEffectif((current) => addPlayers(current, players));
   }, []);
+  // Synchronise les présents sur une session détectée/choisie : remplace les joueurs « présents »
+  // par ceux de la session, en conservant les invités saisis à la main.
+  const setPresents = useCallback((players: MatrixPlayer[]) => {
+    setEffectif((current) =>
+      addPlayers(
+        players,
+        current.filter((player) => player.source === "invite"),
+      ),
+    );
+  }, []);
   const addGuest = useCallback((nom: string) => {
     setEffectif((current) => addGuestToEffectif(current, nom));
   }, []);
@@ -115,6 +125,7 @@ export const useMatrixSession = () => {
     currentRound: rounds[currentIndex] ?? null,
     canStart: effectif.length >= 4,
     addPresents,
+    setPresents,
     addGuest,
     removePlayer,
     setTerrains,

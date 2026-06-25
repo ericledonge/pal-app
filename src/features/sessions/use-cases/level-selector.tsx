@@ -11,7 +11,11 @@ type LevelSelectorProps = {
   onModeChange: (mode: "myLevel" | "all") => void;
 };
 
-export const LevelSelector = ({ myLevel, mode, onModeChange }: LevelSelectorProps) => {
+export const LevelSelector = ({
+  myLevel,
+  mode,
+  onModeChange,
+}: LevelSelectorProps) => {
   return (
     <Card className="flex-row items-center justify-between gap-md p-md">
       <View className="flex-1 gap-2xs">

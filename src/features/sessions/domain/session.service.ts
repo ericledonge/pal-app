@@ -1,3 +1,4 @@
+import { toMinutes } from "@/lib/date.utils";
 import { isLevelCode, type LevelCode } from "@/shared/domain/level";
 
 import { COURT_AREA_LABELS } from "./session.constants";
@@ -64,23 +65,29 @@ export const assertValidGrid = (html: string, slots: Slot[]): Slot[] => {
 };
 
 /**
- * Un créneau est-il pertinent pour « mon niveau » ?
- * - vrai si le créneau porte exactement mon niveau, ou est multi-groupes l'incluant ;
+ * Un ensemble de codes est-il pertinent pour « mon niveau » ?
+ * - vrai si les codes portent exactement mon niveau, ou sont multi-groupes l'incluant ;
  * - une séance sans code (jeu libre / ouvert à tous) est pertinente pour tout le monde ;
  * - exception unique à sens unique : un joueur 4.0C voit aussi les créneaux 3.5T (pas l'inverse).
+ *
+ * Règle partagée par l'agenda (F1) et la détection de session de la matrice (F2).
  */
-export const isSlotForLevel = (slot: Slot, myLevel: LevelCode): boolean => {
-  if (slot.codes.length === 0) {
+export const isCodesForLevel = (codes: LevelCode[], myLevel: LevelCode): boolean => {
+  if (codes.length === 0) {
     return true;
   }
-  if (slot.codes.includes(myLevel)) {
+  if (codes.includes(myLevel)) {
     return true;
   }
-  if (myLevel === "4.0C" && slot.codes.includes("3.5T")) {
+  if (myLevel === "4.0C" && codes.includes("3.5T")) {
     return true;
   }
   return false;
 };
+
+/** Un créneau est-il pertinent pour « mon niveau » ? (voir `isCodesForLevel`). */
+export const isSlotForLevel = (slot: Slot, myLevel: LevelCode): boolean =>
+  isCodesForLevel(slot.codes, myLevel);
 
 export const filterSlotsForLevel = (slots: Slot[], myLevel: LevelCode): Slot[] =>
   slots.filter((slot) => isSlotForLevel(slot, myLevel));
@@ -190,10 +197,11 @@ export const createAgendaViewModel = (
     withNames && options.myLevel ? filterSlotsForLevel(slots, options.myLevel) : slots;
 
   const byCourtArea = new Map<CourtArea, AgendaSlotViewModel[]>();
+  // Tri numérique (et non lexicographique) : « 9:00 » sans zéro initial doit précéder « 18:00 ».
   // sort() sur une copie (spread) : Hermes, le moteur JS de React Native, n'implémente pas
   // Array.prototype.toSorted (ES2023). La copie évite de muter l'entrée.
   [...visible]
-    .sort((left, right) => left.heure.localeCompare(right.heure))
+    .sort((left, right) => (toMinutes(left.heure) ?? 0) - (toMinutes(right.heure) ?? 0))
     .forEach((slot, index) => {
       const list = byCourtArea.get(slot.courtArea) ?? [];
       list.push(createAgendaSlotViewModel(slot, index, withNames));

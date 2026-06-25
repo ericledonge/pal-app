@@ -10,32 +10,53 @@ import { Text } from "@/components/ui/text";
 import { t } from "@/lib/i18n";
 import { useTabBarScrollPadding } from "@/lib/safe-area";
 
-import { normalizeName } from "../domain/matrix.service";
+import { mapPresentsToPlayers, normalizeName } from "../domain/matrix.service";
 import { MatrixLiveView } from "./matrix-live-view";
+import { SessionSelector } from "./session-selector";
 import { useMatrixSession } from "./use-matrix-session";
-import { usePresentPlayers } from "./use-present-players";
+import { useSessionRoster } from "./use-session-roster";
 
 export const MatrixView = () => {
-  const { players: presents } = usePresentPlayers();
+  const { windows, rows, autoSession, myLevel } = useSessionRoster();
   const session = useMatrixSession();
   const bottomPadding = useTabBarScrollPadding();
-  const { effectif, config, phase } = session;
+  const { effectif, config, phase, setPresents } = session;
   const [guest, setGuest] = useState("");
   const [selection, setSelection] = useState<Set<string>>(new Set());
-  const preloaded = useRef(false);
+  // Session sélectionnée (par id, stable). Seedée une fois par la détection auto ; ensuite
+  // l'utilisateur garde la main — l'horloge qui avance ne change plus la session choisie.
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const appliedId = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!preloaded.current && presents.length > 0) {
-      session.addPresents(presents);
-      preloaded.current = true;
+    if (selectedId === null && autoSession) {
+      setSelectedId(autoSession.id);
     }
-    // eslint-disable-next-line react/exhaustive-deps
-  }, [presents]);
+  }, [autoSession, selectedId]);
 
+  // Pré-remplit l'effectif avec la session sélectionnée — uniquement en phase config, et une seule
+  // fois par session : un refetch des grilles ou un tick d'horloge ne réécrase pas l'effectif (le
+  // garde repose sur l'id, stable), et une matrice déjà lancée (phase « live ») n'est pas touchée.
+  useEffect(() => {
+    if (phase !== "config" || selectedId === null || appliedId.current === selectedId) {
+      return;
+    }
+    const chosen = windows.find((window) => window.id === selectedId);
+    if (!chosen) {
+      return;
+    }
+    setPresents(chosen.players);
+    appliedId.current = selectedId;
+  }, [phase, selectedId, windows, setPresents]);
+
+  // Présents disponibles = inscrits des autres sessions du jour, hors effectif (ajout d'appoint).
   const available = useMemo(() => {
+    const allPresents = mapPresentsToPlayers(
+      windows.flatMap((window) => window.players.map((player) => player.nom)),
+    );
     const inEffectif = new Set(effectif.map((player) => normalizeName(player.nom)));
-    return presents.filter((player) => !inEffectif.has(normalizeName(player.nom)));
-  }, [presents, effectif]);
+    return allPresents.filter((player) => !inEffectif.has(normalizeName(player.nom)));
+  }, [windows, effectif]);
 
   if (phase === "live") {
     return <MatrixLiveView key={session.currentIndex} session={session} />;
@@ -77,6 +98,13 @@ export const MatrixView = () => {
         contentContainerClassName="gap-md px-lg pt-md"
         contentContainerStyle={{ paddingBottom: bottomPadding }}
       >
+        <SessionSelector
+          rows={rows}
+          selectedId={selectedId}
+          hasLevel={myLevel !== null}
+          onSelect={setSelectedId}
+        />
+
         <Card className="gap-sm">
           <View className="flex-row items-center justify-between">
             <Text variant="label">{t("matrix.terrains")}</Text>

@@ -46,6 +46,15 @@ export const fr = {
   matrix: {
     title: "Matrice",
     roster: "Effectif",
+    sessionNone: "Aucune session de ton calibre",
+    sessionNoneHint:
+      "Aucune session en cours ou à venir pour ton niveau aujourd'hui. Choisis-en une.",
+    sessionSetLevel: "Définis ton niveau dans Profil pour la détection automatique.",
+    sessionMeta: "%{count} joueurs · %{lieu}",
+    changeSession: "Changer",
+    chooseSession: "Choisir une session",
+    sessionPickerTitle: "Sessions du jour",
+    sessionEmpty: "Aucune session aujourd'hui.",
     empty: "Aucun joueur. Ajoute des présents ou des invités.",
     present: "Présent",
     guest: "Invité",
