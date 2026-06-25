@@ -1,3 +1,5 @@
+import { SegmentedControl } from "@expo/ui/community/segmented-control";
+import { useColorScheme } from "nativewind";
 import { useState } from "react";
 import { RefreshControl, ScrollView, View } from "react-native";
 
@@ -15,6 +17,7 @@ import { useAgenda } from "./use-agenda";
 export const AgendaView = () => {
   const [day, setDay] = useState<Day>("today");
   const [mode, setMode] = useState<AgendaMode>("myLevel");
+  const { colorScheme } = useColorScheme();
   const { sections, isLoading, isError, isRefreshing, errorKind, isEmpty, refresh } = useAgenda(
     day,
     mode,
@@ -60,18 +63,14 @@ export const AgendaView = () => {
     <View className="flex-1 bg-background">
       <ScreenHeader title={t("sessions.title")} />
       <View className="gap-sm px-lg pb-sm">
-        <View className="flex-row gap-sm">
-          <Chip
-            label={t("sessions.today")}
-            selected={day === "today"}
-            onPress={() => setDay("today")}
-          />
-          <Chip
-            label={t("sessions.tomorrow")}
-            selected={day === "tomorrow"}
-            onPress={() => setDay("tomorrow")}
-          />
-        </View>
+        <SegmentedControl
+          values={[t("sessions.today"), t("sessions.tomorrow")]}
+          selectedIndex={day === "today" ? 0 : 1}
+          onChange={({ nativeEvent }) =>
+            setDay(nativeEvent.selectedSegmentIndex === 0 ? "today" : "tomorrow")
+          }
+          appearance={colorScheme === "dark" ? "dark" : "light"}
+        />
         <View className="flex-row gap-sm">
           <Chip
             label={t("sessions.myLevel")}
