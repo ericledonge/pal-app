@@ -20,13 +20,13 @@ const SLOTS = [
 ];
 
 describe("createAgendaViewModel", () => {
-  it("mode « Tous » : groupé parc→patinoire, trié par heure, sans noms", () => {
+  it("mode « Tous » : groupé parc→patinoire, trié par heure, inscrits inclus", () => {
     const vm = createAgendaViewModel(SLOTS, { mode: "all", myLevel: null });
     expect(vm.map((section) => section.courtArea)).toEqual(["parc", "patinoire"]);
     expect(vm[0].slots.map((slot) => slot.heure)).toEqual(["08:00", "18:00"]);
-    expect(vm.flatMap((section) => section.slots).every((slot) => slot.inscrits.length === 0)).toBe(
-      true,
-    );
+    const slots = vm.flatMap((section) => section.slots);
+    expect(slots.find((slot) => slot.heure === "18:00")?.inscrits).toEqual(["Bo", "Cy"]);
+    expect(slots.find((slot) => slot.heure === "20:00")?.inscrits).toEqual(["Ana"]);
   });
 
   it("mode « Mon niveau » : filtre par niveau et inclut les inscrits", () => {

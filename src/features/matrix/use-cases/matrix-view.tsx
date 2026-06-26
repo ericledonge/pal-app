@@ -1,16 +1,18 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Alert, ScrollView, View } from "react-native";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Chip } from "@/components/ui/chip";
+// Désactivé avec « Ajouter depuis les présents » (voir bloc commenté plus bas) :
+// import { Chip } from "@/components/ui/chip";
 import { Input } from "@/components/ui/input";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Text } from "@/components/ui/text";
 import { t } from "@/lib/i18n";
 import { useTabBarScrollPadding } from "@/lib/safe-area";
 
-import { mapPresentsToPlayers, normalizeName } from "../domain/matrix.service";
+// Désactivé avec « Ajouter depuis les présents » (réactiver `useMemo` ci-dessus aussi) :
+// import { mapPresentsToPlayers, normalizeName } from "../domain/matrix.service";
 import { MatrixLiveView } from "./matrix-live-view";
 import { SessionSelector } from "./session-selector";
 import { useMatrixSession } from "./use-matrix-session";
@@ -22,7 +24,8 @@ export const MatrixView = () => {
   const bottomPadding = useTabBarScrollPadding();
   const { effectif, config, phase, setPresents } = session;
   const [guest, setGuest] = useState("");
-  const [selection, setSelection] = useState<Set<string>>(new Set());
+  // Désactivé avec « Ajouter depuis les présents » :
+  // const [selection, setSelection] = useState<Set<string>>(new Set());
   // Session sélectionnée (par id, stable). Seedée une fois par la détection auto ; ensuite
   // l'utilisateur garde la main — l'horloge qui avance ne change plus la session choisie.
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -49,35 +52,37 @@ export const MatrixView = () => {
     appliedId.current = selectedId;
   }, [phase, selectedId, windows, setPresents]);
 
-  // Présents disponibles = inscrits des autres sessions du jour, hors effectif (ajout d'appoint).
-  const available = useMemo(() => {
-    const allPresents = mapPresentsToPlayers(
-      windows.flatMap((window) => window.players.map((player) => player.nom)),
-    );
-    const inEffectif = new Set(effectif.map((player) => normalizeName(player.nom)));
-    return allPresents.filter((player) => !inEffectif.has(normalizeName(player.nom)));
-  }, [windows, effectif]);
+  // Désactivé avec « Ajouter depuis les présents » : on n'a pas encore le nom de tous les présents
+  // (réponses au sondage F1), donc cette liste afficherait trop de monde. Conservé pour réactivation.
+  // const available = useMemo(() => {
+  //   const allPresents = mapPresentsToPlayers(
+  //     windows.flatMap((window) => window.players.map((player) => player.nom)),
+  //   );
+  //   const inEffectif = new Set(effectif.map((player) => normalizeName(player.nom)));
+  //   return allPresents.filter((player) => !inEffectif.has(normalizeName(player.nom)));
+  // }, [windows, effectif]);
 
   if (phase === "live") {
     return <MatrixLiveView key={session.currentIndex} session={session} />;
   }
 
-  const toggle = (id: string) => {
-    setSelection((current) => {
-      const next = new Set(current);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  };
+  // Désactivé avec « Ajouter depuis les présents » :
+  // const toggle = (id: string) => {
+  //   setSelection((current) => {
+  //     const next = new Set(current);
+  //     if (next.has(id)) {
+  //       next.delete(id);
+  //     } else {
+  //       next.add(id);
+  //     }
+  //     return next;
+  //   });
+  // };
 
-  const addSelection = () => {
-    session.addPresents(available.filter((player) => selection.has(player.id)));
-    setSelection(new Set());
-  };
+  // const addSelection = () => {
+  //   session.addPresents(available.filter((player) => selection.has(player.id)));
+  //   setSelection(new Set());
+  // };
 
   const confirmRemove = (id: string) => {
     Alert.alert(t("matrix.removeTitle"), t("matrix.removeConfirm"), [
@@ -97,6 +102,8 @@ export const MatrixView = () => {
       <ScrollView
         contentContainerClassName="gap-md px-lg pt-md"
         contentContainerStyle={{ paddingBottom: bottomPadding }}
+        keyboardShouldPersistTaps="handled"
+        automaticallyAdjustKeyboardInsets
       >
         <SessionSelector
           rows={rows}
@@ -143,12 +150,14 @@ export const MatrixView = () => {
             <Text variant="caption">{t("matrix.empty")}</Text>
           ) : (
             effectif.map((player) => (
-              <View key={player.id} className="flex-row items-center justify-between">
-                <View>
-                  <Text variant="body">{player.nom}</Text>
-                  <Text variant="caption">
-                    {player.source === "present" ? t("matrix.present") : t("matrix.guest")}
+              <View key={player.id} className="flex-row items-center justify-between gap-sm">
+                <View className="flex-1">
+                  <Text variant="bodySm" numberOfLines={1}>
+                    {player.nom}
                   </Text>
+                  {player.source === "invite" ? (
+                    <Text variant="caption">{t("matrix.guest")}</Text>
+                  ) : null}
                 </View>
                 <Button
                   variant="ghost"
@@ -175,6 +184,8 @@ export const MatrixView = () => {
           />
         </Card>
 
+        {/* Désactivé : on n'a pas encore le nom de tous les présents (réponses au sondage F1),
+            la liste afficherait trop de monde. Conservé pour réactivation ultérieure.
         {available.length > 0 ? (
           <Card className="gap-sm">
             <Text variant="label">{t("matrix.addFromPresents")}</Text>
@@ -195,6 +206,7 @@ export const MatrixView = () => {
             />
           </Card>
         ) : null}
+        */}
 
         {session.canStart ? (
           <Button label={t("matrix.generate")} onPress={session.startSession} />

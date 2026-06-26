@@ -67,15 +67,17 @@ const AgendaContent = ({
 export const AgendaView = () => {
   const [day, setDay] = useState<Day>("today");
   const [mode, setMode] = useState<AgendaMode>("myLevel");
-  const { sections, myLevel, isLoading, isError, isRefreshing, errorKind, isEmpty, refresh } =
-    useAgenda(day, mode);
+  const { sections, isLoading, isError, isRefreshing, errorKind, isEmpty, refresh } = useAgenda(
+    day,
+    mode,
+  );
 
   return (
     <View className="flex-1 bg-background">
       <ScreenHeader title={t("sessions.title")} />
       <View className="gap-md px-lg pb-sm">
         <DaySelector day={day} onDayChange={setDay} />
-        <LevelSelector mode={mode} onModeChange={setMode} myLevel={myLevel} />
+        <LevelSelector mode={mode} onModeChange={setMode} />
       </View>
       <AgendaContent
         sections={sections}

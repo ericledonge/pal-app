@@ -17,58 +17,79 @@ export const SlotCard = ({ slot }: SlotCardProps) => {
   const { onSurfaceMuted, primary, secondary } = useThemeColors();
   const [expanded, setExpanded] = useState(false);
   const hasRoster = slot.inscrits.length > 0;
+  // Couleur d'accent du créneau : orange si c'est mon niveau, or sinon — partagée par la
+  // pastille de niveau et le libellé des inscrits pour un code couleur cohérent.
+  const accentColor = slot.matchesMyLevel ? "#ff5700" : "#8a6200";
+
+  // Heure : protégée par shrink-0 pour ne jamais être écrasée par la pastille à côté.
+  const clock = (
+    <View className="shrink-0 flex-row items-center gap-2xs">
+      <Ionicons name="time-outline" size={18} color={onSurfaceMuted} />
+      <Text variant="cardTitle">{slot.horaire}</Text>
+    </View>
+  );
+
+  // Pastille de niveau, alignement géré par le conteneur parent (top-right vs pleine largeur).
+  // `wrap` : autorise le passage à la ligne pour la pastille pleine largeur (libellés longs) ;
+  // la pastille en ligne (code court) reste sur une seule ligne.
+  const renderLevelPill = (wrap: boolean) =>
+    slot.levelLabel ? (
+      <View
+        className="rounded-full px-sm py-2xs"
+        style={{
+          backgroundColor: slot.matchesMyLevel ? "rgba(255,87,0,0.15)" : "rgba(255,184,0,0.15)",
+        }}
+      >
+        <Text
+          variant="label"
+          weight="semibold"
+          numberOfLines={wrap ? undefined : 1}
+          style={{ color: accentColor }}
+        >
+          {slot.levelLabel}
+        </Text>
+      </View>
+    ) : null;
+
+  // Code de niveau unique (court) → pastille en haut à droite, sur la ligne de l'heure.
+  // Multi-groupes (ex. « 2.0C & 2.5C & 2.5T ») ou libellé de jeu libre (long) → pastille
+  // pleine largeur sous l'heure, qui passe à la ligne au lieu de déborder.
+  const pillInline = slot.isLevelCode && !slot.multiNiveau;
 
   return (
     <Card
       className="gap-sm border-l-4 p-md"
       style={{ borderLeftColor: slot.matchesMyLevel ? primary : secondary }}
     >
-      {/* Horaire + badge niveau aligné sous l'heure */}
-      <View className="gap-2xs">
-        <View className="flex-row items-center gap-2xs">
-          <Ionicons name="time-outline" size={18} color={onSurfaceMuted} />
-          <Text variant="cardTitle">{slot.horaire}</Text>
+      {pillInline ? (
+        <View className="flex-row items-center justify-between gap-sm">
+          {clock}
+          <View className="min-w-0 shrink">{renderLevelPill(false)}</View>
         </View>
-        {slot.levelLabel ? (
-          <View
-            className="ml-[24px] self-start rounded-full px-sm py-2xs"
-            style={{
-              backgroundColor: slot.matchesMyLevel ? "rgba(255,87,0,0.15)" : "rgba(255,184,0,0.20)",
-            }}
-          >
-            <Text
-              variant="label"
-              weight="semibold"
-              className={slot.matchesMyLevel ? "text-primary" : "text-on-surface-muted"}
-            >
-              {slot.levelLabel}
-            </Text>
-          </View>
-        ) : null}
-      </View>
+      ) : (
+        <View className="gap-2xs">
+          {clock}
+          {slot.levelLabel ? <View className="self-start">{renderLevelPill(true)}</View> : null}
+        </View>
+      )}
 
-      {/* Lieu : court area, courts et capacité en colonne */}
-      <View className="gap-2xs">
+      {/* Lieu · courts · capacité sur une rangée horizontale (exploite la largeur). */}
+      <View className="flex-row flex-wrap items-center gap-md">
         <View className="flex-row items-center gap-2xs">
-          <Ionicons
-            name="location-outline"
-            size={16}
-            color={onSurfaceMuted}
-            style={{ marginTop: 2 }}
-          />
+          <Ionicons name="location-outline" size={16} color={onSurfaceMuted} />
           <Text variant="label" className="text-on-surface-muted">
             {slot.courtAreaLabel}
           </Text>
         </View>
         {slot.terrainsLabel ? (
-          <View className="ml-[22px] flex-row items-center gap-2xs">
+          <View className="flex-row items-center gap-2xs">
             <Ionicons name="grid-outline" size={14} color={onSurfaceMuted} />
             <Text variant="label" className="text-on-surface-muted">
               {slot.terrains.length > 1 ? "Courts" : "Court"} {slot.terrainsLabel}
             </Text>
           </View>
         ) : null}
-        <View className="ml-[22px] flex-row items-center gap-2xs">
+        <View className="flex-row items-center gap-2xs">
           <Ionicons name="people-outline" size={14} color={onSurfaceMuted} />
           <Text variant="label" className="text-on-surface-muted">
             {slot.capaciteLabel}
@@ -85,7 +106,12 @@ export const SlotCard = ({ slot }: SlotCardProps) => {
             onPress={() => setExpanded((value) => !value)}
             className="flex-row items-center justify-between gap-sm"
           >
-            <Text variant="label" weight="semibold" className="flex-1 text-primary">
+            <Text
+              variant="label"
+              weight="semibold"
+              className="flex-1"
+              style={{ color: accentColor }}
+            >
               {t("sessions.registrants")} ({slot.count})
             </Text>
             <Ionicons

@@ -10,6 +10,7 @@ export type TextVariant =
   | "stat"
   | "bodyLg"
   | "body"
+  | "bodySm"
   | "label"
   | "caption";
 
@@ -27,6 +28,8 @@ const VARIANT: Record<TextVariant, { typeface: Typeface; class: string }> = {
   stat: { typeface: "lexend", class: "text-[20px] text-on-surface" },
   bodyLg: { typeface: "inter", class: "text-[20px] text-on-surface" },
   body: { typeface: "inter", class: "text-[18px] text-on-surface" },
+  // Même taille que `label` (16px) mais couleur pleine : contenu courant (noms, valeurs).
+  bodySm: { typeface: "inter", class: "text-[16px] text-on-surface" },
   label: { typeface: "inter", class: "text-[16px] text-on-surface-muted" },
   caption: { typeface: "inter", class: "text-[14px] text-on-surface-muted" },
 };

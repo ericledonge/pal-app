@@ -1,7 +1,7 @@
 import { WEB3FORMS } from "@/lib/config";
 
 export interface FeedbackPayload {
-  category: string;
+  category: string | null;
   message: string;
 }
 
@@ -17,9 +17,9 @@ export const submitFeedback = async ({ category, message }: FeedbackPayload): Pr
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify({
       access_key: WEB3FORMS.accessKey,
-      subject: `Feedback pal-app — ${category}`,
+      subject: category ? `Feedback pal-app — ${category}` : "Feedback pal-app",
       from_name: "Pickleball Action Lévis",
-      category,
+      category: category ?? "non précisée",
       message,
     }),
   });

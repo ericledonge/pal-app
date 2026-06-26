@@ -139,9 +139,12 @@ export default function ProfilScreen() {
           right={<Chevron color={mutedColor} />}
         />
 
-        <View className="items-center pt-md">
+        <View className="items-center gap-sm pt-md">
           <Text variant="caption">
             {t("profile.version")} {version}
+          </Text>
+          <Text variant="caption" className="text-center">
+            {t("profile.disclaimer")}
           </Text>
         </View>
       </ScrollView>

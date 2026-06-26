@@ -65,15 +65,11 @@ export const useMatrixSession = () => {
   const addPresents = useCallback((players: MatrixPlayer[]) => {
     setEffectif((current) => addPlayers(current, players));
   }, []);
-  // Synchronise les présents sur une session détectée/choisie : remplace les joueurs « présents »
-  // par ceux de la session, en conservant les invités saisis à la main.
+  // Synchronise l'effectif sur la session détectée/choisie : on repart des seuls joueurs de cette
+  // session. Les invités saisis à la main sont propres à la session courante — ils ne « collent »
+  // pas d'une session à l'autre : un changement (ou une re-détection au lancement) les oublie.
   const setPresents = useCallback((players: MatrixPlayer[]) => {
-    setEffectif((current) =>
-      addPlayers(
-        players,
-        current.filter((player) => player.source === "invite"),
-      ),
-    );
+    setEffectif(players);
   }, []);
   const addGuest = useCallback((nom: string) => {
     setEffectif((current) => addGuestToEffectif(current, nom));

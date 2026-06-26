@@ -11,18 +11,22 @@ interface MatchTimerProps {
   remainingMs: number;
   running: boolean;
   isFinished: boolean;
+  alarming: boolean;
   onStart: () => void;
   onPause: () => void;
   onReset: () => void;
+  onStopAlarm: () => void;
 }
 
 export const MatchTimer = ({
   remainingMs,
   running,
   isFinished,
+  alarming,
   onStart,
   onPause,
   onReset,
+  onStopAlarm,
 }: MatchTimerProps) => (
   <View className="items-center gap-sm">
     <Text className={cn("font-lexend text-[48px]", isFinished ? "text-error" : "text-on-surface")}>
@@ -34,10 +38,13 @@ export const MatchTimer = ({
       </Text>
     ) : null}
     <View className="flex-row gap-sm">
-      {running ? (
+      {alarming ? (
+        // Coupe uniquement la sonnerie : laisse le temps au battement entre les rondes.
+        <Button label={t("matrix.stopAlarm")} onPress={onStopAlarm} />
+      ) : running ? (
         <Button variant="secondary" label={t("matrix.pause")} onPress={onPause} />
       ) : (
-        <Button label={t("matrix.start")} onPress={onStart} />
+        <Button label={t("matrix.start")} onPress={onStart} disabled={isFinished} />
       )}
       <Button variant="ghost" label={t("matrix.reset")} onPress={onReset} />
     </View>

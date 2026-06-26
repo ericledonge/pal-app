@@ -43,7 +43,8 @@
           }
         }
       ],
-      "@sentry/react-native"
+      "@sentry/react-native",
+      "expo-audio"
     ],
     "experiments": {
       "typedRoutes": true,

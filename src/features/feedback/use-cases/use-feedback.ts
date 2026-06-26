@@ -16,10 +16,10 @@ export const useFeedback = () => {
   const [status, setStatus] = useState<FeedbackStatus>("idle");
   const [error, setError] = useState<string | null>(null);
 
-  const canSubmit = category !== null && message.trim().length > 0;
+  const canSubmit = message.trim().length > 0;
 
   const submit = async () => {
-    if (category === null || message.trim().length === 0) {
+    if (message.trim().length === 0) {
       setError(t("feedback.missingFields"));
       return;
     }

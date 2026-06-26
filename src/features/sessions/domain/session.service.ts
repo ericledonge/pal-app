@@ -113,6 +113,11 @@ export interface AgendaSlotViewModel {
   levelLabel: string;
   /** Vrai si multi-groupes (≥ 2 codes) → mise en avant distincte (badge secondaire). */
   multiNiveau: boolean;
+  /**
+   * Vrai si l'étiquette est un code de niveau (court, ex. « 3.5T ») → pastille en haut à droite ;
+   * faux pour un libellé de jeu libre (long, ex. « Jeu ouvert abonnés ») → pastille pleine largeur.
+   */
+  isLevelCode: boolean;
   kindLabel: string;
   count: number;
   countLabel: string;
@@ -123,7 +128,7 @@ export interface AgendaSlotViewModel {
   terrains: string[];
   /** Vrai si le créneau porte le niveau de l'utilisateur (orange) ; faux sinon (or). */
   matchesMyLevel: boolean;
-  /** Noms des inscrits — peuplé uniquement en mode « Mon niveau ». */
+  /** Noms des inscrits — toujours peuplés dès que le créneau en compte. */
   inscrits: string[];
 }
 
@@ -159,7 +164,6 @@ const formatCourts = (terrains: Slot["terrains"]): string => {
 const createAgendaSlotViewModel = (
   slot: Slot,
   index: number,
-  withNames: boolean,
   myLevel: LevelCode | null,
 ): AgendaSlotViewModel => {
   const courts = formatCourts(slot.terrains);
@@ -175,6 +179,7 @@ const createAgendaSlotViewModel = (
       : COURT_AREA_LABELS[slot.courtArea],
     levelLabel: slot.codes.length > 0 ? slot.codes.join(" & ") : slot.labels.join(", "),
     multiNiveau: slot.codes.length > 1,
+    isLevelCode: slot.codes.length > 0,
     kindLabel: KIND_LABELS[slot.kind],
     count: slot.count,
     countLabel,
@@ -187,21 +192,23 @@ const createAgendaSlotViewModel = (
     terrainsLabel: courts,
     terrains: slot.terrains,
     matchesMyLevel: myLevel !== null && slot.codes.length > 0 && isSlotForLevel(slot, myLevel),
-    inscrits: withNames ? slot.inscrits.map((registrant) => registrant.nom) : [],
+    inscrits: slot.inscrits.map((registrant) => registrant.nom),
   };
 };
 
 /**
  * View model de l'agenda : trié par heure, groupé/étiqueté par court area (parc puis patinoire).
- * Mode « Mon niveau » → filtre par niveau + inclut les inscrits ; « Tous » → résumé sans noms.
+ * Mode « Mon niveau » → filtre par niveau ; « Tous » → tous les créneaux. Les inscrits sont
+ * toujours inclus (la `SlotCard` les affiche dès qu'il y en a, quel que soit le mode).
  */
 export const createAgendaViewModel = (
   slots: Slot[],
   options: { mode: AgendaMode; myLevel: LevelCode | null },
 ): AgendaSection[] => {
-  const withNames = options.mode === "myLevel";
   const visible =
-    withNames && options.myLevel ? filterSlotsForLevel(slots, options.myLevel) : slots;
+    options.mode === "myLevel" && options.myLevel
+      ? filterSlotsForLevel(slots, options.myLevel)
+      : slots;
 
   const byCourtArea = new Map<CourtArea, AgendaSlotViewModel[]>();
   // Tri numérique (et non lexicographique) : « 9:00 » sans zéro initial doit précéder « 18:00 ».
@@ -211,7 +218,7 @@ export const createAgendaViewModel = (
     .sort((left, right) => (toMinutes(left.heure) ?? 0) - (toMinutes(right.heure) ?? 0))
     .forEach((slot, index) => {
       const list = byCourtArea.get(slot.courtArea) ?? [];
-      list.push(createAgendaSlotViewModel(slot, index, withNames, options.myLevel));
+      list.push(createAgendaSlotViewModel(slot, index, options.myLevel));
       byCourtArea.set(slot.courtArea, list);
     });
 

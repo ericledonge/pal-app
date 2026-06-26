@@ -46,11 +46,16 @@ export const fr = {
   matrix: {
     title: "Matrice",
     roster: "Effectif",
+    editRoster: "Modifier l'effectif",
     sessionNone: "Aucune session de ton calibre",
     sessionNoneHint:
       "Aucune session en cours ou à venir pour ton niveau aujourd'hui. Choisis-en une.",
     sessionSetLevel: "Définis ton niveau dans Profil pour la détection automatique.",
     sessionMeta: "%{count} joueurs · %{lieu}",
+    sessionFieldLevel: "Niveau",
+    sessionFieldTime: "Horaire",
+    sessionFieldPlayers: "Joueurs",
+    sessionFieldPlace: "Lieu",
     changeSession: "Changer",
     chooseSession: "Choisir une session",
     sessionPickerTitle: "Sessions du jour",
@@ -73,6 +78,7 @@ export const fr = {
     start: "Démarrer",
     pause: "Pause",
     reset: "Réinitialiser",
+    stopAlarm: "Arrêter la sonnerie",
     finished: "Temps écoulé",
     round: "Ronde",
     nextRound: "Ronde suivante",
@@ -102,11 +108,13 @@ export const fr = {
     privacy: "Confidentialité",
     privacySubtitle: "Politique de confidentialité",
     version: "Version",
+    disclaimer:
+      "Cette application n'est ni affiliée à Pickleball Action Lévis ni à pickleballenligne.com.",
   },
   feedback: {
     title: "Donner mon avis",
     intro: "Une suggestion ou un souci avec l'app ? Dis-le-moi.",
-    category: "Catégorie",
+    category: "Catégorie (facultatif)",
     categoryBug: "Problème",
     categoryIdea: "Idée",
     categoryOther: "Autre",
@@ -115,6 +123,6 @@ export const fr = {
     send: "Envoyer",
     success: "Merci ! Ton message a été envoyé.",
     error: "Échec de l'envoi. Réessaie plus tard.",
-    missingFields: "Choisis une catégorie et écris un message.",
+    missingFields: "Écris un message avant d'envoyer.",
   },
 } as const;
