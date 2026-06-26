@@ -1,4 +1,4 @@
-import { createAgendaViewModel, type GetSlotWeather } from "../session.service";
+import { createAgendaViewModel, formatDayDate, type GetSlotWeather } from "../session.service";
 import { aSlot } from "./session.builders";
 
 const SLOTS = [
@@ -74,5 +74,28 @@ describe("createAgendaViewModel", () => {
     expect(vm.flatMap((section) => section.slots).every((slot) => slot.weather === undefined)).toBe(
       true,
     );
+  });
+});
+
+describe("formatDayDate", () => {
+  // 26 juin 2026 = un vendredi (heure locale).
+  const friday = new Date(2026, 5, 26);
+
+  it("« today » : date du jour, première lettre en majuscule (fr-CA)", () => {
+    expect(formatDayDate("today", friday)).toBe("Vendredi 26 juin");
+  });
+
+  it("« tomorrow » : jour suivant", () => {
+    expect(formatDayDate("tomorrow", friday)).toBe("Samedi 27 juin");
+  });
+
+  it("« tomorrow » franchit la fin de mois", () => {
+    expect(formatDayDate("tomorrow", new Date(2026, 5, 30))).toBe("Mercredi 1 juillet");
+  });
+
+  it("ne mute pas la date fournie", () => {
+    const now = new Date(2026, 5, 26);
+    formatDayDate("tomorrow", now);
+    expect(now.getDate()).toBe(26);
   });
 });

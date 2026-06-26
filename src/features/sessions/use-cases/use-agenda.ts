@@ -5,7 +5,12 @@ import { useWeatherForecast } from "@/features/weather/domain/weather.repository
 import { createSlotWeatherViewModel } from "@/features/weather/domain/weather.service";
 
 import { useGrid } from "../domain/session.repository";
-import { type AgendaMode, createAgendaViewModel, GridParseError } from "../domain/session.service";
+import {
+  type AgendaMode,
+  createAgendaViewModel,
+  formatDayDate,
+  GridParseError,
+} from "../domain/session.service";
 import type { Day } from "../domain/session.types";
 
 // Hook orchestrateur (glue uniquement) : combine les deux court areas du jour, lit le niveau
@@ -45,6 +50,7 @@ export const useAgenda = (day: Day, mode: AgendaMode) => {
 
   return {
     sections,
+    dateLabel: formatDayDate(day),
     myLevel: level,
     isLoading,
     isError,

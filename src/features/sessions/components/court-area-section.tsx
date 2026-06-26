@@ -12,7 +12,7 @@ interface CourtAreaSectionProps {
 // Une court area de l'agenda (parc / patinoire) : libellé du lieu suivi de ses créneaux.
 export const CourtAreaSection = ({ section }: CourtAreaSectionProps) => (
   <View className="gap-sm">
-    <Text variant="label" className="text-on-surface-muted">
+    <Text variant="cardTitle" className="text-center">
       {section.courtAreaLabel}
     </Text>
     {section.slots.map((slot) => (

@@ -3,6 +3,7 @@ import { RefreshControl, ScrollView, View } from "react-native";
 
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { ScreenEmpty, ScreenError, ScreenLoading } from "@/components/ui/screen-state";
+import { Text } from "@/components/ui/text";
 import { t } from "@/lib/i18n";
 import { useTabBarScrollPadding } from "@/lib/safe-area";
 
@@ -67,10 +68,8 @@ const AgendaContent = ({
 export const AgendaView = () => {
   const [day, setDay] = useState<Day>("today");
   const [mode, setMode] = useState<AgendaMode>("myLevel");
-  const { sections, isLoading, isError, isRefreshing, errorKind, isEmpty, refresh } = useAgenda(
-    day,
-    mode,
-  );
+  const { sections, dateLabel, isLoading, isError, isRefreshing, errorKind, isEmpty, refresh } =
+    useAgenda(day, mode);
 
   return (
     <View className="flex-1 bg-background">
@@ -78,6 +77,9 @@ export const AgendaView = () => {
       <View className="gap-md px-lg pb-sm">
         <DaySelector day={day} onDayChange={setDay} />
         <LevelSelector mode={mode} onModeChange={setMode} />
+        <Text variant="cardTitle" className="text-center">
+          {dateLabel}
+        </Text>
       </View>
       <AgendaContent
         sections={sections}

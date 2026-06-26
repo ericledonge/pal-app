@@ -1,9 +1,10 @@
 import type { SlotWeatherViewModel } from "@/features/weather/domain/weather.types";
 import { toMinutes } from "@/lib/date.utils";
+import { formatDate } from "@/lib/format.utils";
 import { isLevelCode, type LevelCode } from "@/shared/domain/level";
 
 import { COURT_AREA_LABELS } from "./session.constants";
-import type { CourtArea, Slot, SlotKind } from "./session.types";
+import type { CourtArea, Day, Slot, SlotKind } from "./session.types";
 
 // Logique pure : validation de la sortie du parser par type guards (PAS de Zod).
 // Aucun import react / react-native / @tanstack/react-query.
@@ -102,6 +103,20 @@ const KIND_LABELS: Record<SlotKind, string> = {
 };
 
 export type AgendaMode = "myLevel" | "all";
+
+/**
+ * Date longue (fr-CA) du jour consulté, ex. « Vendredi 26 juin » — première lettre en majuscule
+ * pour l'affichage en tête de liste. « tomorrow » = jour suivant l'horloge locale. `now` injectable
+ * pour les tests.
+ */
+export const formatDayDate = (day: Day, now: Date = new Date()): string => {
+  const date = new Date(now);
+  if (day === "tomorrow") {
+    date.setDate(date.getDate() + 1);
+  }
+  const label = formatDate(date);
+  return label.charAt(0).toUpperCase() + label.slice(1);
+};
 
 export interface AgendaSlotViewModel {
   id: string;
