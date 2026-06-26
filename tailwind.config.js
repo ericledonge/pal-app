@@ -17,6 +17,7 @@ module.exports = {
         "on-primary": "rgb(var(--color-on-primary) / <alpha-value>)",
         secondary: "rgb(var(--color-secondary) / <alpha-value>)",
         "on-secondary": "rgb(var(--color-on-secondary) / <alpha-value>)",
+        warning: "rgb(var(--color-warning) / <alpha-value>)",
         error: "rgb(var(--color-error) / <alpha-value>)",
       },
       // Grille 8px — tokens d'espacement 2xs (6) → 2xl (28).

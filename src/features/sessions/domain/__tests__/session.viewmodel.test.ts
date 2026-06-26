@@ -21,10 +21,13 @@ const SLOTS = [
 
 // Stub de météo injectée : encode l'heure reçue pour vérifier qu'elle est bien transmise.
 const stubWeather: GetSlotWeather = (heure) => ({
-  temperatureLabel: `${heure} 21°`,
+  apparentTemperatureLabel: `${heure} 21°`,
   precipitationLabel: "30 %",
   precipitationProbability: 30,
-  precipitationLevel: "moderate",
+  precipitationSeverity: "normal",
+  precipitationMmLabel: "0 mm",
+  windLabel: "5 km/h",
+  windSeverity: "normal",
   a11yLabel: "x",
 });
 
@@ -63,7 +66,7 @@ describe("createAgendaViewModel", () => {
     });
     const slots = vm.flatMap((section) => section.slots);
     expect(slots.every((slot) => slot.weather !== undefined)).toBe(true);
-    expect(slots[0].weather?.temperatureLabel).toBe(`${slots[0].heure} 21°`);
+    expect(slots[0].weather?.apparentTemperatureLabel).toBe(`${slots[0].heure} 21°`);
   });
 
   it("laisse weather indéfini quand getWeather n'est pas fourni", () => {

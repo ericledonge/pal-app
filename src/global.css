@@ -16,6 +16,7 @@
     --color-on-primary: 255 255 255;
     --color-secondary: 255 184 0; /* #ffb800 — accent secondaire (or) Stitch, identique clair/sombre */
     --color-on-secondary: 26 28 30; /* #1a1c1e — texte sombre sur l'or */
+    --color-warning: 194 65 12; /* #c2410c — avertissement orange lisible sur fond clair */
     --color-error: 186 26 26;
   }
 
@@ -32,6 +33,7 @@
       --color-on-primary: 255 255 255;
       --color-secondary: 255 184 0; /* #ffb800 — or, identique */
       --color-on-secondary: 26 28 30; /* #1a1c1e — texte sombre sur l'or */
+      --color-warning: 253 186 116; /* #fdba74 — avertissement orange clair sur le navy sombre */
       --color-error: 255 180 171; /* #ffb4ab */
     }
   }

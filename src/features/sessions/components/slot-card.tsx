@@ -1,26 +1,33 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
 
 import { Card } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
+import type { WeatherSeverity } from "@/features/weather/domain/weather.types";
 import { t } from "@/lib/i18n";
 import { useThemeColors } from "@/lib/theme";
 
 import type { AgendaSlotViewModel } from "../domain/session.service";
-import { SlotWeatherPill } from "./slot-weather-pill";
 
 interface SlotCardProps {
   slot: AgendaSlotViewModel;
 }
 
 export const SlotCard = ({ slot }: SlotCardProps) => {
-  const { onSurfaceMuted, primary, secondary } = useThemeColors();
+  const { onSurfaceMuted, primary, secondary, warning, error } = useThemeColors();
   const [expanded, setExpanded] = useState(false);
   const hasRoster = slot.inscrits.length > 0;
   // Couleur d'accent du créneau : orange si c'est mon niveau, or sinon — partagée par la
   // pastille de niveau et le libellé des inscrits pour un code couleur cohérent.
   const accentColor = slot.matchesMyLevel ? "#ff5700" : "#8a6200";
+  const weather = slot.weather;
+  // Code couleur de la sévérité météo : orange (warning) / rouge (alert) ; `undefined` = sourd
+  // par défaut (la ligne garde la couleur muted et la graisse normale).
+  const severityColor = (severity: WeatherSeverity): string | undefined =>
+    severity === "alert" ? error : severity === "warning" ? warning : undefined;
+  const precipColor = weather ? severityColor(weather.precipitationSeverity) : undefined;
+  const windColor = weather ? severityColor(weather.windSeverity) : undefined;
 
   // Heure : protégée par shrink-0 pour ne jamais être écrasée par la pastille à côté.
   const clock = (
@@ -30,10 +37,10 @@ export const SlotCard = ({ slot }: SlotCardProps) => {
     </View>
   );
 
-  // Pastille de niveau, alignement géré par le conteneur parent (top-right vs pleine largeur).
-  // `wrap` : autorise le passage à la ligne pour la pastille pleine largeur (libellés longs) ;
-  // la pastille en ligne (code court) reste sur une seule ligne.
-  const renderLevelPill = (wrap: boolean) =>
+  // Pastille de niveau. La graisse par défaut des items flex en RN est `flexShrink: 0`, et on
+  // ne fixe aucun `numberOfLines` : le texte n'est donc jamais tronqué. En cas de manque de place
+  // (libellé long ou police agrandie), la pastille passe simplement à la ligne (flex-wrap).
+  const renderLevelPill = () =>
     slot.levelLabel ? (
       <View
         className="rounded-full px-sm py-2xs"
@@ -41,20 +48,15 @@ export const SlotCard = ({ slot }: SlotCardProps) => {
           backgroundColor: slot.matchesMyLevel ? "rgba(255,87,0,0.15)" : "rgba(255,184,0,0.15)",
         }}
       >
-        <Text
-          variant="label"
-          weight="semibold"
-          numberOfLines={wrap ? undefined : 1}
-          style={{ color: accentColor }}
-        >
+        <Text variant="label" weight="semibold" style={{ color: accentColor }}>
           {slot.levelLabel}
         </Text>
       </View>
     ) : null;
 
-  // Code de niveau unique (court) → pastille en haut à droite, sur la ligne de l'heure.
-  // Multi-groupes (ex. « 2.0C & 2.5C & 2.5T ») ou libellé de jeu libre (long) → pastille
-  // pleine largeur sous l'heure, qui passe à la ligne au lieu de déborder.
+  // Code de niveau unique (court) → pastille en haut à droite, sur la ligne de l'heure ;
+  // elle repasse sous l'heure si la place manque. Multi-groupes ou libellé de jeu libre (long)
+  // → pastille pleine largeur sous l'heure dès le départ.
   const pillInline = slot.isLevelCode && !slot.multiNiveau;
 
   return (
@@ -63,42 +65,60 @@ export const SlotCard = ({ slot }: SlotCardProps) => {
       style={{ borderLeftColor: slot.matchesMyLevel ? primary : secondary }}
     >
       {pillInline ? (
-        <View className="flex-row items-center justify-between gap-sm">
+        <View className="flex-row flex-wrap items-center justify-between gap-sm">
           {clock}
-          <View className="min-w-0 shrink">{renderLevelPill(false)}</View>
+          {renderLevelPill()}
         </View>
       ) : (
         <View className="gap-2xs">
           {clock}
-          {slot.levelLabel ? <View className="self-start">{renderLevelPill(true)}</View> : null}
+          {slot.levelLabel ? <View className="self-start">{renderLevelPill()}</View> : null}
         </View>
       )}
 
-      {/* Lieu en colonne à gauche (parc · court · inscrits), météo à droite. */}
-      <View className="flex-row items-center justify-between gap-md">
-        <View className="min-w-0 shrink gap-2xs">
+      {/* Détails alignés (mêmes icône + retrait) : courts puis météo, sans fond. Le plateau
+          (parc/patinoire) n'est pas répété — c'est déjà le titre de la section. */}
+      <View className="gap-xs">
+        {slot.terrainsLabel ? (
           <View className="flex-row items-center gap-2xs">
-            <Ionicons name="location-outline" size={16} color={onSurfaceMuted} />
+            <Ionicons name="grid-outline" size={14} color={onSurfaceMuted} />
             <Text variant="label" className="text-on-surface-muted">
-              {slot.courtAreaLabel}
+              {slot.terrains.length > 1 ? "Courts" : "Court"} {slot.terrainsLabel}
             </Text>
           </View>
-          {slot.terrainsLabel ? (
+        ) : null}
+        {weather ? (
+          <View accessible accessibilityLabel={weather.a11yLabel} className="gap-xs">
             <View className="flex-row items-center gap-2xs">
-              <Ionicons name="grid-outline" size={14} color={onSurfaceMuted} />
+              <Ionicons name="thermometer-outline" size={14} color={onSurfaceMuted} />
               <Text variant="label" className="text-on-surface-muted">
-                {slot.terrains.length > 1 ? "Courts" : "Court"} {slot.terrainsLabel}
+                {weather.apparentTemperatureLabel} ressenti
               </Text>
             </View>
-          ) : null}
-          <View className="flex-row items-center gap-2xs">
-            <Ionicons name="people-outline" size={14} color={onSurfaceMuted} />
-            <Text variant="label" className="text-on-surface-muted">
-              {slot.capaciteLabel}
-            </Text>
+            <View className="flex-row items-center gap-2xs">
+              <Ionicons name="water-outline" size={14} color={precipColor ?? onSurfaceMuted} />
+              <Text
+                variant="label"
+                weight={precipColor ? "semibold" : "regular"}
+                className="text-on-surface-muted"
+                style={precipColor ? { color: precipColor } : undefined}
+              >
+                {weather.precipitationLabel} de pluie ({weather.precipitationMmLabel})
+              </Text>
+            </View>
+            <View className="flex-row items-center gap-2xs">
+              <Feather name="wind" size={14} color={windColor ?? onSurfaceMuted} />
+              <Text
+                variant="label"
+                weight={windColor ? "semibold" : "regular"}
+                className="text-on-surface-muted"
+                style={windColor ? { color: windColor } : undefined}
+              >
+                {weather.windLabel}
+              </Text>
+            </View>
           </View>
-        </View>
-        {slot.weather ? <SlotWeatherPill weather={slot.weather} /> : null}
+        ) : null}
       </View>
 
       {hasRoster ? (

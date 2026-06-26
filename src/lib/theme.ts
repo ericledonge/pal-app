@@ -21,6 +21,8 @@ export const palette = {
     onPrimary: "#ffffff",
     secondary: "#ffb800",
     onSecondary: "#1a1c1e",
+    // Avertissement (orange lisible sur fond clair, ~4.9:1 sur blanc) — distinct du rouge `error`.
+    warning: "#c2410c",
     error: "#ba1a1a",
   },
   // Thème SOMBRE — variante Midnight Pro (navy #0b1326).
@@ -35,6 +37,8 @@ export const palette = {
     onPrimary: "#ffffff",
     secondary: "#ffb800",
     onSecondary: "#1a1c1e",
+    // Avertissement (orange clair lisible sur le navy sombre) — distinct du rouge `error`.
+    warning: "#fdba74",
     error: "#ffb4ab",
   },
 } as const;

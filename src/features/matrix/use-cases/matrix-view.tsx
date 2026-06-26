@@ -10,6 +10,7 @@ import { ScreenHeader } from "@/components/ui/screen-header";
 import { Text } from "@/components/ui/text";
 import { t } from "@/lib/i18n";
 import { useTabBarScrollPadding } from "@/lib/safe-area";
+import { setUpdatesBlocked } from "@/lib/updates/update-gate";
 
 // Désactivé avec « Ajouter depuis les présents » (réactiver `useMemo` ci-dessus aussi) :
 // import { mapPresentsToPlayers, normalizeName } from "../domain/matrix.service";
@@ -36,6 +37,18 @@ export const MatrixView = () => {
       setSelectedId(autoSession.id);
     }
   }, [autoSession, selectedId]);
+
+  // Garde-fou auto-update : tant qu'une matrice est live, on bloque l'application d'une MAJ OTA (un
+  // reload remettrait à zéro le minuteur de match). À la fin de la matrice, la MAJ en attente
+  // s'applique. Posé sur le parent (phase stable) plutôt que sur MatrixLiveView, remontée à chaque
+  // ronde.
+  useEffect(() => {
+    if (phase !== "live") {
+      return undefined;
+    }
+    setUpdatesBlocked("matrix-live", true);
+    return () => setUpdatesBlocked("matrix-live", false);
+  }, [phase]);
 
   // Pré-remplit l'effectif avec la session sélectionnée — uniquement en phase config, et une seule
   // fois par session : un refetch des grilles ou un tick d'horloge ne réécrase pas l'effectif (le

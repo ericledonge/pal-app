@@ -35,6 +35,7 @@ import { initAnalytics } from "@/lib/analytics";
 import { t } from "@/lib/i18n";
 import { initObservability, logger } from "@/lib/logger";
 import { queryClient } from "@/lib/query-client";
+import { useAutoUpdate } from "@/lib/updates/use-auto-update";
 
 import "@/global.css";
 
@@ -115,6 +116,9 @@ function RootLayout() {
   });
 
   const fontsReady = fontsLoaded || fontError !== null;
+
+  // Auto-update OTA (EAS Update) : télécharge au premier plan, applique quand c'est sûr.
+  useAutoUpdate();
 
   // Focus manager TanStack Query : refetch quand l'app revient au premier plan.
   useEffect(() => {
