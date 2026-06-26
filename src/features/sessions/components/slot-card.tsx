@@ -22,16 +22,13 @@ export const SlotCard = ({ slot }: SlotCardProps) => {
   // pastille de niveau et le libellé des inscrits pour un code couleur cohérent.
   const accentColor = slot.matchesMyLevel ? "#ff5700" : "#8a6200";
 
-  // Heure : protégée par shrink-0 pour ne jamais être écrasée par les pastilles à côté.
+  // Heure : protégée par shrink-0 pour ne jamais être écrasée par la pastille à côté.
   const clock = (
     <View className="shrink-0 flex-row items-center gap-2xs">
       <Ionicons name="time-outline" size={18} color={onSurfaceMuted} />
       <Text variant="cardTitle">{slot.horaire}</Text>
     </View>
   );
-
-  // Météo (température + risque de pluie) : pastille compacte partagée avec le coin haut-droit.
-  const weatherPill = slot.weather ? <SlotWeatherPill weather={slot.weather} /> : null;
 
   // Pastille de niveau, alignement géré par le conteneur parent (top-right vs pleine largeur).
   // `wrap` : autorise le passage à la ligne pour la pastille pleine largeur (libellés longs) ;
@@ -55,9 +52,9 @@ export const SlotCard = ({ slot }: SlotCardProps) => {
       </View>
     ) : null;
 
-  // Code de niveau unique (court) → pastille en haut à droite, sur la ligne de l'heure (avec la
-  // météo). Multi-groupes (ex. « 2.0C & 2.5C & 2.5T ») ou libellé de jeu libre (long) → pastille
-  // pleine largeur sous l'heure ; la météo reste alors seule en haut à droite.
+  // Code de niveau unique (court) → pastille en haut à droite, sur la ligne de l'heure.
+  // Multi-groupes (ex. « 2.0C & 2.5C & 2.5T ») ou libellé de jeu libre (long) → pastille
+  // pleine largeur sous l'heure, qui passe à la ligne au lieu de déborder.
   const pillInline = slot.isLevelCode && !slot.multiNiveau;
 
   return (
@@ -68,43 +65,40 @@ export const SlotCard = ({ slot }: SlotCardProps) => {
       {pillInline ? (
         <View className="flex-row items-center justify-between gap-sm">
           {clock}
-          <View className="min-w-0 shrink flex-row items-center justify-end gap-2xs">
-            {weatherPill}
-            <View className="min-w-0 shrink">{renderLevelPill(false)}</View>
-          </View>
+          <View className="min-w-0 shrink">{renderLevelPill(false)}</View>
         </View>
       ) : (
         <View className="gap-2xs">
-          <View className="flex-row items-center justify-between gap-sm">
-            {clock}
-            {weatherPill}
-          </View>
+          {clock}
           {slot.levelLabel ? <View className="self-start">{renderLevelPill(true)}</View> : null}
         </View>
       )}
 
-      {/* Lieu · courts · capacité sur une rangée horizontale (exploite la largeur). */}
-      <View className="flex-row flex-wrap items-center gap-md">
-        <View className="flex-row items-center gap-2xs">
-          <Ionicons name="location-outline" size={16} color={onSurfaceMuted} />
-          <Text variant="label" className="text-on-surface-muted">
-            {slot.courtAreaLabel}
-          </Text>
-        </View>
-        {slot.terrainsLabel ? (
+      {/* Lieu en colonne à gauche (parc · court · inscrits), météo à droite. */}
+      <View className="flex-row items-center justify-between gap-md">
+        <View className="min-w-0 shrink gap-2xs">
           <View className="flex-row items-center gap-2xs">
-            <Ionicons name="grid-outline" size={14} color={onSurfaceMuted} />
+            <Ionicons name="location-outline" size={16} color={onSurfaceMuted} />
             <Text variant="label" className="text-on-surface-muted">
-              {slot.terrains.length > 1 ? "Courts" : "Court"} {slot.terrainsLabel}
+              {slot.courtAreaLabel}
             </Text>
           </View>
-        ) : null}
-        <View className="flex-row items-center gap-2xs">
-          <Ionicons name="people-outline" size={14} color={onSurfaceMuted} />
-          <Text variant="label" className="text-on-surface-muted">
-            {slot.capaciteLabel}
-          </Text>
+          {slot.terrainsLabel ? (
+            <View className="flex-row items-center gap-2xs">
+              <Ionicons name="grid-outline" size={14} color={onSurfaceMuted} />
+              <Text variant="label" className="text-on-surface-muted">
+                {slot.terrains.length > 1 ? "Courts" : "Court"} {slot.terrainsLabel}
+              </Text>
+            </View>
+          ) : null}
+          <View className="flex-row items-center gap-2xs">
+            <Ionicons name="people-outline" size={14} color={onSurfaceMuted} />
+            <Text variant="label" className="text-on-surface-muted">
+              {slot.capaciteLabel}
+            </Text>
+          </View>
         </View>
+        {slot.weather ? <SlotWeatherPill weather={slot.weather} /> : null}
       </View>
 
       {hasRoster ? (
