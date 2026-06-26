@@ -1,4 +1,4 @@
-import { nowMinutes, toMinutes } from "../date.utils";
+import { nowMinutes, toDateKey, toMinutes } from "../date.utils";
 
 describe("toMinutes", () => {
   it("convertit une heure « HH:MM » en minutes depuis minuit", () => {
@@ -23,5 +23,12 @@ describe("toMinutes", () => {
 describe("nowMinutes", () => {
   it("retourne les minutes depuis minuit de l'instant fourni", () => {
     expect(nowMinutes(new Date(2026, 5, 24, 18, 30))).toBe(1110);
+  });
+});
+
+describe("toDateKey", () => {
+  it("formate les composantes locales en « YYYY-MM-DD » (mois et jour sur deux chiffres)", () => {
+    expect(toDateKey(new Date(2026, 5, 25, 23, 59))).toBe("2026-06-25");
+    expect(toDateKey(new Date(2026, 0, 9, 0, 0))).toBe("2026-01-09");
   });
 });

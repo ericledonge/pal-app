@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 
 import { useLevelPreference } from "@/features/level/use-cases/use-level-preference";
+import { useWeatherForecast } from "@/features/weather/domain/weather.repository";
+import { createSlotWeatherViewModel } from "@/features/weather/domain/weather.service";
 
 import { useGrid } from "../domain/session.repository";
 import { type AgendaMode, createAgendaViewModel, GridParseError } from "../domain/session.service";
@@ -12,6 +14,8 @@ export const useAgenda = (day: Day, mode: AgendaMode) => {
   const { level } = useLevelPreference();
   const parc = useGrid(day, "parc");
   const patinoire = useGrid(day, "patinoire");
+  // Météo supplémentaire et non bloquante : son absence ne touche ni loading/error ni refresh.
+  const { data: forecast } = useWeatherForecast();
 
   const isLoading = parc.isLoading || patinoire.isLoading;
   // Erreur affichée seulement sans donnée à montrer : une erreur de refetch (données déjà
@@ -27,8 +31,11 @@ export const useAgenda = (day: Day, mode: AgendaMode) => {
       createAgendaViewModel([...(parc.data ?? []), ...(patinoire.data ?? [])], {
         mode,
         myLevel: level,
+        getWeather: forecast
+          ? (heure) => createSlotWeatherViewModel(forecast, day, heure)
+          : undefined,
       }),
-    [parc.data, patinoire.data, mode, level],
+    [parc.data, patinoire.data, mode, level, forecast, day],
   );
 
   const refresh = () => {

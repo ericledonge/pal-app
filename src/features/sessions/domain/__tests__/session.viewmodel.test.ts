@@ -1,4 +1,4 @@
-import { createAgendaViewModel } from "../session.service";
+import { createAgendaViewModel, type GetSlotWeather } from "../session.service";
 import { aSlot } from "./session.builders";
 
 const SLOTS = [
@@ -18,6 +18,15 @@ const SLOTS = [
   }),
   aSlot({ courtArea: "parc", heure: "08:00", codes: ["4.0C"], inscrits: [], count: 0 }),
 ];
+
+// Stub de météo injectée : encode l'heure reçue pour vérifier qu'elle est bien transmise.
+const stubWeather: GetSlotWeather = (heure) => ({
+  temperatureLabel: `${heure} 21°`,
+  precipitationLabel: "30 %",
+  precipitationProbability: 30,
+  precipitationLevel: "moderate",
+  a11yLabel: "x",
+});
 
 describe("createAgendaViewModel", () => {
   it("mode « Tous » : groupé parc→patinoire, trié par heure, inscrits inclus", () => {
@@ -44,5 +53,23 @@ describe("createAgendaViewModel", () => {
       .map((slot) => slot.levelLabel)
       .toSorted();
     expect(labels).toEqual(["3.5T", "4.0C"]);
+  });
+
+  it("attache la météo (par heure de début) quand getWeather est fourni", () => {
+    const vm = createAgendaViewModel(SLOTS, {
+      mode: "all",
+      myLevel: null,
+      getWeather: stubWeather,
+    });
+    const slots = vm.flatMap((section) => section.slots);
+    expect(slots.every((slot) => slot.weather !== undefined)).toBe(true);
+    expect(slots[0].weather?.temperatureLabel).toBe(`${slots[0].heure} 21°`);
+  });
+
+  it("laisse weather indéfini quand getWeather n'est pas fourni", () => {
+    const vm = createAgendaViewModel(SLOTS, { mode: "all", myLevel: null });
+    expect(vm.flatMap((section) => section.slots).every((slot) => slot.weather === undefined)).toBe(
+      true,
+    );
   });
 });

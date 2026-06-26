@@ -8,6 +8,7 @@ import { t } from "@/lib/i18n";
 import { useThemeColors } from "@/lib/theme";
 
 import type { AgendaSlotViewModel } from "../domain/session.service";
+import { SlotWeatherPill } from "./slot-weather-pill";
 
 interface SlotCardProps {
   slot: AgendaSlotViewModel;
@@ -21,13 +22,16 @@ export const SlotCard = ({ slot }: SlotCardProps) => {
   // pastille de niveau et le libellé des inscrits pour un code couleur cohérent.
   const accentColor = slot.matchesMyLevel ? "#ff5700" : "#8a6200";
 
-  // Heure : protégée par shrink-0 pour ne jamais être écrasée par la pastille à côté.
+  // Heure : protégée par shrink-0 pour ne jamais être écrasée par les pastilles à côté.
   const clock = (
     <View className="shrink-0 flex-row items-center gap-2xs">
       <Ionicons name="time-outline" size={18} color={onSurfaceMuted} />
       <Text variant="cardTitle">{slot.horaire}</Text>
     </View>
   );
+
+  // Météo (température + risque de pluie) : pastille compacte partagée avec le coin haut-droit.
+  const weatherPill = slot.weather ? <SlotWeatherPill weather={slot.weather} /> : null;
 
   // Pastille de niveau, alignement géré par le conteneur parent (top-right vs pleine largeur).
   // `wrap` : autorise le passage à la ligne pour la pastille pleine largeur (libellés longs) ;
@@ -51,9 +55,9 @@ export const SlotCard = ({ slot }: SlotCardProps) => {
       </View>
     ) : null;
 
-  // Code de niveau unique (court) → pastille en haut à droite, sur la ligne de l'heure.
-  // Multi-groupes (ex. « 2.0C & 2.5C & 2.5T ») ou libellé de jeu libre (long) → pastille
-  // pleine largeur sous l'heure, qui passe à la ligne au lieu de déborder.
+  // Code de niveau unique (court) → pastille en haut à droite, sur la ligne de l'heure (avec la
+  // météo). Multi-groupes (ex. « 2.0C & 2.5C & 2.5T ») ou libellé de jeu libre (long) → pastille
+  // pleine largeur sous l'heure ; la météo reste alors seule en haut à droite.
   const pillInline = slot.isLevelCode && !slot.multiNiveau;
 
   return (
@@ -64,11 +68,17 @@ export const SlotCard = ({ slot }: SlotCardProps) => {
       {pillInline ? (
         <View className="flex-row items-center justify-between gap-sm">
           {clock}
-          <View className="min-w-0 shrink">{renderLevelPill(false)}</View>
+          <View className="min-w-0 shrink flex-row items-center justify-end gap-2xs">
+            {weatherPill}
+            <View className="min-w-0 shrink">{renderLevelPill(false)}</View>
+          </View>
         </View>
       ) : (
         <View className="gap-2xs">
-          {clock}
+          <View className="flex-row items-center justify-between gap-sm">
+            {clock}
+            {weatherPill}
+          </View>
           {slot.levelLabel ? <View className="self-start">{renderLevelPill(true)}</View> : null}
         </View>
       )}

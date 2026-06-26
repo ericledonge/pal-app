@@ -18,3 +18,9 @@ export const toMinutes = (hhmm: string): number | null => {
 /** Minutes écoulées depuis minuit pour l'instant donné (défaut : maintenant). Lit l'horloge locale. */
 export const nowMinutes = (now: Date = new Date()): number =>
   now.getHours() * 60 + now.getMinutes();
+
+const pad2 = (value: number): string => String(value).padStart(2, "0");
+
+/** Clé de date locale « YYYY-MM-DD » (composantes locales, sans dépendance à un fuseau via Intl). */
+export const toDateKey = (date: Date): string =>
+  `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;

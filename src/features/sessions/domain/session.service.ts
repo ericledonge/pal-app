@@ -1,3 +1,4 @@
+import type { SlotWeatherViewModel } from "@/features/weather/domain/weather.types";
 import { toMinutes } from "@/lib/date.utils";
 import { isLevelCode, type LevelCode } from "@/shared/domain/level";
 
@@ -130,7 +131,12 @@ export interface AgendaSlotViewModel {
   matchesMyLevel: boolean;
   /** Noms des inscrits — toujours peuplés dès que le créneau en compte. */
   inscrits: string[];
+  /** Météo de l'heure de début (parc/patinoire en plein air) ; absent si indisponible. */
+  weather?: SlotWeatherViewModel;
 }
+
+/** Fournit la météo d'un créneau à partir de son heure de début. Injectée (callback pur). */
+export type GetSlotWeather = (heure: string) => SlotWeatherViewModel | null;
 
 export interface AgendaSection {
   courtArea: CourtArea;
@@ -165,6 +171,7 @@ const createAgendaSlotViewModel = (
   slot: Slot,
   index: number,
   myLevel: LevelCode | null,
+  getWeather?: GetSlotWeather,
 ): AgendaSlotViewModel => {
   const courts = formatCourts(slot.terrains);
   const total = slot.placesLibres === null ? null : slot.count + slot.placesLibres;
@@ -193,6 +200,7 @@ const createAgendaSlotViewModel = (
     terrains: slot.terrains,
     matchesMyLevel: myLevel !== null && slot.codes.length > 0 && isSlotForLevel(slot, myLevel),
     inscrits: slot.inscrits.map((registrant) => registrant.nom),
+    weather: getWeather?.(slot.heure) ?? undefined,
   };
 };
 
@@ -203,7 +211,7 @@ const createAgendaSlotViewModel = (
  */
 export const createAgendaViewModel = (
   slots: Slot[],
-  options: { mode: AgendaMode; myLevel: LevelCode | null },
+  options: { mode: AgendaMode; myLevel: LevelCode | null; getWeather?: GetSlotWeather },
 ): AgendaSection[] => {
   const visible =
     options.mode === "myLevel" && options.myLevel
@@ -218,7 +226,7 @@ export const createAgendaViewModel = (
     .sort((left, right) => (toMinutes(left.heure) ?? 0) - (toMinutes(right.heure) ?? 0))
     .forEach((slot, index) => {
       const list = byCourtArea.get(slot.courtArea) ?? [];
-      list.push(createAgendaSlotViewModel(slot, index, options.myLevel));
+      list.push(createAgendaSlotViewModel(slot, index, options.myLevel, options.getWeather));
       byCourtArea.set(slot.courtArea, list);
     });
 
