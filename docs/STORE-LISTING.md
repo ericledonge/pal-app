@@ -34,6 +34,20 @@ Cible : francophones du Québec. Tous les textes en **français (FR-CA)**. Ident
 
 > Note : l'application ne gère pas les inscriptions (elles restent par courriel). Mentionner ce point évite les rejets de revue pour fonctionnalité attendue manquante.
 
+## Notes de revue & autorisation (anti-rejet 5.2.2)
+
+Le risque de rejet le plus probable n'est pas la vie privée mais le **scraping d'un service tiers**
+(Apple 5.2.2) : l'app lit et réaffiche le contenu de `pickleballenligne.com`. La parade — autorisation
+écrite du club + notes de revue à coller dans les stores — est détaillée dans
+[`AUTORISATION.md`](AUTORISATION.md).
+
+À ne pas oublier au moment de soumettre :
+
+- **App Store Connect → App Review Information → Notes** : coller le texte FR/EN de `AUTORISATION.md`
+  (aucun compte requis, données issues du calendrier public du club, app compagnon autorisée).
+- **Play Console → App access** : déclarer « All functionality is available without special access ».
+- Tenir prête l'**autorisation écrite du club** (Apple peut la demander).
+
 ## Captures d'écran
 
 À produire depuis un **dev/preview build** sur simulateur iOS et émulateur Android (les captures sont prises via l'outil Argent `screenshot` ou la capture native du simulateur), en **clair et en sombre**.

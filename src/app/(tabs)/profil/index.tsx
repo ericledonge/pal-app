@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import type { ComponentProps, ReactNode } from "react";
@@ -9,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Chip } from "@/components/ui/chip";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Text } from "@/components/ui/text";
+import { getVersionLabel } from "@/lib/app-version";
 import { useLevelPreference } from "@/features/level/use-cases/use-level-preference";
 import type { ThemeMode } from "@/features/preferences/domain/preferences.storage";
 import { usePreferences } from "@/features/preferences/use-cases/use-preferences";

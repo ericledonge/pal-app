@@ -1,12 +1,12 @@
 # Politique de confidentialité — Pickleball Action Lévis
 
-_Dernière mise à jour : 22 juin 2026_
+_Dernière mise à jour : 26 juin 2026_
 
 L'application **Pickleball Action Lévis** (`ca.palevis.app`) est éditée à titre bénévole pour le club Pickleball Action Lévis. Cette politique décrit les données traitées par l'application.
 
 ## Aucun compte, aucun serveur
 
-L'application **ne demande aucune inscription ni compte**. Elle **ne possède pas de serveur** : les présences affichées sont lues directement depuis le calendrier public du club (`pickleballenligne.com`), et toutes les préférences (votre niveau, vos réglages) ainsi que les matrices de jeu sont stockées **uniquement sur votre appareil**.
+L'application **ne demande aucune inscription ni compte**. Elle **ne possède pas de serveur** : les présences affichées sont lues directement depuis le calendrier public du club (`pickleballenligne.com`), et toutes les préférences (votre niveau, vos réglages) ainsi que les matrices de jeu — **y compris les noms des joueurs saisis pour les composer** — sont stockées **uniquement sur votre appareil** et ne sont jamais transmises.
 
 ## Données traitées
 
@@ -19,15 +19,17 @@ Ces données ne sont **ni vendues, ni partagées** à des fins publicitaires.
 
 ## Données affichées (présences)
 
-Les noms des personnes inscrites affichés dans l'agenda proviennent du **calendrier public** du club et ne sont **pas stockés** par l'application : ils sont lus à la demande et mis en cache temporairement sur votre appareil.
+Les noms des personnes inscrites affichés dans l'agenda proviennent du **calendrier public** du club et ne sont **pas stockés** par l'application : ils sont lus à la demande et mis en cache temporairement sur votre appareil. Le club demeure responsable de ces renseignements : toute demande de **retrait ou de rectification** d'un nom affiché doit être adressée au club (ou à l'adresse de contact ci-dessous, qui la relaiera).
 
 ## Commentaires (feedback)
 
 Si vous envoyez un commentaire via l'application, votre message et la catégorie choisie sont transmis par courriel au mainteneur (via le service Web3Forms). N'y incluez pas d'informations sensibles.
 
-## Vos choix
+## Vos choix et vos droits
 
-Aucune donnée de compte n'étant conservée, il n'y a rien à supprimer côté serveur. La désinstallation de l'application efface toutes les données locales.
+Aucune donnée de compte n'étant conservée, il n'y a rien à supprimer côté serveur. La désinstallation de l'application efface toutes les données locales (préférences et matrices).
+
+Conformément à la _Loi sur la protection des renseignements personnels dans le secteur privé_ (Loi 25, Québec), vous pouvez exercer vos droits d'accès, de rectification et de retrait. Pour les noms affichés dans l'agenda, ces demandes relèvent du club, source des données ; pour toute autre question, écrivez à l'adresse ci-dessous.
 
 ## Contact
 
