@@ -77,6 +77,81 @@ describe("createAgendaViewModel", () => {
   });
 });
 
+describe("createAgendaViewModel — plage subdivisée (deux niveaux sur des courts distincts)", () => {
+  // Même court area + même horaire, deux séances : 4.0C sur 01–03, 2.0C/2.0T sur 04–06.
+  const SUBDIVIDED = [
+    aSlot({ courtArea: "parc", heure: "12:00", codes: ["4.0C"], terrains: ["01", "02", "03"] }),
+    aSlot({
+      courtArea: "parc",
+      heure: "12:00",
+      codes: ["2.0C", "2.0T"],
+      terrains: ["04", "05", "06"],
+    }),
+  ];
+
+  it("mode « Tous » + mon niveau 4.0C : une seule carte (4.0C), courts 01–03", () => {
+    const vm = createAgendaViewModel(SUBDIVIDED, { mode: "all", myLevel: "4.0C" });
+    const slots = vm.flatMap((section) => section.slots);
+    expect(slots).toHaveLength(1);
+    expect(slots[0].levelLabel).toBe("4.0C");
+    expect(slots[0].terrains).toEqual(["01", "02", "03"]);
+  });
+
+  it("mode « Tous » + mon niveau 2.0C : ne garde que la séance 2.0C/2.0T, courts 04–06", () => {
+    const vm = createAgendaViewModel(SUBDIVIDED, { mode: "all", myLevel: "2.0C" });
+    const slots = vm.flatMap((section) => section.slots);
+    expect(slots).toHaveLength(1);
+    expect(slots[0].terrains).toEqual(["04", "05", "06"]);
+  });
+
+  it("mode « Tous » + niveau ne correspondant à aucune séance (3.0C) : garde les deux", () => {
+    const vm = createAgendaViewModel(SUBDIVIDED, { mode: "all", myLevel: "3.0C" });
+    expect(vm.flatMap((section) => section.slots)).toHaveLength(2);
+  });
+
+  it("mode « Tous » sans niveau choisi : garde les deux séances", () => {
+    const vm = createAgendaViewModel(SUBDIVIDED, { mode: "all", myLevel: null });
+    expect(vm.flatMap((section) => section.slots)).toHaveLength(2);
+  });
+
+  it("mode « Mon niveau » 4.0C : le filtre ne laisse que la séance 4.0C", () => {
+    const vm = createAgendaViewModel(SUBDIVIDED, { mode: "myLevel", myLevel: "4.0C" });
+    const slots = vm.flatMap((section) => section.slots);
+    expect(slots).toHaveLength(1);
+    expect(slots[0].terrains).toEqual(["01", "02", "03"]);
+  });
+
+  it("une séance « jeu libre » (sans code) ne masque PAS une vraie séance de niveau", () => {
+    // Plage subdivisée : séance 2.0C (avec inscrits) + jeu libre. Joueur 3.0C en mode « Tous ».
+    const withJeuLibre = [
+      aSlot({ courtArea: "parc", heure: "12:00", codes: ["2.0C"], terrains: ["01", "02", "03"] }),
+      aSlot({
+        courtArea: "parc",
+        heure: "12:00",
+        codes: [],
+        labels: ["Jeu libre public"],
+        terrains: ["04", "05", "06"],
+        inscrits: [],
+        count: 0,
+      }),
+    ];
+    const vm = createAgendaViewModel(withJeuLibre, { mode: "all", myLevel: "3.0C" });
+    // Les DEUX séances sont conservées (aucun code ne correspond → on ne masque rien).
+    expect(vm.flatMap((section) => section.slots)).toHaveLength(2);
+  });
+
+  it("mode « Tous » : l'asymétrie 4.0C→3.5T ne masque pas une séance d'un autre niveau", () => {
+    // Plage subdivisée 3.5T + 3.0C, joueur 4.0C. 4.0C n'a aucun code exact ici → garder les deux
+    // (et NON ne montrer que 3.5T via l'asymétrie, ce qui cacherait la séance 3.0C voisine).
+    const subdivided = [
+      aSlot({ courtArea: "parc", heure: "12:00", codes: ["3.5T"], terrains: ["01", "02", "03"] }),
+      aSlot({ courtArea: "parc", heure: "12:00", codes: ["3.0C"], terrains: ["04", "05", "06"] }),
+    ];
+    const vm = createAgendaViewModel(subdivided, { mode: "all", myLevel: "4.0C" });
+    expect(vm.flatMap((section) => section.slots)).toHaveLength(2);
+  });
+});
+
 describe("formatDayDate", () => {
   // 26 juin 2026 = un vendredi (heure locale).
   const friday = new Date(2026, 5, 26);

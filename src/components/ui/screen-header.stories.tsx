@@ -15,3 +15,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Simple: Story = {};
 export const WithAction: Story = { args: { action: <Chip label="3.5T" selected /> } };
+export const WithClose: Story = { args: { title: "Donner mon avis", onClose: () => {} } };

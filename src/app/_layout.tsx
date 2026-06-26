@@ -97,6 +97,7 @@ const AppShell = ({ fontsReady }: { fontsReady: boolean }) => {
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         <Stack.Screen name="select-level" options={{ presentation: "modal", headerShown: false }} />
         <Stack.Screen name="feedback" options={{ presentation: "modal", headerShown: false }} />
+        <Stack.Screen name="donation" options={{ presentation: "modal", headerShown: false }} />
       </Stack>
       <StatusBar style={resolvedScheme === "dark" ? "light" : "dark"} />
     </ThemeProvider>

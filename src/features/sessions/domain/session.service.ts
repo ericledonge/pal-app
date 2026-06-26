@@ -4,6 +4,7 @@ import { formatDate } from "@/lib/format.utils";
 import { isLevelCode, type LevelCode } from "@/shared/domain/level";
 
 import { COURT_AREA_LABELS } from "./session.constants";
+import { hasGridState } from "./session.parser";
 import type { CourtArea, Day, Slot, SlotKind } from "./session.types";
 
 // Logique pure : validation de la sortie du parser par type guards (PAS de Zod).
@@ -48,17 +49,24 @@ export const isValidSlot = (value: unknown): value is Slot => {
   );
 };
 
-/** Le HTML contient-il la structure attendue du RadScheduler ? (sinon : structure inattendue). */
+/** Le HTML contient-il la coquille DOM attendue du RadScheduler ? */
 export const hasSchedulerStructure = (html: string): boolean =>
   /RadScheduler|appointment-card|rsApt/i.test(html);
 
 /**
- * Valide la sortie du parser. Distingue une grille **vide légitime** (structure présente,
- * 0 créneau) d'un **échec de parsing** (structure absente, ou créneau non conforme) → `GridParseError`.
+ * Valide la sortie du parser. Distingue trois cas :
+ * - ni coquille DOM ni ClientState → structure inattendue (`GridParseError`) ;
+ * - ClientState introuvable/illisible (la VRAIE source de données du parser) → `GridParseError`,
+ *   et NON une grille vide légitime — sinon une casse du format passerait inaperçue (pas de Sentry) ;
+ * - ClientState exploitable (même 0 appointment) → grille vide légitime, on valide les créneaux.
  */
 export const assertValidGrid = (html: string, slots: Slot[]): Slot[] => {
-  if (!hasSchedulerStructure(html)) {
-    throw new GridParseError("Structure de grille inattendue (HTML possiblement modifié).");
+  if (!hasGridState(html)) {
+    throw new GridParseError(
+      hasSchedulerStructure(html)
+        ? "ClientState introuvable ou illisible (format de la grille modifié)."
+        : "Structure de grille inattendue (HTML possiblement modifié).",
+    );
   }
   if (slots.some((slot) => !isValidSlot(slot))) {
     throw new GridParseError("Créneau non conforme dans la sortie du parser.");
@@ -93,6 +101,40 @@ export const isSlotForLevel = (slot: Slot, myLevel: LevelCode): boolean =>
 
 export const filterSlotsForLevel = (slots: Slot[], myLevel: LevelCode): Slot[] =>
   slots.filter((slot) => isSlotForLevel(slot, myLevel));
+
+/** Clé d'une plage : une même plage d'un court area peut être SUBDIVISÉE en plusieurs séances. */
+const rangeKey = (slot: Slot): string => `${slot.courtArea}|${slot.heure}|${slot.heureFin}`;
+
+/**
+ * Quand une même plage (court area + horaire) est subdivisée en plusieurs séances (ex. parc
+ * 12:00–14:00 : courts 01–03 « 4.0C » + courts 04–06 « 2.0C/2.0T »), ne garder que la séance dont
+ * le code porte EXACTEMENT mon niveau si l'une d'elles correspond — sinon laisser toutes les
+ * séances. Privilégie un affichage personnel et net (une carte « 4.0C » plutôt que deux cartes ou
+ * une carte fusionnée). Le test est `codes.includes(myLevel)` (et non `isSlotForLevel`) à dessein :
+ * une séance sans code (jeu libre, pertinente pour tous) ne doit pas écraser une vraie séance de
+ * niveau, et l'asymétrie 4.0C→3.5T ne doit pas masquer une séance d'un autre niveau réel en mode
+ * « Tous ». Sans niveau choisi, ou pour une plage non subdivisée, ne change rien.
+ */
+export const collapseSubdividedByLevel = (slots: Slot[], myLevel: LevelCode | null): Slot[] => {
+  if (!myLevel) {
+    return slots;
+  }
+  const byRange = new Map<string, Slot[]>();
+  for (const slot of slots) {
+    const list = byRange.get(rangeKey(slot)) ?? [];
+    list.push(slot);
+    byRange.set(rangeKey(slot), list);
+  }
+  const kept = new Set<Slot>();
+  for (const group of byRange.values()) {
+    const matching = group.length > 1 ? group.filter((slot) => slot.codes.includes(myLevel)) : [];
+    const visible = matching.length > 0 ? matching : group;
+    for (const slot of visible) {
+      kept.add(slot);
+    }
+  }
+  return slots.filter((slot) => kept.has(slot));
+};
 
 const KIND_LABELS: Record<SlotKind, string> = {
   groupe: "",
@@ -184,7 +226,6 @@ const formatCourts = (terrains: Slot["terrains"]): string => {
 
 const createAgendaSlotViewModel = (
   slot: Slot,
-  index: number,
   myLevel: LevelCode | null,
   getWeather?: GetSlotWeather,
 ): AgendaSlotViewModel => {
@@ -192,7 +233,9 @@ const createAgendaSlotViewModel = (
   const total = slot.placesLibres === null ? null : slot.count + slot.placesLibres;
   const countLabel = `${slot.count} ${slot.count > 1 ? "inscrits" : "inscrit"}`;
   return {
-    id: `${slot.courtArea}-${slot.heure}-${slot.codes.join("_")}-${index}`,
+    // id intrinsèque (courts disjoints au sein d'une plage subdivisée) → stable aux refetch/tri,
+    // ce qui préserve l'état « déplié » des cartes.
+    id: `${slot.courtArea}-${slot.heure}-${slot.heureFin}-${slot.terrains.join("_")}`,
     heure: slot.heure,
     horaire: slot.heureFin ? `${slot.heure} - ${slot.heureFin}` : slot.heure,
     courtAreaLabel: COURT_AREA_LABELS[slot.courtArea],
@@ -228,10 +271,12 @@ export const createAgendaViewModel = (
   slots: Slot[],
   options: { mode: AgendaMode; myLevel: LevelCode | null; getWeather?: GetSlotWeather },
 ): AgendaSection[] => {
-  const visible =
+  const filtered =
     options.mode === "myLevel" && options.myLevel
       ? filterSlotsForLevel(slots, options.myLevel)
       : slots;
+  // Une plage subdivisée (2 niveaux sur des courts distincts) → ne montrer que mon niveau.
+  const visible = collapseSubdividedByLevel(filtered, options.myLevel);
 
   const byCourtArea = new Map<CourtArea, AgendaSlotViewModel[]>();
   // Tri numérique (et non lexicographique) : « 9:00 » sans zéro initial doit précéder « 18:00 ».
@@ -239,9 +284,9 @@ export const createAgendaViewModel = (
   // Array.prototype.toSorted (ES2023). La copie évite de muter l'entrée.
   [...visible]
     .sort((left, right) => (toMinutes(left.heure) ?? 0) - (toMinutes(right.heure) ?? 0))
-    .forEach((slot, index) => {
+    .forEach((slot) => {
       const list = byCourtArea.get(slot.courtArea) ?? [];
-      list.push(createAgendaSlotViewModel(slot, index, options.myLevel, options.getWeather));
+      list.push(createAgendaSlotViewModel(slot, options.myLevel, options.getWeather));
       byCourtArea.set(slot.courtArea, list);
     });
 

@@ -25,18 +25,30 @@ describe("isValidSlot", () => {
 });
 
 describe("assertValidGrid", () => {
-  const STRUCTURE = '<div class="RadScheduler"></div>';
+  // Grille vide LÉGITIME : coquille RadScheduler + ClientState présent mais sans appointment.
+  const STRUCTURE =
+    '<div class="RadScheduler"></div><script>var s={"resources":"[]","appointments":"[]"};</script>';
 
   it("laisse passer une grille conforme", () => {
     expect(assertValidGrid(STRUCTURE, [aSlot()])).toHaveLength(1);
   });
 
-  it("distingue une grille vide légitime (structure présente, 0 créneau)", () => {
+  it("distingue une grille vide légitime (ClientState présent, 0 créneau)", () => {
     expect(assertValidGrid(STRUCTURE, [])).toHaveLength(0);
   });
 
-  it("structure absente → GridParseError", () => {
+  it("structure totalement absente → GridParseError", () => {
     expect(() => assertValidGrid("<html><body>oups</body></html>", [])).toThrow(GridParseError);
+  });
+
+  it("coquille DOM présente mais ClientState absent → GridParseError (casse détectée)", () => {
+    // Régression visée : sans cette garde, une casse du format passerait pour une grille vide.
+    expect(() => assertValidGrid('<div class="RadScheduler"></div>', [])).toThrow(GridParseError);
+  });
+
+  it("ClientState présent mais JSON corrompu → GridParseError (et non vide silencieux)", () => {
+    const corrupt = '<div class="RadScheduler"></div><script>var s={"appointments":"[{"};</script>';
+    expect(() => assertValidGrid(corrupt, [])).toThrow(GridParseError);
   });
 
   it("créneau non conforme → GridParseError", () => {

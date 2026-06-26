@@ -131,6 +131,15 @@ export default function ProfilScreen() {
         />
 
         <SettingsRow
+          icon="heart-outline"
+          iconColor={iconColor}
+          title={t("profile.donation")}
+          subtitle={t("profile.donationSubtitle")}
+          onPress={() => router.push("/donation")}
+          right={<Chevron color={mutedColor} />}
+        />
+
+        <SettingsRow
           icon="lock-closed-outline"
           iconColor={iconColor}
           title={t("profile.privacy")}

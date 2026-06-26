@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { ScrollView, View } from "react-native";
 
 import { Button } from "@/components/ui/button";
@@ -15,12 +16,13 @@ const CATEGORY_LABELS = {
 } as const;
 
 export default function FeedbackScreen() {
+  const router = useRouter();
   const { category, setCategory, message, setMessage, status, error, canSubmit, submit } =
     useFeedback();
 
   return (
     <View className="flex-1 bg-background">
-      <ScreenHeader title={t("feedback.title")} />
+      <ScreenHeader title={t("feedback.title")} onClose={() => router.back()} />
       <ScrollView contentContainerClassName="gap-md px-lg py-md">
         <Text variant="body" className="text-on-surface-muted">
           {t("feedback.intro")}

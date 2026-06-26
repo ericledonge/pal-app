@@ -105,6 +105,8 @@ export const fr = {
     help: "Aide et commentaires",
     feedback: "Donner mon avis",
     feedbackSubtitle: "Une suggestion ou un souci ?",
+    donation: "Faire un don",
+    donationSubtitle: "Tu aimes l'app ? Soutiens-la",
     privacy: "Confidentialité",
     privacySubtitle: "Politique de confidentialité",
     version: "Version",
@@ -124,5 +126,18 @@ export const fr = {
     success: "Merci ! Ton message a été envoyé.",
     error: "Échec de l'envoi. Réessaie plus tard.",
     missingFields: "Écris un message avant d'envoyer.",
+  },
+  donation: {
+    title: "Faire un don",
+    intro:
+      "Cette application est gratuite, sans publicité et développée bénévolement. Si elle te rend service, un petit don aide à la maintenir. C'est entièrement optionnel et sans contrepartie. Merci!",
+    cardCta: "Faire un don",
+    cardHint: "Carte, Apple Pay ou Google Pay (via Ko-fi).",
+    interacTitle: "Par virement Interac",
+    interacHint:
+      "Sans frais. Envoie le montant de ton choix à cette adresse, en utilisant la réponse de sécurité ci-dessous.",
+    interacEmailLabel: "Adresse courriel",
+    interacAnswerLabel: "Réponse de sécurité",
+    note: "Aucun don ne débloque de contenu : l'application reste entièrement gratuite.",
   },
 } as const;

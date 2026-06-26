@@ -28,7 +28,7 @@ export default function SelectLevelScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <ScreenHeader title={t("profile.changeLevel")} />
+      <ScreenHeader title={t("profile.changeLevel")} onClose={() => router.back()} />
       <ScrollView contentContainerClassName="gap-lg px-lg py-md">
         <LevelGrid selected={selected} onSelect={setSelected} />
         <Button
