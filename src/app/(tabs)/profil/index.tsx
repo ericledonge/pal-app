@@ -8,10 +8,10 @@ import { Card } from "@/components/ui/card";
 import { Chip } from "@/components/ui/chip";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Text } from "@/components/ui/text";
-import { getVersionLabel } from "@/lib/app-version";
 import { useLevelPreference } from "@/features/level/use-cases/use-level-preference";
 import type { ThemeMode } from "@/features/preferences/domain/preferences.storage";
 import { usePreferences } from "@/features/preferences/use-cases/use-preferences";
+import { getVersionLabel } from "@/lib/app-version";
 import { t } from "@/lib/i18n";
 import { useTabBarScrollPadding } from "@/lib/safe-area";
 import { useThemeColors } from "@/lib/theme";
@@ -66,7 +66,7 @@ export default function ProfilScreen() {
   const bottomPadding = useTabBarScrollPadding();
   const { level } = useLevelPreference();
   const { preferences, setPreference } = usePreferences();
-  const version = Constants.expoConfig?.version ?? "—";
+  const version = getVersionLabel();
 
   const iconColor = colors.onSurface;
   const mutedColor = colors.onSurfaceMuted;
