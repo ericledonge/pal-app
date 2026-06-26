@@ -94,6 +94,71 @@ const splitFour = (four: string[], history: History): Pick<Pairing, "equipeA" | 
   return { equipeA: best[0], equipeB: best[1] };
 };
 
+// Coût de co-localisation de a et b = nombre de rondes où ils ont déjà partagé un terrain
+// (partenaires OU adversaires). On veut éviter de réunir ceux qui se sont déjà beaucoup croisés.
+const coLocationCost = (a: string, b: string, history: History): number =>
+  (history.partner.get(pairKey(a, b)) ?? 0) + (history.opponent.get(pairKey(a, b)) ?? 0);
+
+// Coût d'un quatuor = somme des co-localisations de ses 6 paires.
+const fourCost = (four: string[], history: History): number => {
+  let total = 0;
+  for (let i = 0; i < four.length; i += 1) {
+    for (let j = i + 1; j < four.length; j += 1) {
+      total += coLocationCost(four[i], four[j], history);
+    }
+  }
+  return total;
+};
+
+// Répartit les joueurs qui jouent en `courtsUsed` quatuors en minimisant les croisements déjà vus.
+// `playing` arrive déjà mélangé (seedé) : l'ordre sert de graine et départage les égalités, ce qui
+// conserve le déterminisme et la variété inter-rondes. Glouton (amorce + plus proche au moindre coût)
+// puis échanges 2-opt déterministes tant qu'ils réduisent le coût — n'aggrave jamais la base.
+const groupFours = (playing: string[], courtsUsed: number, history: History): string[][] => {
+  const remaining = [...playing];
+  const fours: string[][] = [];
+  for (let court = 0; court < courtsUsed; court += 1) {
+    const group = [remaining.shift() as string];
+    while (group.length < 4) {
+      let bestIdx = 0;
+      let bestAdded = Number.POSITIVE_INFINITY;
+      for (let k = 0; k < remaining.length; k += 1) {
+        const added = group.reduce((sum, id) => sum + coLocationCost(id, remaining[k], history), 0);
+        if (added < bestAdded) {
+          bestAdded = added;
+          bestIdx = k;
+        }
+      }
+      group.push(remaining.splice(bestIdx, 1)[0]);
+    }
+    fours.push(group);
+  }
+
+  // Polissage : échange deux joueurs de terrains différents tant que ça baisse le coût total.
+  let improved = true;
+  let passes = 0;
+  while (improved && passes < 4) {
+    improved = false;
+    passes += 1;
+    for (let i = 0; i < fours.length; i += 1) {
+      for (let j = i + 1; j < fours.length; j += 1) {
+        for (let p = 0; p < 4; p += 1) {
+          for (let q = 0; q < 4; q += 1) {
+            const before = fourCost(fours[i], history) + fourCost(fours[j], history);
+            [fours[i][p], fours[j][q]] = [fours[j][q], fours[i][p]];
+            if (fourCost(fours[i], history) + fourCost(fours[j], history) < before) {
+              improved = true;
+            } else {
+              [fours[i][p], fours[j][q]] = [fours[j][q], fours[i][p]]; // annule l'échange
+            }
+          }
+        }
+      }
+    }
+  }
+  return fours;
+};
+
 /** Génère la prochaine ronde à partir de l'historique. */
 export const generateRound = (
   effectif: MatrixPlayer[],
@@ -112,13 +177,17 @@ export const generateRound = (
     (x, y) => (counts.bench.get(x.id) ?? 0) - (counts.bench.get(y.id) ?? 0),
   );
   const benchPlayers = ordered.slice(0, effectif.length - playingCount);
-  const playing = shuffled(ordered.slice(effectif.length - playingCount), rng);
+  // Mélange seedé des joueurs qui jouent → graine du groupement (variété + tiebreak), puis quatuors
+  // formés pour minimiser les croisements déjà vus (splitFour reste maître du découpage 2v2 interne).
+  const playingIds = shuffled(ordered.slice(effectif.length - playingCount), rng).map(
+    (player) => player.id,
+  );
+  const fours = groupFours(playingIds, courtsUsed, counts);
 
-  const pairings: Pairing[] = [];
-  for (let court = 0; court < courtsUsed; court += 1) {
-    const four = playing.slice(court * 4, court * 4 + 4).map((player) => player.id);
-    pairings.push({ terrain: court + 1, ...splitFour(four, counts) });
-  }
+  const pairings: Pairing[] = fours.map((four, court) => {
+    const { equipeA, equipeB } = splitFour(four, counts);
+    return { terrain: court + 1, equipeA, equipeB };
+  });
 
   return {
     numero: history.length + 1,
