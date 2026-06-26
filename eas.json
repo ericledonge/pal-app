@@ -8,7 +8,8 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "SENTRY_DISABLE_AUTO_UPLOAD": "true"
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true",
+        "EXPO_PUBLIC_WEB3FORMS_KEY": "6685056d-9b6e-4488-a5ff-fbd73d1c3520"
       }
     },
     "development-simulator": {
@@ -21,14 +22,16 @@
       "distribution": "internal",
       "channel": "preview",
       "env": {
-        "SENTRY_DISABLE_AUTO_UPLOAD": "true"
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true",
+        "EXPO_PUBLIC_WEB3FORMS_KEY": "6685056d-9b6e-4488-a5ff-fbd73d1c3520"
       }
     },
     "production": {
       "autoIncrement": true,
       "channel": "production",
       "env": {
-        "SENTRY_DISABLE_AUTO_UPLOAD": "true"
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true",
+        "EXPO_PUBLIC_WEB3FORMS_KEY": "6685056d-9b6e-4488-a5ff-fbd73d1c3520"
       }
     }
   },

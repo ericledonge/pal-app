@@ -1,7 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { logger } from "@/lib/logger";
-
 import { fetchTodayGrid, fetchTomorrowGrid } from "./session.adapter";
 import { parseGrid } from "./session.parser";
 import { assertValidGrid } from "./session.service";
@@ -15,15 +13,6 @@ const fetchGrid = async (day: Day, courtArea: CourtArea): Promise<Slot[]> => {
   const html =
     day === "today" ? await fetchTodayGrid(courtArea) : await fetchTomorrowGrid(courtArea);
   const slots = assertValidGrid(html, parseGrid(html, courtArea));
-  if (__DEV__) {
-    // Diagnostic du parsing (cœur fragile de la feature) : nb de créneaux + codes/inscrits vus.
-    logger.info(
-      `[sessions] ${day}/${courtArea} → ${slots.length} créneaux | ` +
-        slots
-          .map((slot) => `${slot.heure} ${slot.codes.join("&") || "(sans code)"}×${slot.count}`)
-          .join(", "),
-    );
-  }
   return slots;
 };
 
