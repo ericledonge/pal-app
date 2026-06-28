@@ -35,13 +35,11 @@ export const fr = {
     myLevel: "Mon niveau",
     allLevels: "Tous les niveaux",
     myLevelFilterSubtitle: "Afficher uniquement les sessions pour %{level}",
-    myLevelFilterSubtitleGeneric:
-      "Afficher uniquement les sessions de mon niveau",
+    myLevelFilterSubtitleGeneric: "Afficher uniquement les sessions de mon niveau",
     empty: "Aucun créneau pour ce jour.",
     emptyMyLevel: "Aucun créneau à ton niveau pour ce jour.",
     emptyToday: "Aucune session en cours ou à venir aujourd'hui.",
-    emptyTodayMyLevel:
-      "Aucune session à ton niveau en cours ou à venir aujourd'hui.",
+    emptyTodayMyLevel: "Aucune session à ton niveau en cours ou à venir aujourd'hui.",
     errorNetwork: "Connexion impossible. Vérifie ta connexion et réessaie.",
     errorParsing: "Affichage des présences momentanément indisponible.",
     registrants: "Inscrits",
@@ -55,11 +53,9 @@ export const fr = {
     sessionNoneHint:
       "Aucune session en cours ou à venir pour ton niveau aujourd'hui. Choisis-en une ou crée-en une.",
     sessionManual: "Session manuelle",
-    sessionManualHint:
-      "Effectif construit à la main. Ajoute des invités ci-dessous.",
+    sessionManualHint: "Effectif construit à la main. Ajoute des invités ci-dessous.",
     createSession: "Créer une session",
-    sessionSetLevel:
-      "Définis ton niveau dans Profil pour la détection automatique.",
+    sessionSetLevel: "Définis ton niveau dans Profil pour la détection automatique.",
     sessionMeta: "%{count} joueurs · %{lieu}",
     sessionFieldLevel: "Niveau",
     sessionFieldTime: "Horaire",
@@ -88,6 +84,9 @@ export const fr = {
     reset: "Réinitialiser",
     stopAlarm: "Arrêter sonnerie",
     finished: "Temps écoulé",
+    notifChannel: "Minuteur de match",
+    notifTitle: "Temps écoulé",
+    notifBody: "La ronde est terminée. Touchez pour revenir au minuteur.",
     round: "Ronde",
     nextRound: "Ronde suivante",
     waitingArea: "Salle d'attente",
@@ -96,8 +95,7 @@ export const fr = {
     noBench: "Personne au banc.",
     endSession: "Terminer la session",
     endSessionTitle: "Terminer la session",
-    endSessionConfirm:
-      "Terminer la session en cours ? Les rondes générées seront effacées.",
+    endSessionConfirm: "Terminer la session en cours ? Les rondes générées seront effacées.",
     decreaseTerrains: "Diminuer le nombre de terrains",
     increaseTerrains: "Augmenter le nombre de terrains",
     decreaseDuration: "Diminuer la durée d'un match",

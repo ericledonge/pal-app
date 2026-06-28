@@ -8,11 +8,13 @@ import { Input } from "@/components/ui/input";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Text } from "@/components/ui/text";
 import { t } from "@/lib/i18n";
+import { useKeepAwakeWhileActive } from "@/lib/keep-awake";
 import { useTabBarScrollPadding } from "@/lib/safe-area";
 import { useThemeColors } from "@/lib/theme";
 
 import { MatchTimer } from "./match-timer";
 import { useMatchAlarm } from "./use-match-alarm";
+import { useMatchEndNotification } from "./use-match-end-notification";
 import { useMatchTimer } from "./use-match-timer";
 import type { UseMatrixSession } from "./use-matrix-session";
 
@@ -25,6 +27,10 @@ export const MatrixLiveView = ({ session }: MatrixLiveViewProps) => {
   const { effectif, config, currentRound, currentIndex } = session;
   const alarm = useMatchAlarm();
   const timer = useMatchTimer(config.dureeMatchMin, alarm.start);
+  const notification = useMatchEndNotification();
+  // Garde l'écran allumé pendant le décompte ET la sonnerie : sinon l'OS suspend le JS et l'alarme
+  // ne sonne qu'au réveil. (Si l'utilisateur verrouille à la main, la notification OS prend le relais.)
+  useKeepAwakeWhileActive(timer.running || alarm.alarming);
   const bottomPadding = useTabBarScrollPadding();
   const { onSurfaceMuted } = useThemeColors();
   const [guest, setGuest] = useState("");
@@ -49,11 +55,36 @@ export const MatrixLiveView = ({ session }: MatrixLiveViewProps) => {
     action();
   };
 
+  // Pause/Réinitialiser arrêtent le décompte : on coupe la sonnerie ET on annule la notification OS
+  // en attente (plus de minuteur en cours → plus besoin du filet).
+  const interrupt = (action: () => void) => () => {
+    alarm.stop();
+    notification.cancel();
+    action();
+  };
+
+  // Démarrer/reprendre : coupe une éventuelle sonnerie, (re)programme la notification de secours pour
+  // le temps restant, puis lance le décompte. `timer.start` ignore un minuteur déjà écoulé, et
+  // `schedule` ignore un délai nul — cohérents.
+  const handleStart = () => {
+    alarm.stop();
+    notification.cancel();
+    timer.start();
+    notification.schedule(timer.remainingMs);
+  };
+
   // Terminer efface les rondes : on confirme d'abord (l'alarme est coupée à l'ouverture de la modale).
   const confirmEndSession = stopAlarmThen(() => {
     Alert.alert(t("matrix.endSessionTitle"), t("matrix.endSessionConfirm"), [
       { text: t("common.cancel"), style: "cancel" },
-      { text: t("matrix.endSession"), style: "destructive", onPress: session.endSession },
+      {
+        text: t("matrix.endSession"),
+        style: "destructive",
+        onPress: () => {
+          notification.cancel();
+          session.endSession();
+        },
+      },
     ]);
   });
 
@@ -72,9 +103,9 @@ export const MatrixLiveView = ({ session }: MatrixLiveViewProps) => {
             running={timer.running}
             isFinished={timer.isFinished}
             alarming={alarm.alarming}
-            onStart={stopAlarmThen(timer.start)}
-            onPause={stopAlarmThen(timer.pause)}
-            onReset={stopAlarmThen(timer.reset)}
+            onStart={handleStart}
+            onPause={interrupt(timer.pause)}
+            onReset={interrupt(timer.reset)}
             onStopAlarm={alarm.stop}
           />
         </Card>

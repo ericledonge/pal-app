@@ -34,6 +34,7 @@ import { usePreferences } from "@/features/preferences/use-cases/use-preferences
 import { initAnalytics } from "@/lib/analytics";
 import { t } from "@/lib/i18n";
 import { initObservability, logger } from "@/lib/logger";
+import { setupMatchNotifications } from "@/lib/notifications";
 import { queryClient } from "@/lib/query-client";
 import { useAutoUpdate } from "@/lib/updates/use-auto-update";
 
@@ -42,6 +43,8 @@ import "@/global.css";
 // Suivi d'erreurs (Sentry en prod si DSN configuré) + analytics produit (Amplitude). À init avant le rendu.
 initObservability();
 initAnalytics();
+// Notifications locales (filet de l'alarme du minuteur) : handler de présentation + canal Android.
+void setupMatchNotifications();
 
 // Maintient le splash jusqu'au chargement des polices (évite tout flash de police système).
 void SplashScreen.preventAutoHideAsync();

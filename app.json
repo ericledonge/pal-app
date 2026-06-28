@@ -27,7 +27,8 @@
         "backgroundColor": "#0b1326",
         "foregroundImage": "./assets/images/android-icon-foreground.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": ["SCHEDULE_EXACT_ALARM"]
     },
     "plugins": [
       "expo-router",
@@ -45,7 +46,14 @@
         }
       ],
       "@sentry/react-native",
-      "expo-audio"
+      "expo-audio",
+      [
+        "expo-notifications",
+        {
+          "color": "#ff5700",
+          "sounds": ["./assets/sounds/match-end.wav"]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
