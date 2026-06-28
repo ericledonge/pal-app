@@ -36,6 +36,8 @@ export const useAgenda = (day: Day, mode: AgendaMode) => {
       createAgendaViewModel([...(parc.data ?? []), ...(patinoire.data ?? [])], {
         mode,
         myLevel: level,
+        // « today » : masque les séances terminées (en cours / à venir seulement).
+        day,
         getWeather: forecast
           ? (heure) => createSlotWeatherViewModel(forecast, day, heure)
           : undefined,

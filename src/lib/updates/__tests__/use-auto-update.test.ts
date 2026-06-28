@@ -32,8 +32,13 @@ let appStateHandler: ((state: AppStateStatus) => void) | undefined;
 
 const T0 = 10_000_000; // base de temps élevée : la 1re vérification passe le throttle (lastCheck = 0).
 
+const devGlobal = globalThis as unknown as { __DEV__: boolean };
+const ORIGINAL_DEV = devGlobal.__DEV__;
+
 beforeEach(() => {
   jest.clearAllMocks();
+  // Le hook est neutralisé en dev ; on simule un build prod pour exercer le chemin OTA réel.
+  devGlobal.__DEV__ = false;
   updates.isEnabled = true;
   updates.checkForUpdateAsync.mockResolvedValue({ isAvailable: true });
   updates.fetchUpdateAsync.mockResolvedValue({ isNew: true });
@@ -50,6 +55,7 @@ beforeEach(() => {
 
 afterEach(() => {
   setUpdatesBlocked("matrix-live", false);
+  devGlobal.__DEV__ = ORIGINAL_DEV;
   jest.restoreAllMocks();
 });
 
@@ -84,8 +90,20 @@ describe("useAutoUpdate", () => {
     expect(updates.reloadAsync).not.toHaveBeenCalled();
   });
 
-  it("ne fait rien si les updates sont désactivées (dev / Expo Go)", async () => {
+  it("ne fait rien si les updates sont désactivées (Expo Go / build sans OTA)", async () => {
     updates.isEnabled = false;
+    await mountHook();
+
+    expect(updates.checkForUpdateAsync).not.toHaveBeenCalled();
+    expect(AppState.addEventListener).not.toHaveBeenCalled();
+    expect(updates.reloadAsync).not.toHaveBeenCalled();
+  });
+
+  it("ne fait rien en dev même si isEnabled est true (development build)", async () => {
+    // En development build expo-updates est embarqué (isEnabled true) mais checkForUpdateAsync
+    // lève en dev → on doit court-circuiter via __DEV__ pour éviter la redbox au reload.
+    devGlobal.__DEV__ = true;
+    updates.isEnabled = true;
     await mountHook();
 
     expect(updates.checkForUpdateAsync).not.toHaveBeenCalled();

@@ -14,6 +14,7 @@ import { setUpdatesBlocked } from "@/lib/updates/update-gate";
 
 // Désactivé avec « Ajouter depuis les présents » (réactiver `useMemo` ci-dessus aussi) :
 // import { mapPresentsToPlayers, normalizeName } from "../domain/matrix.service";
+import { MANUAL_SESSION_ID } from "../domain/matrix.session-select";
 import { MatrixLiveView } from "./matrix-live-view";
 import { SessionSelector } from "./session-selector";
 import { useMatrixSession } from "./use-matrix-session";
@@ -109,6 +110,15 @@ export const MatrixView = () => {
     setGuest("");
   };
 
+  // Crée une session « manuelle » : effectif vide, à bâtir à la main (invités). On pose le garde
+  // (`appliedId`) sur le sentinel pour neutraliser l'effet de pré-remplissage, et on vide l'effectif
+  // directement — réappuyer (depuis la modale) le re-vide proprement.
+  const handleCreateManual = () => {
+    appliedId.current = MANUAL_SESSION_ID;
+    setSelectedId(MANUAL_SESSION_ID);
+    setPresents([]);
+  };
+
   return (
     <View className="flex-1 bg-background">
       <ScreenHeader title={t("matrix.title")} />
@@ -123,6 +133,7 @@ export const MatrixView = () => {
           selectedId={selectedId}
           hasLevel={myLevel !== null}
           onSelect={setSelectedId}
+          onCreateManual={handleCreateManual}
         />
 
         <Card className="gap-sm">
@@ -146,12 +157,21 @@ export const MatrixView = () => {
           </View>
           <View className="flex-row items-center justify-between">
             <Text variant="label">{t("matrix.matchDuration")}</Text>
-            <Input
-              keyboardType="number-pad"
-              value={String(config.dureeMatchMin)}
-              onChangeText={(value) => session.setDuration(Number.parseInt(value, 10) || 0)}
-              className="w-20 text-center"
-            />
+            <View className="flex-row items-center gap-sm">
+              <Button
+                variant="secondary"
+                label="−"
+                accessibilityLabel={t("matrix.decreaseDuration")}
+                onPress={() => session.setDuration(Math.max(1, config.dureeMatchMin - 1))}
+              />
+              <Text variant="stat">{config.dureeMatchMin}</Text>
+              <Button
+                variant="secondary"
+                label="+"
+                accessibilityLabel={t("matrix.increaseDuration")}
+                onPress={() => session.setDuration(config.dureeMatchMin + 1)}
+              />
+            </View>
           </View>
         </Card>
 
@@ -168,9 +188,6 @@ export const MatrixView = () => {
                   <Text variant="bodySm" numberOfLines={1}>
                     {player.nom}
                   </Text>
-                  {player.source === "invite" ? (
-                    <Text variant="caption">{t("matrix.guest")}</Text>
-                  ) : null}
                 </View>
                 <Button
                   variant="ghost"

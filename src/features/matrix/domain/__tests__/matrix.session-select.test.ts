@@ -3,6 +3,7 @@ import { aSlot } from "@/features/sessions/domain/__tests__/session.builders";
 import {
   buildSessionWindows,
   createSessionPickerRows,
+  selectableSessionRows,
   selectAutoSession,
   sessionStatus,
   type SessionWindow,
@@ -169,5 +170,31 @@ describe("createSessionPickerRows", () => {
       1100,
     );
     expect(rows[0].niveauLabel).toBe("Jeu libre public");
+  });
+});
+
+describe("selectableSessionRows", () => {
+  it("masque les sessions passées, garde celles en cours ou à venir", () => {
+    const rows = createSessionPickerRows(
+      [
+        aWindow({ id: "08:00|3.5T", heure: "08:00", heureFin: "10:00" }), // passée à 18:20
+        aWindow({ id: "18:00|3.5T", heure: "18:00", heureFin: "20:00" }), // en cours à 18:20
+        aWindow({ id: "21:00|3.5T", heure: "21:00", heureFin: "23:00" }), // à venir à 18:20
+      ],
+      1100, // 18:20
+    );
+
+    const selectable = selectableSessionRows(rows);
+
+    expect(selectable.map((row) => row.id)).toEqual(["18:00|3.5T", "21:00|3.5T"]);
+    expect(selectable.every((row) => row.status !== "passee")).toBe(true);
+  });
+
+  it("retourne une liste vide quand toutes les sessions sont passées", () => {
+    const rows = createSessionPickerRows(
+      [aWindow({ id: "08:00|3.5T", heure: "08:00", heureFin: "10:00" })],
+      1100, // 18:20
+    );
+    expect(selectableSessionRows(rows)).toEqual([]);
   });
 });

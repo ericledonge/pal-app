@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useMemo, useState } from "react";
-import { Pressable, ScrollView, View } from "react-native";
+import { Alert, Pressable, ScrollView, View } from "react-native";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -48,6 +48,14 @@ export const MatrixLiveView = ({ session }: MatrixLiveViewProps) => {
     alarm.stop();
     action();
   };
+
+  // Terminer efface les rondes : on confirme d'abord (l'alarme est coupée à l'ouverture de la modale).
+  const confirmEndSession = stopAlarmThen(() => {
+    Alert.alert(t("matrix.endSessionTitle"), t("matrix.endSessionConfirm"), [
+      { text: t("common.cancel"), style: "cancel" },
+      { text: t("matrix.endSession"), style: "destructive", onPress: session.endSession },
+    ]);
+  });
 
   return (
     <View className="flex-1 bg-background">
@@ -105,11 +113,7 @@ export const MatrixLiveView = ({ session }: MatrixLiveViewProps) => {
             <Button label={t("matrix.nextRound")} onPress={stopAlarmThen(session.nextRound)} />
           </View>
         </View>
-        <Button
-          variant="ghost"
-          label={t("matrix.endSession")}
-          onPress={stopAlarmThen(session.endSession)}
-        />
+        <Button variant="ghost" label={t("matrix.endSession")} onPress={confirmEndSession} />
 
         <Card className="gap-sm">
           <Pressable

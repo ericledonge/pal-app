@@ -10,15 +10,22 @@ import { cn } from "@/lib/cn";
 import { t } from "@/lib/i18n";
 import { useThemeColors } from "@/lib/theme";
 
-import type { SessionPickerRow, SessionStatus } from "../domain/matrix.session-select";
+import {
+  MANUAL_SESSION_ID,
+  selectableSessionRows,
+  type SessionPickerRow,
+  type SessionStatus,
+} from "../domain/matrix.session-select";
 
 interface SessionSelectorProps {
   rows: SessionPickerRow[];
-  /** Id de la session effective (auto ou choisie), `null` si aucune. */
+  /** Id de la session effective (auto, choisie ou `MANUAL_SESSION_ID`), `null` si aucune. */
   selectedId: string | null;
   /** Vrai si l'utilisateur a défini son niveau (détection auto possible). */
   hasLevel: boolean;
   onSelect: (id: string) => void;
+  /** Crée une session manuelle (effectif vide). */
+  onCreateManual: () => void;
 }
 
 const STATUS_PILL: Record<SessionStatus, string> = {
@@ -62,16 +69,48 @@ const SessionField = ({
   </View>
 );
 
-export const SessionSelector = ({ rows, selectedId, hasLevel, onSelect }: SessionSelectorProps) => {
+export const SessionSelector = ({
+  rows,
+  selectedId,
+  hasLevel,
+  onSelect,
+  onCreateManual,
+}: SessionSelectorProps) => {
   const [open, setOpen] = useState(false);
   const insets = useSafeAreaInsets();
   const colors = useThemeColors();
   const selected = rows.find((row) => row.id === selectedId) ?? null;
+  const isManual = selectedId === MANUAL_SESSION_ID;
+  // Le sélecteur ne propose que les sessions en cours ou à venir : on ne rejoue pas le passé. La
+  // session sélectionnée reste résolue sur `rows` complet — si elle se termine pendant la config,
+  // sa carte affiche « Terminée » sans disparaître.
+  const pickerRows = selectableSessionRows(rows);
 
   const choose = (id: string) => {
     onSelect(id);
     setOpen(false);
   };
+
+  const createManual = () => {
+    onCreateManual();
+    setOpen(false);
+  };
+
+  // Affordance « Changer » réutilisée par la carte réelle et la carte manuelle (rouvre la modale).
+  const changeButton = (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={t("matrix.changeSession")}
+      hitSlop={8}
+      onPress={() => setOpen(true)}
+      className="flex-row items-center gap-2xs py-2xs"
+    >
+      <Text variant="label" weight="bold" className="text-primary">
+        {t("matrix.changeSession")}
+      </Text>
+      <Ionicons name="chevron-forward" size={16} color={colors.primary} />
+    </Pressable>
+  );
 
   return (
     <>
@@ -80,18 +119,7 @@ export const SessionSelector = ({ rows, selectedId, hasLevel, onSelect }: Sessio
           <View className="gap-sm">
             <View className="flex-row items-center justify-between">
               <StatusPill row={selected} />
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={t("matrix.changeSession")}
-                hitSlop={8}
-                onPress={() => setOpen(true)}
-                className="flex-row items-center gap-2xs py-2xs"
-              >
-                <Text variant="label" weight="bold" className="text-primary">
-                  {t("matrix.changeSession")}
-                </Text>
-                <Ionicons name="chevron-forward" size={16} color={colors.primary} />
-              </Pressable>
+              {changeButton}
             </View>
             <View className="h-px bg-outline" />
             <View className="gap-2xs">
@@ -108,6 +136,19 @@ export const SessionSelector = ({ rows, selectedId, hasLevel, onSelect }: Sessio
               <SessionField label={t("matrix.sessionFieldPlace")} value={selected.lieuLabel} />
             </View>
           </View>
+        ) : isManual ? (
+          <View className="gap-sm">
+            <View className="flex-row items-center justify-between">
+              <View className="self-start rounded-full border border-outline bg-surface-muted px-sm py-2xs">
+                <Text variant="caption" className="text-on-surface-muted">
+                  {t("matrix.sessionManual")}
+                </Text>
+              </View>
+              {changeButton}
+            </View>
+            <View className="h-px bg-outline" />
+            <Text variant="caption">{t("matrix.sessionManualHint")}</Text>
+          </View>
         ) : (
           <View className="gap-sm">
             <Text variant="cardTitle">{t("matrix.sessionNone")}</Text>
@@ -115,6 +156,11 @@ export const SessionSelector = ({ rows, selectedId, hasLevel, onSelect }: Sessio
               {hasLevel ? t("matrix.sessionNoneHint") : t("matrix.sessionSetLevel")}
             </Text>
             <Button label={t("matrix.chooseSession")} onPress={() => setOpen(true)} />
+            <Button
+              variant="secondary"
+              label={t("matrix.createSession")}
+              onPress={onCreateManual}
+            />
           </View>
         )}
       </Card>
@@ -147,11 +193,11 @@ export const SessionSelector = ({ rows, selectedId, hasLevel, onSelect }: Sessio
               <Text variant="cardTitle">{t("matrix.sessionPickerTitle")}</Text>
               <Button variant="ghost" label={t("common.close")} onPress={() => setOpen(false)} />
             </View>
-            {rows.length === 0 ? (
+            {pickerRows.length === 0 ? (
               <Text variant="caption">{t("matrix.sessionEmpty")}</Text>
             ) : (
-              <ScrollView contentContainerClassName="gap-sm">
-                {rows.map((row) => (
+              <ScrollView className="flex-shrink" contentContainerClassName="gap-sm">
+                {pickerRows.map((row) => (
                   <Pressable
                     key={row.id}
                     accessibilityRole="button"
@@ -177,6 +223,12 @@ export const SessionSelector = ({ rows, selectedId, hasLevel, onSelect }: Sessio
                 ))}
               </ScrollView>
             )}
+            <Button
+              variant="secondary"
+              label={t("matrix.createSession")}
+              onPress={createManual}
+              className="mt-md"
+            />
           </Pressable>
         </Pressable>
       </Modal>

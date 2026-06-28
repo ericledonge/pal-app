@@ -17,11 +17,21 @@ import { useAgenda } from "./use-agenda";
 type AgendaContentProps = Pick<
   ReturnType<typeof useAgenda>,
   "sections" | "isLoading" | "isError" | "isRefreshing" | "errorKind" | "isEmpty" | "refresh"
-> & { mode: AgendaMode };
+> & { mode: AgendaMode; day: Day };
+
+// Le jour courant ne montre que les séances en cours / à venir → message vide dédié (sinon « aucun
+// créneau pour ce jour » serait trompeur quand toutes les séances de la journée sont terminées).
+const emptyMessage = (day: Day, mode: AgendaMode): string => {
+  if (day === "today") {
+    return mode === "myLevel" ? t("sessions.emptyTodayMyLevel") : t("sessions.emptyToday");
+  }
+  return mode === "myLevel" ? t("sessions.emptyMyLevel") : t("sessions.empty");
+};
 
 const AgendaContent = ({
   sections,
   mode,
+  day,
   isLoading,
   isError,
   isRefreshing,
@@ -45,11 +55,7 @@ const AgendaContent = ({
   }
 
   if (isEmpty) {
-    return (
-      <ScreenEmpty
-        message={mode === "myLevel" ? t("sessions.emptyMyLevel") : t("sessions.empty")}
-      />
-    );
+    return <ScreenEmpty message={emptyMessage(day, mode)} />;
   }
 
   return (
@@ -84,6 +90,7 @@ export const AgendaView = () => {
       <AgendaContent
         sections={sections}
         mode={mode}
+        day={day}
         isLoading={isLoading}
         isError={isError}
         isRefreshing={isRefreshing}

@@ -19,6 +19,13 @@ const DEFAULT_SESSION_MIN = 120;
 export type SessionStatus = "en-cours" | "a-venir" | "passee";
 
 /**
+ * Id sentinelle d'une session « manuelle » : effectif vide, construit à la main (invités). Ne
+ * correspond à aucune fenêtre réelle — les ids réels valent « heure|codes » et contiennent
+ * toujours un « | », donc aucune collision possible.
+ */
+export const MANUAL_SESSION_ID = "manual";
+
+/**
  * Fenêtre de session = un groupe de niveau à une heure donnée, fusionné sur les deux court areas.
  * L'effectif est l'union dédoublonnée des inscrits des créneaux de la fenêtre.
  */
@@ -177,3 +184,10 @@ export const createSessionPickerRows = (
       statusLabel: STATUS_LABELS[status],
     };
   });
+
+/**
+ * Restreint les lignes du sélecteur aux sessions sélectionnables : en cours ou à venir. Les
+ * sessions déjà terminées n'ont pas à encombrer le choix (on joue maintenant, pas dans le passé).
+ */
+export const selectableSessionRows = (rows: SessionPickerRow[]): SessionPickerRow[] =>
+  rows.filter((row) => row.status !== "passee");

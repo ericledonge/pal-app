@@ -1,5 +1,5 @@
 import type { SlotWeatherViewModel } from "@/features/weather/domain/weather.types";
-import { toMinutes } from "@/lib/date.utils";
+import { nowMinutes, toMinutes } from "@/lib/date.utils";
 import { formatDate } from "@/lib/format.utils";
 import { isLevelCode, type LevelCode } from "@/shared/domain/level";
 
@@ -102,6 +102,46 @@ export const isSlotForLevel = (slot: Slot, myLevel: LevelCode): boolean =>
 export const filterSlotsForLevel = (slots: Slot[], myLevel: LevelCode): Slot[] =>
   slots.filter((slot) => isSlotForLevel(slot, myLevel));
 
+/**
+ * Durée supposée (minutes) quand l'heure de fin d'un créneau est inconnue. Aligné sur la matrice
+ * (`matrix.session-select`) pour qu'un créneau disparaisse de l'agenda au moment exact où la matrice
+ * le déclare « Terminée ».
+ */
+const DEFAULT_SLOT_DURATION_MIN = 120;
+
+/**
+ * Fin d'un créneau en minutes depuis minuit. Heure de fin absente → durée par défaut ; fin < début
+ * (créneau franchissant minuit, ex. « 23:00 »–« 01:00 ») → fin ramenée au lendemain. `null` si
+ * l'heure de début est illisible (on ne pourra alors jamais déclarer le créneau passé).
+ */
+const slotEndMinutes = (slot: Slot): number | null => {
+  const start = toMinutes(slot.heure);
+  if (start === null) {
+    return null;
+  }
+  const rawEnd = toMinutes(slot.heureFin) ?? start + DEFAULT_SLOT_DURATION_MIN;
+  return rawEnd < start ? rawEnd + 1440 : rawEnd;
+};
+
+/** Un créneau est-il déjà terminé (heure de fin dépassée) à l'instant donné ? `now` injectable. */
+export const isSlotPast = (slot: Slot, now: Date = new Date()): boolean => {
+  const end = slotEndMinutes(slot);
+  if (end === null) {
+    return false; // heure illisible : on ne masque pas, faute de pouvoir trancher
+  }
+  return nowMinutes(now) > end;
+};
+
+/**
+ * Pour le jour courant, ne garde que les séances en cours ou à venir (fin non dépassée) : une fois
+ * terminée, une session quitte la vue. Pour « demain » (ou jour non précisé), rien n'est masqué.
+ */
+export const filterUpcomingForDay = (
+  slots: Slot[],
+  day: Day | undefined,
+  now: Date = new Date(),
+): Slot[] => (day === "today" ? slots.filter((slot) => !isSlotPast(slot, now)) : slots);
+
 /** Clé d'une plage : une même plage d'un court area peut être SUBDIVISÉE en plusieurs séances. */
 const rangeKey = (slot: Slot): string => `${slot.courtArea}|${slot.heure}|${slot.heureFin}`;
 
@@ -201,13 +241,14 @@ export interface AgendaSection {
   slots: AgendaSlotViewModel[];
 }
 
+const pad = (n: number) => String(n).padStart(2, "0");
+
 /** Formate des courts triés en plages contiguës : ["01","02","03","05"] → « 01-03, 05 ». */
 const formatCourts = (terrains: Slot["terrains"]): string => {
   const nums = terrains.map((court) => Number(court)).sort((left, right) => left - right);
   if (nums.length === 0) {
     return "";
   }
-  const pad = (n: number) => String(n).padStart(2, "0");
   const runs: string[] = [];
   let start = nums[0];
   let prev = nums[0];
@@ -269,12 +310,21 @@ const createAgendaSlotViewModel = (
  */
 export const createAgendaViewModel = (
   slots: Slot[],
-  options: { mode: AgendaMode; myLevel: LevelCode | null; getWeather?: GetSlotWeather },
+  options: {
+    mode: AgendaMode;
+    myLevel: LevelCode | null;
+    getWeather?: GetSlotWeather;
+    /** Jour consulté : pour « today », les séances terminées sont masquées (`now` injectable). */
+    day?: Day;
+    now?: Date;
+  },
 ): AgendaSection[] => {
+  // Jour courant : on retire d'abord les séances déjà passées (en cours / à venir uniquement).
+  const upcoming = filterUpcomingForDay(slots, options.day, options.now);
   const filtered =
     options.mode === "myLevel" && options.myLevel
-      ? filterSlotsForLevel(slots, options.myLevel)
-      : slots;
+      ? filterSlotsForLevel(upcoming, options.myLevel)
+      : upcoming;
   // Une plage subdivisée (2 niveaux sur des courts distincts) → ne montrer que mon niveau.
   const visible = collapseSubdividedByLevel(filtered, options.myLevel);
 

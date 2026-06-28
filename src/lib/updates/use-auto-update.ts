@@ -20,14 +20,16 @@ const CHECK_THROTTLE_MS = 5 * 60_000;
 //     aucune opération sensible n'est en cours.
 //   - Garde-fou : une matrice live bloque l'application (cf. update-gate). La MAJ reste prête et
 //     s'applique dès la libération du garde-fou (fin de matrice).
-// En dev / Expo Go, Updates.isEnabled est false : tout est neutralisé.
+// Neutralisé en dev (`__DEV__`) : dans un development build, `Updates.isEnabled` vaut true mais
+// `checkForUpdateAsync()` lève (« not supported in development builds ») — l'erreur remonterait en
+// LogBox à chaque reload. En Expo Go / build sans OTA, `Updates.isEnabled` est false.
 export const useAutoUpdate = (): void => {
   const lastCheck = useRef(0);
   // true dès qu'une MAJ a été téléchargée mais pas encore appliquée (en attente d'un moment sûr).
   const pendingApply = useRef(false);
 
   useEffect(() => {
-    if (!Updates.isEnabled) {
+    if (__DEV__ || !Updates.isEnabled) {
       return undefined;
     }
 

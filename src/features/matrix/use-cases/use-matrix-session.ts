@@ -35,16 +35,22 @@ export const useMatrixSession = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hydrated, setHydrated] = useState(false);
 
-  // Reprise : restaure une session persistée au lancement.
+  // Reprise au lancement. Les préférences (terrains / durée) sont toujours restaurées. En revanche,
+  // seule une matrice déjà LIVE restaure son effectif et ses rondes : en phase config, l'effectif
+  // repart VIDE et se re-dérive de la session sélectionnée + invités saisis. Sinon les invités d'une
+  // config précédente « colleraient » au prochain lancement (et l'effectif ne serait pas vide quand
+  // aucune session du calibre n'est détectée). Voir le commentaire de `setPresents`.
   useEffect(() => {
     let active = true;
     void readMatrixSession().then((saved) => {
       if (active && saved) {
-        setEffectif(saved.effectif);
         setConfig(saved.config);
-        setRounds(saved.rounds);
-        setPhase(saved.phase);
-        setCurrentIndex(saved.currentIndex);
+        if (saved.phase === "live") {
+          setEffectif(saved.effectif);
+          setRounds(saved.rounds);
+          setPhase("live");
+          setCurrentIndex(saved.currentIndex);
+        }
       }
       if (active) {
         setHydrated(true);
