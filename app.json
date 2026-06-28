@@ -51,7 +51,7 @@
         "expo-notifications",
         {
           "color": "#ff5700",
-          "sounds": ["./assets/sounds/match-end.wav"]
+          "sounds": ["./assets/sounds/match_end.wav"]
         }
       ]
     ],

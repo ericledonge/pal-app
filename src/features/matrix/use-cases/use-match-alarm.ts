@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Vibration } from "react-native";
 
 // Sonnerie de fin de ronde (bips en boucle) jouée jusqu'à l'arrêt manuel.
-const ALARM_SOURCE = require("@/assets/sounds/match-end.wav");
+const ALARM_SOURCE = require("@/assets/sounds/match_end.wav");
 
 // Vibration soutenue répétée pendant l'alarme. Sur iOS les durées du motif sont ignorées (vibration
 // fixe), mais la répétition fonctionne ; sur Android le motif est respecté tel quel.

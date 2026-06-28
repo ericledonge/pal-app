@@ -13,8 +13,9 @@ import { logger } from "@/lib/logger";
 // création — changer le son imposerait un nouvel identifiant de canal.
 const CHANNEL_ID = "match-timer";
 // Fichier embarqué via le config plugin expo-notifications (`sounds` dans app.json), référencé par
-// nom seul. 1 s, bien sous la limite iOS de ~30 s pour un son de notification.
-const ALARM_SOUND = "match-end.wav";
+// nom seul. 1 s, bien sous la limite iOS de ~30 s. Underscore obligatoire (pas de trait d'union) :
+// le nom devient une ressource Android (res/raw), qui n'autorise que [a-z0-9_].
+const ALARM_SOUND = "match_end.wav";
 
 // iOS : un refus de permission est définitif sans passer par les Réglages ; on ne redemande pas en
 // boucle.
