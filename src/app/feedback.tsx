@@ -23,7 +23,11 @@ export default function FeedbackScreen() {
   return (
     <View className="flex-1 bg-background">
       <ScreenHeader title={t("feedback.title")} onClose={() => router.back()} />
-      <ScrollView contentContainerClassName="gap-md px-lg py-md">
+      <ScrollView
+        contentContainerClassName="gap-md px-lg py-md"
+        keyboardShouldPersistTaps="handled"
+        automaticallyAdjustKeyboardInsets
+      >
         <Text variant="body" className="text-on-surface-muted">
           {t("feedback.intro")}
         </Text>
@@ -44,13 +48,18 @@ export default function FeedbackScreen() {
 
         <View className="gap-sm">
           <Text variant="label">{t("feedback.message")}</Text>
+          {/* scrollEnabled={false} + minHeight (pas de hauteur fixe) : le champ grandit avec le
+              texte au lieu de scroller en interne. Le défilement revient à la ScrollView, qui —
+              via automaticallyAdjustKeyboardInsets — garde le curseur au-dessus du clavier à
+              chaque nouvelle ligne (sinon le bas du champ multiline reste masqué par le clavier). */}
           <Input
             multiline
+            scrollEnabled={false}
             value={message}
             onChangeText={setMessage}
             placeholder={t("feedback.messagePlaceholder")}
             textAlignVertical="top"
-            className="h-32"
+            style={{ minHeight: 128 }}
           />
         </View>
 

@@ -45,7 +45,14 @@
           }
         }
       ],
-      "@sentry/react-native",
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "organization": "eric-inc",
+          "project": "pal"
+        }
+      ],
       "expo-audio",
       [
         "expo-notifications",

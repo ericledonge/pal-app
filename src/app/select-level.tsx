@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { LevelGrid } from "@/features/level/use-cases/level-grid";
 import { useLevelPreference } from "@/features/level/use-cases/use-level-preference";
+import { trackEvent } from "@/lib/analytics";
 import { t } from "@/lib/i18n";
 import type { LevelCode } from "@/shared/domain/level";
 
@@ -23,6 +24,7 @@ export default function SelectLevelScreen() {
     }
     setSaving(true);
     await setLevel(selected);
+    trackEvent("level_changed", { level: selected });
     router.back();
   };
 

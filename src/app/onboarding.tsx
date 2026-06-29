@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
 import { LevelGrid } from "@/features/level/use-cases/level-grid";
 import { useLevelPreference } from "@/features/level/use-cases/use-level-preference";
+import { trackEvent } from "@/lib/analytics";
 import { t } from "@/lib/i18n";
 import type { LevelCode } from "@/shared/domain/level";
 
@@ -24,6 +25,7 @@ export default function OnboardingScreen() {
     }
     setSaving(true);
     await setLevel(selected);
+    trackEvent("onboarding_completed", { level: selected });
     router.replace("/sessions");
   };
 

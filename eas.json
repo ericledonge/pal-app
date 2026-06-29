@@ -7,9 +7,12 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
+      "environment": "development",
       "env": {
         "SENTRY_DISABLE_AUTO_UPLOAD": "true",
-        "EXPO_PUBLIC_WEB3FORMS_KEY": "6685056d-9b6e-4488-a5ff-fbd73d1c3520"
+        "EXPO_PUBLIC_WEB3FORMS_KEY": "6685056d-9b6e-4488-a5ff-fbd73d1c3520",
+        "EXPO_PUBLIC_SENTRY_DSN": "https://8d74a107725c044e290db060c8f9d1ce@o4508104629682176.ingest.us.sentry.io/4511649210892288",
+        "EXPO_PUBLIC_AMPLITUDE_KEY": "4f64073e9468077e759d9c3cfd946b0a"
       },
       "channel": "development"
     },
@@ -23,17 +26,23 @@
     "preview": {
       "distribution": "internal",
       "channel": "preview",
+      "environment": "preview",
       "env": {
-        "SENTRY_DISABLE_AUTO_UPLOAD": "true",
-        "EXPO_PUBLIC_WEB3FORMS_KEY": "6685056d-9b6e-4488-a5ff-fbd73d1c3520"
+        "SENTRY_DISABLE_AUTO_UPLOAD": "false",
+        "EXPO_PUBLIC_WEB3FORMS_KEY": "6685056d-9b6e-4488-a5ff-fbd73d1c3520",
+        "EXPO_PUBLIC_SENTRY_DSN": "https://8d74a107725c044e290db060c8f9d1ce@o4508104629682176.ingest.us.sentry.io/4511649210892288",
+        "EXPO_PUBLIC_AMPLITUDE_KEY": "4f64073e9468077e759d9c3cfd946b0a"
       }
     },
     "production": {
       "autoIncrement": true,
       "channel": "production",
+      "environment": "production",
       "env": {
-        "SENTRY_DISABLE_AUTO_UPLOAD": "true",
-        "EXPO_PUBLIC_WEB3FORMS_KEY": "6685056d-9b6e-4488-a5ff-fbd73d1c3520"
+        "SENTRY_DISABLE_AUTO_UPLOAD": "false",
+        "EXPO_PUBLIC_WEB3FORMS_KEY": "6685056d-9b6e-4488-a5ff-fbd73d1c3520",
+        "EXPO_PUBLIC_SENTRY_DSN": "https://8d74a107725c044e290db060c8f9d1ce@o4508104629682176.ingest.us.sentry.io/4511649210892288",
+        "EXPO_PUBLIC_AMPLITUDE_KEY": "4f64073e9468077e759d9c3cfd946b0a"
       }
     }
   },

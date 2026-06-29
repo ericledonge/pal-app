@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { trackEvent } from "@/lib/analytics";
 import { t } from "@/lib/i18n";
 import { logger } from "@/lib/logger";
 
@@ -27,6 +28,7 @@ export const useFeedback = () => {
     setStatus("sending");
     try {
       await submitFeedback({ category, message: message.trim() });
+      trackEvent("feedback_submitted", { category });
       setStatus("success");
       setCategory(null);
       setMessage("");

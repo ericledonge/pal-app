@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ScreenHeader } from "@/components/ui/screen-header";
 import { Text } from "@/components/ui/text";
+import { trackEvent } from "@/lib/analytics";
 import { DONATION } from "@/lib/config";
 import { t } from "@/lib/i18n";
 
@@ -24,7 +25,10 @@ export default function DonationScreen() {
           <View className="gap-2xs">
             <Button
               label={t("donation.cardCta")}
-              onPress={() => void WebBrowser.openBrowserAsync(DONATION.kofiUrl)}
+              onPress={() => {
+                trackEvent("donation_opened", { method: "kofi" });
+                void WebBrowser.openBrowserAsync(DONATION.kofiUrl);
+              }}
             />
             <Text variant="caption" className="text-center">
               {t("donation.cardHint")}

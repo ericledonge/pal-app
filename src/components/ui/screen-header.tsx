@@ -26,10 +26,14 @@ export const ScreenHeader = ({ title, action, onClose }: ScreenHeaderProps) => {
   const colors = useThemeColors();
   return (
     <View
-      className="flex-row items-center justify-between bg-background px-lg pb-sm"
+      className="flex-row items-start justify-between gap-sm bg-background px-lg pb-sm"
       style={{ paddingTop: insets.top + 12 }}
     >
-      <Text variant="title">{title}</Text>
+      {/* flex-1 : le titre occupe l'espace dispo et passe sur plusieurs lignes (gros corps de
+          police accessibilité) au lieu de pousser l'action/× hors écran ou de la tronquer. */}
+      <Text variant="title" className="flex-1">
+        {title}
+      </Text>
       {action || onClose ? (
         <View className="flex-row items-center gap-sm">
           {action}

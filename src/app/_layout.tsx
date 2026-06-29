@@ -19,6 +19,7 @@ import {
   type ErrorBoundaryProps,
   Stack,
   ThemeProvider,
+  usePathname,
 } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
@@ -31,7 +32,7 @@ import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useLevelPreference } from "@/features/level/use-cases/use-level-preference";
 import { usePreferences } from "@/features/preferences/use-cases/use-preferences";
-import { initAnalytics } from "@/lib/analytics";
+import { initAnalytics, trackEvent } from "@/lib/analytics";
 import { t } from "@/lib/i18n";
 import { initObservability, logger } from "@/lib/logger";
 import { setupMatchNotifications } from "@/lib/notifications";
@@ -75,6 +76,12 @@ const AppShell = ({ fontsReady }: { fontsReady: boolean }) => {
   const { preferences } = usePreferences();
   const { setColorScheme } = useNativeWindColorScheme();
   const { isLoading: levelLoading } = useLevelPreference();
+  const pathname = usePathname();
+
+  // Suivi des vues d'écran (Amplitude en prod) : un événement à chaque changement de route.
+  useEffect(() => {
+    trackEvent("screen_viewed", { screen: pathname });
+  }, [pathname]);
 
   const { themeMode } = preferences;
   // Pilote NativeWind (couleurs via global.css) selon la préférence ; "system" suit l'appareil.
